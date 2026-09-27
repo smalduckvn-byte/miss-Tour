@@ -1,0 +1,2892 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Vietnam Wonder Travel - Khám phá vẻ đẹp bất tận của du lịch Việt Nam: Vịnh Hạ Long, Sapa, Hội An, Phú Quốc, Ninh Bình. Đặt tour trọn gói giá tốt nhất, hỗ trợ 24/7.">
+  <title>Vietnam Wonder Travel - Khám Phá Vẻ Đẹp Bất Tận Của Việt Nam</title>
+  <style>
+/* ==========================================================================
+   TOAN BO CSS (TU style.css) DUOC TICH HOP TRUC TIEP CHO NOTEPAD / NOTEPAD++
+   ========================================================================== */
+/* ==========================================================================
+   VIETNAM WONDER TRAVEL - MAIN STYLESHEET
+   Thiết kế chuẩn HTML5 & CSS3 - Responsive Mobile / Tablet / PC
+   Chỉnh sửa hoàn hảo trên Notepad++
+   ========================================================================== */
+
+/* --- GOOGLE FONTS & BIẾN MÀU SẮC DESIGN SYSTEM --- */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+:root {
+  --primary-color: #0d6efd;
+  --primary-dark: #0947a7;
+  --teal-accent: #0284c7;
+  --teal-glow: rgba(14, 165, 233, 0.15);
+  --gold-accent: #f59e0b;
+  --gold-hover: #d97706;
+  --emerald: #10b981;
+  --emerald-dark: #059669;
+  
+  --bg-body: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-dark: #0f172a;
+  --bg-darker: #090d16;
+  
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+  --text-white: #ffffff;
+  
+  --border-color: #e2e8f0;
+  --border-focus: #38bdf8;
+  
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.12);
+  --shadow-hover: 0 20px 40px rgba(13, 110, 253, 0.18);
+  
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* --- RESET CĂN BẢN --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color var(--transition-fast);
+}
+
+ul, ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+}
+
+.container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* --- TOPBAR THÔNG TIN LIÊN HỆ & GIỜ HỖ TRỢ --- */
+.top-bar {
+  background-color: var(--bg-dark);
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8px 0;
+  position: relative;
+  z-index: 101;
+}
+
+.top-bar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.top-bar-left, .top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.top-bar-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.top-bar-item svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+  color: var(--gold-accent);
+}
+
+.top-bar-item a:hover {
+  color: #38bdf8;
+}
+
+.support-hours-badge {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.support-hours-badge::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: #10b981;
+  border-radius: 50%;
+  animation: pulse-dot 1.8s infinite;
+}
+
+@keyframes pulse-dot {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.social-link {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd5e1;
+  transition: all var(--transition-fast);
+}
+
+.social-link:hover {
+  background: var(--primary-color);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.social-link svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+/* --- HEADER & NAVIGATION CHÍNH --- */
+.site-header {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all var(--transition-normal);
+}
+
+.site-header.scrolled {
+  background-color: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+}
+
+.nav-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 75px;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+}
+
+.brand-logo .logo-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #0d6efd, #06b6d4);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+.brand-logo span.highlight {
+  color: #0d6efd;
+  font-weight: 800;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-link {
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: var(--text-main);
+  position: relative;
+  padding: 8px 0;
+  transition: color var(--transition-fast);
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, #0d6efd, #06b6d4);
+  border-radius: 4px;
+  transition: width var(--transition-normal);
+}
+
+.nav-link:hover, .nav-link.active {
+  color: #0d6efd;
+}
+
+.nav-link:hover::after, .nav-link.active::after {
+  width: 100%;
+}
+
+.btn-header-booking {
+  padding: 10px 22px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #0d6efd, #0284c7);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(13, 110, 253, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-header-booking:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(13, 110, 253, 0.45);
+  background: linear-gradient(135deg, #0b5ed7, #0369a1);
+}
+
+/* Nút mobile hamburger */
+.mobile-toggle-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: var(--text-main);
+}
+
+.mobile-toggle-btn svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* Menu Drawer Mobile */
+.mobile-nav-drawer {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 300px;
+  max-width: 85%;
+  height: 100vh;
+  background-color: var(--bg-surface);
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  transition: right 0.35s ease;
+  overflow-y: auto;
+}
+
+.mobile-nav-drawer.open {
+  right: 0;
+}
+
+.mobile-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+.mobile-close-btn {
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-main);
+}
+
+.mobile-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mobile-nav-link {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all var(--transition-fast);
+}
+
+.mobile-nav-link.active, .mobile-nav-link:hover {
+  background: #eff6ff;
+  color: #0d6efd;
+}
+
+.drawer-contact-info {
+  margin-top: auto;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mobile-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- HERO SECTION VỚI SLIDER ẢNH DU LỊCH VIỆT NAM --- */
+.hero-section {
+  position: relative;
+  min-height: 580px;
+  height: calc(85vh - 75px);
+  max-height: 720px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: #ffffff;
+}
+
+.hero-slider-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center center;
+  opacity: 0;
+  transform: scale(1.05);
+  transition: opacity 1.2s ease, transform 6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.hero-slide.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.55) 0%, rgba(15, 23, 42, 0.75) 100%);
+  z-index: 2;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero-badge svg {
+  color: var(--gold-accent);
+}
+
+.hero-title {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.hero-title .gradient-text {
+  background: linear-gradient(90deg, #38bdf8, #fef08a, #34d399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-desc {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  max-width: 680px;
+  margin-bottom: 35px;
+  color: #f1f5f9;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* THANH TÌM KIẾM TOUR NHANH */
+.search-tour-bar {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  max-width: 1050px;
+}
+
+.search-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-right: 1px solid var(--border-color);
+  padding-right: 14px;
+}
+
+.search-field:nth-child(4) {
+  border-right: none;
+}
+
+.search-field label {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-field label svg {
+  color: #0d6efd;
+}
+
+.search-field input, .search-field select {
+  border: none;
+  background: transparent;
+  font-weight: 600;
+  color: var(--text-main);
+  font-size: 0.95rem;
+  padding: 4px 0;
+}
+
+.btn-search-action {
+  background: linear-gradient(135deg, #0d6efd, #0284c7);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 14px 24px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-search-action:hover {
+  background: linear-gradient(135deg, #0b5ed7, #0369a1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(13, 110, 253, 0.4);
+}
+
+/* Hero Slider Controls */
+.hero-slider-nav {
+  position: absolute;
+  bottom: 25px;
+  right: 40px;
+  z-index: 4;
+  display: flex;
+  gap: 10px;
+}
+
+.slider-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-fast);
+}
+
+.slider-dot.active {
+  width: 32px;
+  border-radius: 10px;
+  background: #38bdf8;
+}
+
+/* --- SECTION TIÊU ĐỀ CHUNG --- */
+.section-header {
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto 50px auto;
+}
+
+.section-tag {
+  color: #0d6efd;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+  display: inline-block;
+  background: rgba(13, 110, 253, 0.08);
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+}
+
+.section-title {
+  font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+
+.section-subtitle {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+
+/* --- DỊCH VỤ / TÍNH NĂNG VƯỢT TRỘI --- */
+.features-section {
+  padding: 80px 0 50px;
+  background-color: var(--bg-surface);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.feature-box {
+  background: var(--bg-body);
+  border: 1px solid var(--border-color);
+  padding: 30px 24px;
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-normal);
+  text-align: left;
+}
+
+.feature-box:hover {
+  transform: translateY(-8px);
+  background: #ffffff;
+  border-color: #93c5fd;
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-icon-wrapper {
+  width: 58px;
+  height: 58px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(13, 110, 253, 0.12), rgba(6, 182, 212, 0.18));
+  color: #0d6efd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  transition: transform var(--transition-fast);
+}
+
+.feature-box:hover .feature-icon-wrapper {
+  transform: scale(1.1) rotate(5deg);
+  background: linear-gradient(135deg, #0d6efd, #0284c7);
+  color: #ffffff;
+}
+
+.feature-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text-main);
+}
+
+.feature-desc {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* --- ĐIỂM ĐẾN NỔI BẬT (DESTINATIONS) --- */
+.destinations-section {
+  padding: 80px 0;
+}
+
+.filter-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 22px;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filter-btn:hover, .filter-btn.active {
+  background: #0d6efd;
+  color: #ffffff;
+  border-color: #0d6efd;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25);
+}
+
+.destinations-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.destination-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+}
+
+.destination-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
+  border-color: #93c5fd;
+}
+
+.card-img-box {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+}
+
+.card-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.destination-card:hover .card-img-box img {
+  transform: scale(1.08);
+}
+
+.card-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.card-badge.badge-hot {
+  background: linear-gradient(135deg, #ef4444, #f97316);
+}
+
+.card-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #0d6efd;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.card-location svg {
+  width: 14px;
+  height: 14px;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text-main);
+}
+
+.card-desc {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.card-footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+}
+
+.card-price-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-price-info span.label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.card-price-info span.price {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ef4444;
+}
+
+.btn-card-action {
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  background: #eff6ff;
+  color: #0d6efd;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: 1px solid #bfdbfe;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.btn-card-action:hover {
+  background: #0d6efd;
+  color: #ffffff;
+  border-color: #0d6efd;
+}
+
+/* --- TOUR DU LỊCH BÁN CHẠY (FEATURED TOURS) --- */
+.tours-section {
+  padding: 80px 0;
+  background-color: var(--bg-surface);
+}
+
+.tours-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.tour-card {
+  background: var(--bg-body);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+}
+
+.tour-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
+  border-color: #93c5fd;
+}
+
+.tour-img-wrap {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.tour-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.tour-card:hover .tour-img-wrap img {
+  transform: scale(1.08);
+}
+
+.tour-meta-tag {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tour-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.tour-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  color: var(--gold-accent);
+  font-weight: 600;
+}
+
+.tour-rating svg {
+  fill: currentColor;
+  width: 15px;
+  height: 15px;
+}
+
+.tour-rating span.review-count {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.tour-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  color: var(--text-main);
+}
+
+.tour-features-list {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.tour-features-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tour-features-list li svg {
+  color: #10b981;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.tour-footer-box {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tour-price-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.tour-price-box .price-old {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  text-decoration: line-through;
+}
+
+.tour-price-box .price-current {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0d6efd;
+}
+
+.btn-book-tour {
+  background: linear-gradient(135deg, #0d6efd, #0284c7);
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-book-tour:hover {
+  background: linear-gradient(135deg, #0b5ed7, #0369a1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(13, 110, 253, 0.4);
+}
+
+/* --- BANNER KHUYẾN MÃI / CALL TO ACTION --- */
+.cta-banner {
+  padding: 70px 0;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-banner::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.cta-content-wrapper {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.cta-text-side {
+  max-width: 650px;
+}
+
+.cta-text-side h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+
+.cta-text-side p {
+  font-size: 1.05rem;
+  color: #cbd5e1;
+}
+
+.cta-action-side {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-cta-primary {
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+  transition: all var(--transition-fast);
+}
+
+.btn-cta-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5);
+}
+
+.btn-cta-secondary {
+  padding: 14px 28px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-cta-secondary:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* --- CẢM NHẬN KHÁCH HÀNG (TESTIMONIALS) --- */
+.testimonials-section {
+  padding: 80px 0;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.testimonial-card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all var(--transition-normal);
+}
+
+.testimonial-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+  border-color: #93c5fd;
+}
+
+.testimonial-quote {
+  font-size: 0.98rem;
+  color: var(--text-main);
+  line-height: 1.7;
+  font-style: italic;
+  margin-bottom: 24px;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.author-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #0d6efd;
+}
+
+.author-info h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.author-info p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* --- TRANG LIÊN HỆ / FORM ĐẶT TOUR --- */
+.contact-page-section {
+  padding: 60px 0 80px;
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.contact-info-panel {
+  background: linear-gradient(145deg, #0f172a, #1e293b);
+  color: #ffffff;
+  padding: 40px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.contact-info-panel h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.contact-info-panel p.intro {
+  color: #94a3b8;
+  margin-bottom: 35px;
+  font-size: 0.96rem;
+}
+
+.contact-item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.contact-detail-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.contact-detail-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: rgba(13, 110, 253, 0.2);
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contact-detail-text h5 {
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.contact-detail-text p, .contact-detail-text a {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.contact-detail-text a:hover {
+  color: #38bdf8;
+}
+
+.panel-socials-title {
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+
+.panel-socials {
+  display: flex;
+  gap: 12px;
+}
+
+.panel-socials a {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: all var(--transition-fast);
+}
+
+.panel-socials a:hover {
+  background: #0d6efd;
+  transform: translateY(-3px);
+}
+
+/* Khung Form liên hệ & đặt tour */
+.contact-form-panel {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+}
+
+.form-header-group {
+  margin-bottom: 28px;
+}
+
+.form-header-group h3 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.form-header-group p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.form-group label span.required {
+  color: #ef4444;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: #f8fafc;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  transition: all var(--transition-fast);
+}
+
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  background: #ffffff;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
+
+.btn-submit-booking {
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #0d6efd, #0284c7);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all var(--transition-fast);
+  margin-top: 10px;
+}
+
+.btn-submit-booking:hover {
+  background: linear-gradient(135deg, #0b5ed7, #0369a1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(13, 110, 253, 0.35);
+}
+
+/* --- FOOTER CHÍNH & CREDIT DESIGNER --- */
+.site-footer {
+  background-color: var(--bg-darker);
+  color: #94a3b8;
+  padding: 70px 0 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-top-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1.2fr 1.2fr;
+  gap: 40px;
+  margin-bottom: 50px;
+}
+
+.footer-col h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 22px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.footer-col h4::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 32px;
+  height: 2px;
+  background: #0d6efd;
+  border-radius: 2px;
+}
+
+.footer-brand p {
+  font-size: 0.92rem;
+  line-height: 1.7;
+  margin-bottom: 20px;
+  color: #94a3b8;
+}
+
+.footer-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-links-list a {
+  font-size: 0.92rem;
+  color: #94a3b8;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-links-list a:hover {
+  color: #38bdf8;
+  transform: translateX(4px);
+}
+
+.footer-contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 0.92rem;
+}
+
+.footer-contact-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.footer-contact-row svg {
+  color: #0d6efd;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.footer-social-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.footer-social-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd5e1;
+  transition: all var(--transition-fast);
+}
+
+.footer-social-btn:hover {
+  background: #0d6efd;
+  color: #ffffff;
+  transform: translateY(-3px);
+}
+
+/* DÒNG CREDIT DESIGNER & BẢN QUYỀN CUỐI CÙNG */
+.footer-bottom-bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.88rem;
+}
+
+.footer-copyright {
+  color: #64748b;
+}
+
+/* Yêu cầu: Credit designer dòng chữ nhỏ cuối footer: “Thiết kế bởi Minh Đỗ”, font nhỏ, màu xám nhạt, căn giữa hoặc bên phải */
+.footer-designer-credit {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  text-align: right;
+  font-style: normal;
+  letter-spacing: 0.3px;
+}
+
+.footer-designer-credit strong {
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+/* --- MODAL XEM CHI TIẾT & ĐẶT TOUR --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  position: relative;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+  padding: 30px;
+}
+
+.modal-overlay.active .modal-card {
+  transform: translateY(0);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-main);
+  transition: background var(--transition-fast);
+}
+
+.modal-close-btn:hover {
+  background: #e2e8f0;
+}
+
+/* TOAST THÔNG BÁO */
+.toast-notification {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #ffffff;
+  color: var(--text-main);
+  border-left: 4px solid #10b981;
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 2000;
+  transform: translateY(120%);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toast-notification.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast-icon {
+  width: 28px;
+  height: 28px;
+  background: #d1fae5;
+  color: #10b981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* --- ANIMATION KHI SCROLL --- */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.fade-in-up.appear {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   RESPONSIVE CHO TABLET VÀ ĐIỆN THOẠI
+   Các card tự động chuyển thành dạng dọc trên màn hình nhỏ
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .destinations-grid, .tours-grid, .testimonials-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .footer-top-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .search-tour-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .search-field:nth-child(2) {
+    border-right: none;
+  }
+  
+  .btn-search-action {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .top-bar {
+    display: none; /* Ẩn top-bar ở màn hình rất nhỏ để gọn, dồn vào drawer */
+  }
+  
+  .nav-wrapper {
+    height: 65px;
+  }
+  
+  .main-nav {
+    display: none;
+  }
+  
+  .mobile-toggle-btn {
+    display: flex;
+    align-items: center;
+  }
+  
+  .hero-section {
+    min-height: 520px;
+    height: auto;
+    padding: 60px 0;
+  }
+  
+  .search-tour-bar {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 16px;
+  }
+  
+  .search-field {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    padding-right: 0;
+  }
+  
+  .btn-search-action {
+    grid-column: span 1;
+  }
+
+  /* Card tự động chuyển thành dạng dọc */
+  .features-grid,
+  .destinations-grid,
+  .tours-grid,
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer-top-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .footer-bottom-bar {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .footer-designer-credit {
+    text-align: center;
+  }
+  
+  .cta-content-wrapper {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .cta-action-side {
+    justify-content: center;
+  }
+}
+
+</style>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%20%220%22%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>✈️</text></svg>">
+</head>
+<body>
+
+  <!-- TOP BAR: THÔNG TIN LIÊN HỆ, GIỜ HỖ TRỢ, MẠNG XÃ HỘI -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar-left">
+        <div class="top-bar-item">
+          <!-- Phone Icon -->
+          <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          <span>Hotline: <a href="tel:19006868" style="font-weight:700; color:#ffffff;">1900 6868</a> - <a href="tel:0988123456">0988 123 456</a></span>
+        </div>
+        <div class="top-bar-item">
+          <!-- Mail Icon -->
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          <span>Email: <a href="mailto:contact@vietnamtravel.vn">contact@vietnamtravel.vn</a></span>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="support-hours-badge">
+          Giờ hỗ trợ: 08:00 - 22:00 (Hỗ trợ 24/7)
+        </div>
+        <div class="social-links">
+          <!-- Facebook -->
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-link" title="Facebook">
+            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <!-- Instagram -->
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-link" title="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <!-- TikTok -->
+          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="social-link" title="TikTok">
+            <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-1.01-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SITE HEADER & NAVIGATION -->
+  <header class="site-header">
+    <div class="container">
+      <div class="nav-wrapper">
+        <!-- Brand Logo -->
+        <a href="index.html" class="brand-logo" id="headerLogo">
+          <div class="logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M10.18 9l2.12-6 2.12 6H21l-5.18 3.73 1.98 6.27-5.27-3.83-5.27 3.83 1.98-6.27L3 9h7.18z"/>
+            </svg>
+          </div>
+          <span>VIETNAM <span class="highlight">WONDER</span></span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="main-nav">
+          <ul class="nav-list">
+            <li><a href="index.html" class="nav-link active">Trang chủ</a></li>
+            <li><a href="diem-den.html" class="nav-link">Điểm đến</a></li>
+            <li><a href="tour.html" class="nav-link">Tour</a></li>
+            <li><a href="lien-he.html" class="nav-link">Liên hệ</a></li>
+          </ul>
+          <a href="lien-he.html" class="btn-header-booking">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+            </svg>
+            Đặt Tour Ngay
+          </a>
+        </nav>
+
+        <!-- Mobile Toggle Button -->
+        <button class="mobile-toggle-btn" id="mobileToggleBtn" aria-label="Mở menu điều hướng">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE NAVIGATION DRAWER -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+  <aside class="mobile-nav-drawer" id="mobileNavDrawer">
+    <div class="mobile-drawer-header">
+      <div class="brand-logo" style="font-size: 1.2rem;">
+        <span>VIETNAM <span class="highlight">WONDER</span></span>
+      </div>
+      <button class="mobile-close-btn" id="mobileCloseBtn" aria-label="Đóng menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <ul class="mobile-nav-list">
+      <li><a href="index.html" class="mobile-nav-link active">Trang chủ <span>→</span></a></li>
+      <li><a href="diem-den.html" class="mobile-nav-link">Điểm đến <span>→</span></a></li>
+      <li><a href="tour.html" class="mobile-nav-link">Tour du lịch <span>→</span></a></li>
+      <li><a href="lien-he.html" class="mobile-nav-link">Liên hệ hỗ trợ <span>→</span></a></li>
+    </ul>
+
+    <div class="drawer-contact-info">
+      <p style="font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Tổng đài hỗ trợ 24/7:</p>
+      <p style="color: #0d6efd; font-size: 1.1rem; font-weight: 800; margin-bottom: 6px;">1900 6868</p>
+      <p style="margin-bottom: 14px;">Email: contact@vietnamtravel.vn</p>
+      <p style="font-size: 0.8rem; color: #94a3b8;">Giờ làm việc: 08:00 - 22:00 hàng ngày</p>
+      <a href="lien-he.html" class="btn-header-booking" style="width: 100%; justify-content: center; margin-top: 18px;">Tư Vấn & Đặt Tour</a>
+    </div>
+  </aside>
+
+  <!-- HERO SECTION WITH SLIDER -->
+  <section class="hero-section">
+    <div class="hero-slider-bg">
+      <!-- Slide 1: Hạ Long -->
+      <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=1600&auto=format&fit=crop');"></div>
+      <!-- Slide 2: Sapa / Ruộng bậc thang -->
+      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1544644181-1484b3fdfc62?q=80&w=1600&auto=format&fit=crop');"></div>
+      <!-- Slide 3: Phố Cổ Hội An -->
+      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?q=80&w=1600&auto=format&fit=crop');"></div>
+      <!-- Slide 4: Biển Phú Quốc -->
+      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop');"></div>
+    </div>
+    <div class="hero-overlay"></div>
+
+    <div class="container hero-content">
+      <div class="hero-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span>Trải Nghiệm Du Lịch Đẳng Cấp 2026</span>
+      </div>
+      <h1 class="hero-title">Khám Phá <span class="gradient-text">Vẻ Đẹp Bất Tận</span><br>Của Đất Nước Việt Nam</h1>
+      <p class="hero-desc">Hành trình chạm đến những kỳ quan thế giới, biển ngọc trong xanh, ruộng bậc thang vàng rực và nền văn minh di sản nghìn năm văn hiến.</p>
+
+      <!-- THANH TÌM KIẾM TOUR NHANH -->
+      <form class="search-tour-bar" id="quickSearchForm">
+        <div class="search-field">
+          <label for="quickDest">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            Điểm Đến
+          </label>
+          <select id="quickDest" name="destination">
+            <option value="Tất cả điểm đến">Tất cả điểm đến</option>
+            <option value="Vịnh Hạ Long">Vịnh Hạ Long (Quảng Ninh)</option>
+            <option value="Sapa - Fansipan">Sapa - Fansipan (Lào Cai)</option>
+            <option value="Phố cổ Hội An">Phố cổ Hội An (Quảng Nam)</option>
+            <option value="Đảo Ngọc Phú Quốc">Đảo Ngọc Phú Quốc</option>
+            <option value="Tràng An - Ninh Bình">Tràng An - Ninh Bình</option>
+            <option value="Đà Lạt ngàn hoa">Đà Lạt ngàn hoa</option>
+          </select>
+        </div>
+
+        <div class="search-field">
+          <label for="quickDate">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+            Ngày Khởi Hành
+          </label>
+          <input type="date" id="quickDate" name="depart_date" value="2026-10-01">
+        </div>
+
+        <div class="search-field">
+          <label for="quickType">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Loại Hình Tour
+          </label>
+          <select id="quickType" name="tour_type">
+            <option value="Tất cả loại hình">Tất cả tour</option>
+            <option value="Tour Nghỉ Dưỡng">Tour Nghỉ Dưỡng Cao Cấp</option>
+            <option value="Tour Di Sản">Tour Khám Phá Di Sản</option>
+            <option value="Tour Mạo Hiểm">Tour Mạo Hiểm & Săn Mây</option>
+          </select>
+        </div>
+
+        <div class="search-field">
+          <label for="quickBudget">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+            Mức Ngân Sách
+          </label>
+          <select id="quickBudget" name="budget">
+            <option value="Tất cả mức giá">Mọi mức giá</option>
+            <option value="Dưới 3 triệu">Dưới 3.000.000đ</option>
+            <option value="3 - 6 triệu">3.000.000đ - 6.000.000đ</option>
+            <option value="Trên 6 triệu">Trên 6.000.000đ</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-search-action" id="btnQuickSearch">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          Tìm Kiếm
+        </button>
+      </form>
+    </div>
+
+    <!-- Nút điều hướng dot của slider -->
+    <div class="hero-slider-nav">
+      <button class="slider-dot active" aria-label="Slide 1"></button>
+      <button class="slider-dot" aria-label="Slide 2"></button>
+      <button class="slider-dot" aria-label="Slide 3"></button>
+      <button class="slider-dot" aria-label="Slide 4"></button>
+    </div>
+  </section>
+
+  <!-- FEATURES / VÌ SAO CHỌN CHÚNG TÔI -->
+  <section class="features-section">
+    <div class="container">
+      <div class="section-header fade-in-up">
+        <span class="section-tag">Cam Kết Chất Lượng</span>
+        <h2 class="section-title">Tại Sao Nên Đồng Hành Cùng Vietnam Wonder?</h2>
+        <p class="section-subtitle">Hơn 12 năm dẫn đầu ngành lữ hành, chúng tôi kiến tạo những trải nghiệm chạm tới trái tim người lữ khách.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-box fade-in-up">
+          <div class="feature-icon-wrapper">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+          </div>
+          <h3 class="feature-title">An Toàn & Uy Tín Số 1</h3>
+          <p class="feature-desc">100% tour có bảo hiểm du lịch quốc tế lên tới 100.000.000đ, tài xế và hướng dẫn viên dày dạn kinh nghiệm.</p>
+        </div>
+
+        <div class="feature-box fade-in-up">
+          <div class="feature-icon-wrapper">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+          </div>
+          <h3 class="feature-title">Giá Trọn Gói Tốt Nhất</h3>
+          <p class="feature-desc">Minh bạch tuyệt đối, không phát sinh chi phí ẩn. Cam kết hoàn tiền 100% nếu chất lượng dịch vụ không đúng như tư vấn.</p>
+        </div>
+
+        <div class="feature-box fade-in-up">
+          <div class="feature-icon-wrapper">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          </div>
+          <h3 class="feature-title">Hỗ Trợ Khách Hàng 24/7</h3>
+          <p class="feature-desc">Đội ngũ chuyên viên túc trực giải đáp, xử lý phát sinh và hỗ trợ hành khách tận tình cả ngày nghỉ và lễ Tết.</p>
+        </div>
+
+        <div class="feature-box fade-in-up">
+          <div class="feature-icon-wrapper">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 3s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          </div>
+          <h3 class="feature-title">Hướng Dẫn Viên Bản Địa</h3>
+          <p class="feature-desc">Thấu hiểu sâu sắc văn hóa, ẩm thực vùng miền, dẫn bạn đến những góc sống ảo và trải nghiệm nguyên bản nhất.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ĐIỂM ĐẾN TIÊU BIỂU (DESTINATIONS) -->
+  <section class="destinations-section">
+    <div class="container">
+      <div class="section-header fade-in-up">
+        <span class="section-tag">Khám Phá Việt Nam</span>
+        <h2 class="section-title">Điểm Đến Được Yêu Thích Nhất</h2>
+        <p class="section-subtitle">Từ non cao Tây Bắc bồng bềnh mây trắng đến bãi cát vàng ngập nắng phương Nam.</p>
+      </div>
+
+      <!-- Bộ lọc khu vực -->
+      <div class="filter-tabs fade-in-up">
+        <button class="filter-btn active" data-filter="all">Tất Cả</button>
+        <button class="filter-btn" data-filter="north">Miền Bắc</button>
+        <button class="filter-btn" data-filter="central">Miền Trung</button>
+        <button class="filter-btn" data-filter="south">Miền Nam</button>
+      </div>
+
+      <div class="destinations-grid">
+        <!-- Card 1: Hạ Long -->
+        <article class="destination-card fade-in-up" data-region="north">
+          <div class="card-img-box">
+            <img src="https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800&auto=format&fit=crop" alt="Vịnh Hạ Long" loading="lazy">
+            <span class="card-badge badge-hot">★ Di Sản UNESCO</span>
+          </div>
+          <div class="card-content">
+            <div class="card-location">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <span>Quảng Ninh, Miền Bắc</span>
+            </div>
+            <h3 class="card-title">Vịnh Hạ Long - Kỳ Quan</h3>
+            <p class="card-desc">Thưởng ngoạn hàng ngàn hòn đảo đá vôi kỳ vĩ vươn lên giữa làn nước ngọc bích, trải nghiệm chèo thuyền kayak và du thuyền 5 sao.</p>
+            <div class="card-footer">
+              <div class="card-price-info">
+                <span class="label">Giá tour trọn gói từ</span>
+                <span class="price">3.490.000đ</span>
+              </div>
+              <button class="btn-card-action btn-open-detail" data-tour="halong">Xem Chi Tiết</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2: Sapa -->
+        <article class="destination-card fade-in-up" data-region="north">
+          <div class="card-img-box">
+            <img src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?q=80&w=800&auto=format&fit=crop" alt="Sapa Mù Cang Chải" loading="lazy">
+            <span class="card-badge">🏔 Săn Mây Fansipan</span>
+          </div>
+          <div class="card-content">
+            <div class="card-location">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <span>Lào Cai, Miền Bắc</span>
+            </div>
+            <h3 class="card-title">Sapa - Ruộng Bậc Thang</h3>
+            <p class="card-desc">Chạm tay vào Nóc nhà Đông Dương ở độ cao 3.143m, hòa mình cùng sắc vàng lúa chín Mù Cang Chải và bản sắc dân tộc độc đáo.</p>
+            <div class="card-footer">
+              <div class="card-price-info">
+                <span class="label">Giá tour trọn gói từ</span>
+                <span class="price">2.890.000đ</span>
+              </div>
+              <button class="btn-card-action btn-open-detail" data-tour="sapa">Xem Chi Tiết</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3: Phố Cổ Hội An -->
+        <article class="destination-card fade-in-up" data-region="central">
+          <div class="card-img-box">
+            <img src="https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?q=80&w=800&auto=format&fit=crop" alt="Hội An Phố Cổ" loading="lazy">
+            <span class="card-badge badge-hot">🏮 Đèn Lồng Lung Linh</span>
+          </div>
+          <div class="card-content">
+            <div class="card-location">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <span>Quảng Nam, Miền Trung</span>
+            </div>
+            <h3 class="card-title">Phố Cổ Hội An Di Sản</h3>
+            <p class="card-desc">Thả hoa đăng cầu may trên sông Hoài mộng mơ, dạo quanh những bức tường vàng rêu phong và thưởng thức cao lầu, bánh mì nức tiếng.</p>
+            <div class="card-footer">
+              <div class="card-price-info">
+                <span class="label">Giá tour trọn gói từ</span>
+                <span class="price">4.250.000đ</span>
+              </div>
+              <button class="btn-card-action btn-open-detail" data-tour="hoian">Xem Chi Tiết</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 4: Biển Đảo Phú Quốc -->
+        <article class="destination-card fade-in-up" data-region="south">
+          <div class="card-img-box">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop" alt="Biển Phú Quốc" loading="lazy">
+            <span class="card-badge">🏝 Thiên Đường Biển Ngọc</span>
+          </div>
+          <div class="card-content">
+            <div class="card-location">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <span>Kiên Giang, Miền Nam</span>
+            </div>
+            <h3 class="card-title">Đảo Ngọc Phú Quốc</h3>
+            <p class="card-desc">Trải nghiệm cano 4 đảo siêu tốc, lặn ngắm san hô tự nhiên, cáp treo Hòn Thơm vượt biển dài nhất thế giới và hoàng hôn Bãi Sao.</p>
+            <div class="card-footer">
+              <div class="card-price-info">
+                <span class="label">Giá tour trọn gói từ</span>
+                <span class="price">4.690.000đ</span>
+              </div>
+              <button class="btn-card-action btn-open-detail" data-tour="phuquoc">Xem Chi Tiết</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 5: Ninh Bình Tràng An -->
+        <article class="destination-card fade-in-up" data-region="north">
+          <div class="card-img-box">
+            <img src="https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=800&auto=format&fit=crop" alt="Ninh Bình Tràng An" loading="lazy">
+            <span class="card-badge">🛶 Hạ Long Trên Cạn</span>
+          </div>
+          <div class="card-content">
+            <div class="card-location">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <span>Ninh Bình, Miền Bắc</span>
+            </div>
+            <h3 class="card-title">Quần Thể Danh Thắng Tràng An</h3>
+            <p class="card-desc">Ngồi thuyền nan ngắm nhìn non nước trùng điệp, luồn lách qua các hang động thủy triều và chiêm bái ngôi chùa Bái Đính kỷ lục Đông Nam Á.</p>
+            <div class="card-footer">
+              <div class="card-price-info">
+                <span class="label">Giá tour trọn gói từ</span>
+                <span class="price">1.990.000đ</span>
+              </div>
+              <button class="btn-card-action btn-open-detail" data-tour="ninhbinh">Xem Chi Tiết</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 6: Đà Lạt -->
+        <article class="destination-card fade-in-up" data-region="central">
+          <div class="card-img-box">
+            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop" alt="Đà Lạt xứ sở sương mù" loading="lazy">
+            <span class="card-badge">🌸 Thành Phố Ngàn Hoa</span>
+          </div>
+          <div class="card-content">
+            <div class="card-location">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <span>Lâm Đồng, Tây Nguyên</span>
+            </div>
+            <h3 class="card-title">Đà Lạt Xứ Sở Sương Mù</h3>
+            <p class="card-desc">Thưởng thức khí hậu mát mẻ quanh năm, săn mây đồi chè Cầu Đất, dạo quanh hồ Xuân Hương và check-in các nông trại hoa rực rỡ.</p>
+            <div class="card-footer">
+              <div class="card-price-info">
+                <span class="label">Giá tour trọn gói từ</span>
+                <span class="price">2.590.000đ</span>
+              </div>
+              <button class="btn-card-action btn-open-detail" data-tour="dalat">Xem Chi Tiết</button>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div style="text-align: center; margin-top: 45px;">
+        <a href="diem-den.html" class="btn-search-action" style="padding: 12px 30px; display: inline-flex;">Xem Tất Cả Điểm Đến Việt Nam →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOUR DU LỊCH BÁN CHẠY (FEATURED TOURS) -->
+  <section class="tours-section" id="tour-section">
+    <div class="container">
+      <div class="section-header fade-in-up">
+        <span class="section-tag">Tour Khuyến Mãi Hot</span>
+        <h2 class="section-title">Hành Trình Được Đặt Nhiều Nhất</h2>
+        <p class="section-subtitle">Lịch khởi hành liên tục hàng tuần, tiêu chuẩn khách sạn từ 3 đến 5 sao sang trọng.</p>
+      </div>
+
+      <div class="tours-grid">
+        <!-- Tour 1 -->
+        <article class="tour-card fade-in-up">
+          <div class="tour-img-wrap">
+            <img src="https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800&auto=format&fit=crop" alt="Tour Hạ Long">
+            <span class="tour-meta-tag">⏱ 3 Ngày 2 Đêm</span>
+          </div>
+          <div class="tour-body">
+            <div class="tour-rating">
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              <span>5.0 (286 đánh giá)</span>
+              <span class="review-count">• Khởi hành: Thứ 6</span>
+            </div>
+            <h3 class="tour-title">Hạ Long - Bái Tử Long - Nghỉ Dưỡng Du Thuyền 5 Sao</h3>
+            <ul class="tour-features-list">
+              <li>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                Phòng Suite ban công view trọn vịnh
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                Tiệc buffet hải sản tươi sống thượng hạng
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                Xe Limousine Dcar đưa đón tận nơi
+              </li>
+            </ul>
+            <div class="tour-footer-box">
+              <div class="tour-price-box">
+                <span class="price-old">4.200.000đ</span>
+                <span class="price-current">3.490.000đ</span>
+              </div>
+              <a href="lien-he.html" class="btn-book-tour">Đặt Ngay</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Tour 2 -->
+        <article class="tour-card fade-in-up">
+          <div class="tour-img-wrap">
+            <img src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?q=80&w=800&auto=format&fit=crop" alt="Tour Sapa Fansipan">
+            <span class="tour-meta-tag">⏱ 3 Ngày 2 Đêm</span>
+          </div>
+          <div class="tour-body">
+            <div class="tour-rating">
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              <span>4.9 (195 đánh giá)</span>
+              <span class="review-count">• Khởi hành: Thứ 5, 7</span>
+            </div>
+            <h3 class="tour-title">Hà Nội - Sapa - Chinh Phục Đỉnh Fansipan - Bản Cát Cát</h3>
+            <ul class="tour-features-list">
+              <li>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                Bao gồm vé cáp treo khứ hồi Fansipan Legend
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                Khách sạn 4 sao trung tâm view thung lũng
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                Thưởng thức lẩu cá hồi, gà đen Tây Bắc
+              </li>
+            </ul>
+            <div class="tour-footer-box">
+              <div class="tour-price-box">
+                <span class="price-old">3.500.000đ</span>
+                <span class="price-current">2.890.000đ</span>
+              </div>
+              <a href="lien-he.html" class="btn-book-tour">Đặt Ngay</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Tour 3 -->
+        <article class="tour-card fade-in-up">
+          <div class="tour-img-wrap">
+            <img src="https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?q=80&w=800&auto=format&fit=crop" alt="Tour Đà Nẵng Hội An">
+            <span class="tour-meta-tag">⏱ 4 Ngày 3 Đêm</span>
+          </div>
+          <div class="tour-body">
+            <div class="tour-rating">
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              <span>4.9 (340 đánh giá)</span>
+              <span class="review-count">• Khởi hành: Hàng ngày</span>
+            </div>
+            <h3 class="tour-title">Đà Nẵng - Cầu Vàng Bà Nà Hills - Phố Cổ Hội An - Cù Lao Chàm</h3>
+            <ul class="tour-features-list">
+              <li>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                Check-in Cầu Vàng siêu hot trên đỉnh Bà Nà
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                Thả đèn hoa đăng sông Hoài & cano Cù Lao Chàm
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                Khách sạn mặt biển Mỹ Khê Đà Nẵng
+              </li>
+            </ul>
+            <div class="tour-footer-box">
+              <div class="tour-price-box">
+                <span class="price-old">5.100.000đ</span>
+                <span class="price-current">4.250.000đ</span>
+              </div>
+              <a href="lien-he.html" class="btn-book-tour">Đặt Ngay</a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div style="text-align: center; margin-top: 45px;">
+        <a href="tour.html" class="btn-search-action" style="padding: 12px 30px; display: inline-flex;">Xem Toàn Bộ Bảng Giá Tour 2026 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANNER KHUYẾN MÃI / CALL TO ACTION -->
+  <section class="cta-banner">
+    <div class="container">
+      <div class="cta-content-wrapper">
+        <div class="cta-text-side">
+          <h2>Nhận Ngay Ưu Đãi Giảm 15% Cho Nhóm Từ 4 Người!</h2>
+          <p>Đăng ký sớm trong tháng này để nhận trọn bộ quà tặng du lịch cao cấp và voucher giảm giá trực tiếp vào hóa đơn.</p>
+        </div>
+        <div class="cta-action-side">
+          <a href="lien-he.html" class="btn-cta-primary">Đăng Ký Nhận Ưu Đãi</a>
+          <a href="tel:19006868" class="btn-cta-secondary">Gọi Hotline: 1900 6868</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CẢM NHẬN KHÁCH HÀNG (TESTIMONIALS) -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="section-header fade-in-up">
+        <span class="section-tag">Khách Hàng Nói Gì</span>
+        <h2 class="section-title">Hàng Ngàn Khách Hàng Hài Lòng</h2>
+        <p class="section-subtitle">Hạnh phúc của bạn trên mỗi chặng đường là động lực lớn nhất của đội ngũ chúng tôi.</p>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card fade-in-up">
+          <p class="testimonial-quote">“Chuyến đi Hạ Long 3 ngày 2 đêm cùng gia đình vượt ngoài mong đợi! Du thuyền rất sang trọng, đồ ăn ngon và hướng dẫn viên vô cùng chu đáo, chăm sóc các bác lớn tuổi rất ân cần.”</p>
+          <div class="testimonial-author">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" alt="Nguyễn Hoàng Lan" class="author-avatar">
+            <div class="author-info">
+              <h4>Nguyễn Hoàng Lan</h4>
+              <p>Hà Nội - Tour Du Thuyền Hạ Long</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card fade-in-up">
+          <p class="testimonial-quote">“Mình đã đi tour Sapa - Fansipan. Hướng dẫn viên địa phương am hiểu sâu sắc về phong tục của người H'Mông, chụp ảnh cho cả đoàn cực kỳ có tâm. Chắc chắn sẽ tiếp tục ủng hộ Vietnam Wonder!”</p>
+          <div class="testimonial-author">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop" alt="Trần Đình Tuấn" class="author-avatar">
+            <div class="author-info">
+              <h4>Trần Đình Tuấn</h4>
+              <p>TP. Hồ Chí Minh - Tour Sapa Fansipan</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card fade-in-up">
+          <p class="testimonial-quote">“Đi tour Đà Nẵng - Hội An với hội bạn thân. Lịch trình hợp lý, không bị gò bó hay ép mua sắm như các tour khác. Khách sạn biển đẹp lung linh, giá tour lại cực kỳ ưu đãi.”</p>
+          <div class="testimonial-author">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=200&auto=format&fit=crop" alt="Phạm Mai Phương" class="author-avatar">
+            <div class="author-info">
+              <h4>Phạm Mai Phương</h4>
+              <p>Đà Nẵng - Tour Di Sản Miền Trung</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM LIÊN HỆ ĐẶT TOUR NHANH -->
+  <section class="contact-page-section" style="background-color: #f1f5f9;">
+    <div class="container">
+      <div class="section-header fade-in-up">
+        <span class="section-tag">Đặt Tour Nhanh</span>
+        <h2 class="section-title">Bạn Đã Chọn Được Điểm Đến Yêu Thích?</h2>
+        <p class="section-subtitle">Điền thông tin bên dưới, chuyên viên tư vấn sẽ liên hệ ngay trong vòng 10 phút.</p>
+      </div>
+
+      <div class="contact-layout">
+        <!-- Thông tin liên hệ -->
+        <div class="contact-info-panel fade-in-up">
+          <h3>Thông Tin Hỗ Trợ</h3>
+          <p class="intro">Chúng tôi luôn sẵn sàng lắng nghe và đồng hành cùng chuyến du lịch mơ ước của bạn.</p>
+
+          <div class="contact-item-list">
+            <div class="contact-detail-row">
+              <div class="contact-detail-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+              </div>
+              <div class="contact-detail-text">
+                <h5>Số Điện Thoại Hotline</h5>
+                <p><a href="tel:19006868">1900 6868</a> (Tổng đài) - <a href="tel:0988123456">0988 123 456</a></p>
+              </div>
+            </div>
+
+            <div class="contact-detail-row">
+              <div class="contact-detail-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              </div>
+              <div class="contact-detail-text">
+                <h5>Hòm Thư Điện Tử</h5>
+                <p><a href="mailto:contact@vietnamtravel.vn">contact@vietnamtravel.vn</a></p>
+              </div>
+            </div>
+
+            <div class="contact-detail-row">
+              <div class="contact-detail-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+              </div>
+              <div class="contact-detail-text">
+                <h5>Giờ Hỗ Trợ Khách Hàng</h5>
+                <p>Thứ 2 - Chủ Nhật: 08:00 - 22:00 (Hỗ trợ khẩn cấp 24/7)</p>
+              </div>
+            </div>
+          </div>
+
+          <p class="panel-socials-title">Kết Nối Mạng Xã Hội</p>
+          <div class="panel-socials">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" title="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" title="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" title="TikTok">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-1.01-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Form nhập -->
+        <div class="contact-form-panel fade-in-up">
+          <div class="form-header-group">
+            <h3>Gửi Yêu Cầu Đặt Tour / Báo Giá</h3>
+            <p>Vui lòng điền thông tin để chúng tôi phục vụ bạn tốt nhất.</p>
+          </div>
+
+          <form class="booking-form" id="bookingContactForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fullname">Họ Và Tên <span class="required">*</span></label>
+                <input type="text" id="fullname" name="fullname" placeholder="Ví dụ: Nguyễn Văn A" required>
+              </div>
+              <div class="form-group">
+                <label for="phone">Số Điện Thoại <span class="required">*</span></label>
+                <input type="tel" id="phone" name="phone" placeholder="Ví dụ: 0988 123 456" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Địa Chỉ Email</label>
+                <input type="email" id="email" name="email" placeholder="email@gmail.com">
+              </div>
+              <div class="form-group">
+                <label for="tour_selected">Tour Quan Tâm</label>
+                <select id="tour_selected" name="tour_selected">
+                  <option value="Hạ Long - Du Thuyền 5 Sao">Hạ Long - Du Thuyền 5 Sao (3N2Đ)</option>
+                  <option value="Sapa - Fansipan Huyền Thoại">Sapa - Fansipan Huyền Thoại (3N2Đ)</option>
+                  <option value="Đà Nẵng - Hội An - Cù Lao Chàm">Đà Nẵng - Hội An - Cù Lao Chàm (4N3Đ)</option>
+                  <option value="Phú Quốc - Thiên Đường Biển Đảo">Phú Quốc - Thiên Đường Biển Đảo (3N2Đ)</option>
+                  <option value="Ninh Bình - Tràng An Bái Đính">Ninh Bình - Tràng An Bái Đính (2N1Đ)</option>
+                  <option value="Đà Lạt Ngàn Hoa">Đà Lạt Ngàn Hoa (3N2Đ)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="guests">Số Lượng Khách</label>
+                <input type="number" id="guests" name="guests" min="1" value="2">
+              </div>
+              <div class="form-group">
+                <label for="departDate">Ngày Dự Kiến Khởi Hành</label>
+                <input type="date" id="departDate" name="departDate" value="2026-10-15">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="notes">Yêu Cầu Đặc Biệt Hoặc Ghi Chú</label>
+              <textarea id="notes" name="notes" rows="3" placeholder="Ví dụ: Cần phòng đôi hướng biển, có trẻ nhỏ đi kèm..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit-booking" id="btnSubmitBooking">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+              Gửi Yêu Cầu Tư Vấn Ngay
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER CHÍNH & CREDIT DESIGNER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <!-- Cột 1: Thông tin thương hiệu -->
+        <div class="footer-col footer-brand">
+          <div class="brand-logo" style="margin-bottom: 16px;">
+            <div class="logo-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10.18 9l2.12-6 2.12 6H21l-5.18 3.73 1.98 6.27-5.27-3.83-5.27 3.83 1.98-6.27L3 9h7.18z"/>
+              </svg>
+            </div>
+            <span>VIETNAM <span class="highlight">WONDER</span></span>
+          </div>
+          <p>Công ty TNHH Du Lịch & Lữ Hành Quốc Tế Vietnam Wonder. Tự hào mang vẻ đẹp Việt Nam lan tỏa đến du khách trong và ngoài nước.</p>
+          <p style="font-size: 0.85rem; color: #64748b;">Giấy phép Lữ hành Quốc tế số: 01-1234/2024/TCDL-GP LHQT</p>
+        </div>
+
+        <!-- Cột 2: Các liên kết -->
+        <div class="footer-col">
+          <h4>Các Liên Kết</h4>
+          <ul class="footer-links-list">
+            <li><a href="index.html">Trang chủ</a></li>
+            <li><a href="diem-den.html">Điểm đến</a></li>
+            <li><a href="tour.html">Tour du lịch</a></li>
+            <li><a href="lien-he.html">Liên hệ tư vấn</a></li>
+            <li><a href="diem-den.html">Cẩm nang du lịch</a></li>
+            <li><a href="tour.html">Chính sách & Điều khoản</a></li>
+          </ul>
+        </div>
+
+        <!-- Cột 3: Thông tin liên hệ & Giờ hỗ trợ -->
+        <div class="footer-col">
+          <h4>Hỗ Trợ Khách Hàng</h4>
+          <div class="footer-contact-details">
+            <div class="footer-contact-row">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+              <div>
+                <strong>Hotline:</strong><br>
+                <a href="tel:19006868" style="color: #38bdf8; font-weight:700;">1900 6868</a> (Tổng đài)<br>
+                <a href="tel:0988123456" style="color: #cbd5e1;">0988 123 456</a> (Zalo/Viber)
+              </div>
+            </div>
+
+            <div class="footer-contact-row">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              <div>
+                <strong>Email:</strong><br>
+                <a href="mailto:contact@vietnamtravel.vn">contact@vietnamtravel.vn</a>
+              </div>
+            </div>
+
+            <div class="footer-contact-row">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+              <div>
+                <strong>Giờ hỗ trợ khách hàng:</strong><br>
+                <span>Thứ 2 - Chủ Nhật: 08:00 - 22:00</span><br>
+                <span style="color:#10b981; font-weight:600;">(Đường dây nóng hỗ trợ 24/7)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cột 4: Mạng xã hội & Địa chỉ -->
+        <div class="footer-col">
+          <h4>Kết Nối Với Chúng Tôi</h4>
+          <p style="font-size: 0.92rem; margin-bottom: 12px;">Theo dõi chúng tôi trên mạng xã hội để nhận tin khuyến mãi và cẩm nang du lịch mới nhất:</p>
+          <div class="footer-social-icons">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="TikTok">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-1.01-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            </a>
+          </div>
+          <p style="margin-top: 20px; font-size: 0.88rem; color: #cbd5e1;">📍 Văn phòng chính: Tầng 6, Tòa nhà Travel Hub, 128 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh</p>
+        </div>
+      </div>
+
+      <!-- FOOTER BOTTOM: CREDIT DESIGNER & BẢN QUYỀN -->
+      <div class="footer-bottom-bar">
+        <p class="footer-copyright">© 2026 Vietnam Wonder Travel. Bản quyền được bảo lưu.</p>
+        <p class="footer-designer-credit">“Thiết kế bởi Minh Đỗ”</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL XEM CHI TIẾT TOUR -->
+  <div class="modal-overlay" id="tourDetailModal">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Đóng">✕</button>
+      <div style="overflow: hidden; border-radius: var(--radius-md); margin-bottom: 20px;">
+        <img id="modalTourImg" src="" alt="Hình ảnh tour" style="width: 100%; height: 260px; object-fit: cover;">
+      </div>
+      <span id="modalTourLocation" style="color: #0d6efd; font-weight: 700; font-size: 0.88rem;"></span>
+      <h3 id="modalTourTitle" style="font-size: 1.4rem; font-weight: 800; margin: 6px 0 12px;"></h3>
+      <p id="modalTourDesc" style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px;"></p>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 18px;">
+        <div>
+          <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Thời gian: <strong id="modalTourDuration" style="color: var(--text-main);"></strong></span>
+          <span style="font-size: 1.4rem; font-weight: 800; color: #ef4444;" id="modalTourPrice"></span>
+        </div>
+        <a href="lien-he.html" class="btn-book-tour" style="padding: 12px 26px;">Đặt Giữ Chỗ Ngay</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST THÔNG BÁO TƯƠNG TÁC -->
+  <div class="toast-notification" id="toastNotification">
+    <div class="toast-icon">✓</div>
+    <div class="toast-text" id="toastMessage">Yêu cầu đã được ghi nhận thành công!</div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+/* ==========================================================================
+   TOAN BO JAVASCRIPT (TU main.js) DUOC TICH HOP TRUC TIEP CHO NOTEPAD / NOTEPAD++
+   ========================================================================== */
+/**
+ * VIETNAM WONDER TRAVEL - JAVASCRIPT
+ * Tương tác mượt mà, tối ưu responsive, mở trực tiếp mọi trình duyệt
+ * Soạn thảo & chỉnh sửa dễ dàng trên Notepad++
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. MOBILE DRAWER MENU
+  const mobileToggleBtn = document.getElementById('mobileToggleBtn');
+  const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+  const mobileNavDrawer = document.getElementById('mobileNavDrawer');
+  const mobileOverlay = document.getElementById('mobileOverlay');
+
+  function openMobileNav() {
+    if (mobileNavDrawer && mobileOverlay) {
+      mobileNavDrawer.classList.add('open');
+      mobileOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeMobileNav() {
+    if (mobileNavDrawer && mobileOverlay) {
+      mobileNavDrawer.classList.remove('open');
+      mobileOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (mobileToggleBtn) mobileToggleBtn.addEventListener('click', openMobileNav);
+  if (mobileCloseBtn) mobileCloseBtn.addEventListener('click', closeMobileNav);
+  if (mobileOverlay) mobileOverlay.addEventListener('click', closeMobileNav);
+
+  // Đóng drawer khi nhấn link
+  const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', closeMobileNav);
+  });
+
+  // 2. STICKY HEADER EFFECTS
+  const siteHeader = document.querySelector('.site-header');
+  window.addEventListener('scroll', () => {
+    if (siteHeader) {
+      if (window.scrollY > 40) {
+        siteHeader.classList.add('scrolled');
+      } else {
+        siteHeader.classList.remove('scrolled');
+      }
+    }
+  });
+
+  // 3. HERO SLIDER CHUYỂN ẢNH TỰ ĐỘNG
+  const heroSlides = document.querySelectorAll('.hero-slide');
+  const sliderDots = document.querySelectorAll('.slider-dot');
+  let currentSlide = 0;
+  let slideInterval;
+
+  function showSlide(index) {
+    if (heroSlides.length === 0) return;
+    heroSlides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === index);
+    });
+    sliderDots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === index);
+    });
+    currentSlide = index;
+  }
+
+  function nextSlide() {
+    let next = (currentSlide + 1) % heroSlides.length;
+    showSlide(next);
+  }
+
+  if (heroSlides.length > 0) {
+    slideInterval = setInterval(nextSlide, 5000);
+
+    sliderDots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        clearInterval(slideInterval);
+        showSlide(idx);
+        slideInterval = setInterval(nextSlide, 5000);
+      });
+    });
+  }
+
+  // 4. BỘ LỌC ĐIỂM ĐẾN (FILTER TABS)
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const destinationCards = document.querySelectorAll('.destination-card');
+
+  if (filterBtns.length > 0 && destinationCards.length > 0) {
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.getAttribute('data-filter');
+
+        destinationCards.forEach(card => {
+          const region = card.getAttribute('data-region');
+          if (filter === 'all' || region === filter) {
+            card.style.display = 'flex';
+            setTimeout(() => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            }, 10);
+          } else {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(15px)';
+            setTimeout(() => {
+              card.style.display = 'none';
+            }, 250);
+          }
+        });
+      });
+    });
+  }
+
+  // 5. HIỆU ỨNG SCROLL REVEAL (FADE IN UP)
+  const fadeElements = document.querySelectorAll('.fade-in-up');
+  if ('IntersectionObserver' in window) {
+    const appearOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    };
+
+    const appearOnScroll = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('appear');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, appearOptions);
+
+    fadeElements.forEach(el => appearOnScroll.observe(el));
+  } else {
+    // Fallback cho trình duyệt cũ
+    fadeElements.forEach(el => el.classList.add('appear'));
+  }
+
+  // 6. MODAL XEM CHI TIẾT TOUR
+  const detailModal = document.getElementById('tourDetailModal');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const modalTourTitle = document.getElementById('modalTourTitle');
+  const modalTourLocation = document.getElementById('modalTourLocation');
+  const modalTourDuration = document.getElementById('modalTourDuration');
+  const modalTourPrice = document.getElementById('modalTourPrice');
+  const modalTourDesc = document.getElementById('modalTourDesc');
+  const modalTourImg = document.getElementById('modalTourImg');
+
+  const tourDataMap = {
+    'halong': {
+      title: 'Khám Phá Vịnh Hạ Long - Du Thuyền 5 Sao',
+      location: 'Quảng Ninh',
+      duration: '3 Ngày 2 Đêm',
+      price: '3.490.000đ',
+      img: 'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=800&auto=format&fit=crop',
+      desc: 'Hành trình trải nghiệm kỳ quan thiên nhiên thế giới trên du thuyền đẳng cấp. Thưởng ngoạn vịnh Bái Tử Long, chèo thuyền kayak qua hang Luồn, ngắm hoàng hôn rực rỡ và thưởng thức tiệc hải sản tươi sống.'
+    },
+    'sapa': {
+      title: 'Chinh Phục Đỉnh Fansipan & Mù Cang Chải',
+      location: 'Lào Cai - Yên Bái',
+      duration: '3 Ngày 2 Đêm',
+      price: '2.890.000đ',
+      img: 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?q=80&w=800&auto=format&fit=crop',
+      desc: 'Chiêm ngưỡng ruộng bậc thang Mù Cang Chải kỳ vĩ vào mùa lúa chín, chạm tay vào Nóc nhà Đông Dương Fansipan huyền thoại, trải nghiệm văn hóa bản sắc của người H’Mông, Dao đỏ.'
+    },
+    'hoian': {
+      title: 'Di Sản Miền Trung: Đà Nẵng - Hội An - Cù Lao Chàm',
+      location: 'Đà Nẵng - Quảng Nam',
+      duration: '4 Ngày 3 Đêm',
+      price: '4.250.000đ',
+      img: 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?q=80&w=800&auto=format&fit=crop',
+      desc: 'Thả đèn hoa đăng lung linh trên dòng sông Hoài, dạo bước qua từng góc phố cổ rêu phong, chiêm ngưỡng Cầu Vàng Bà Nà Hills và lặn ngắm san hô biển ngọc Cù Lao Chàm.'
+    },
+    'phuquoc': {
+      title: 'Thiên Đường Biển Đảo Phú Quốc & Khám Phá 4 Đảo',
+      location: 'Kiên Giang',
+      duration: '3 Ngày 2 Đêm',
+      price: '4.690.000đ',
+      img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop',
+      desc: 'Tận hưởng làn nước trong xanh như pha lê tại Hòn Thơm, Hòn Móng Tay, thưởng thức hoàng hôn tuyệt mỹ tại Sunset Sanato và trải nghiệm ẩm thực chợ đêm Phú Quốc quyến rũ.'
+    },
+    'ninhbinh': {
+      title: 'Tuyệt Tác Ninh Bình: Tràng An - Tam Cốc - Bái Đính',
+      location: 'Ninh Bình',
+      duration: '2 Ngày 1 Đêm',
+      price: '1.990.000đ',
+      img: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=800&auto=format&fit=crop',
+      desc: 'Ngồi thuyền nan lướt nhẹ qua những hang động kỳ bí, bao bọc bởi dãy núi đá vôi hùng vĩ của di sản thế giới kép Tràng An, check-in Hang Múa nhìn toàn cảnh non sông tuyệt bích.'
+    },
+    'dalat': {
+      title: 'Đà Lạt Ngàn Hoa & Săn Mây Đỉnh Đồi Chè Cầu Đất',
+      location: 'Lâm Đồng',
+      duration: '3 Ngày 2 Đêm',
+      price: '2.590.000đ',
+      img: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop',
+      desc: 'Tận hưởng bầu không khí se lạnh mộng mơ, săn mây bồng bềnh lúc bình minh, check-in đồi chè Cầu Đất bát ngát, thác Datanla hoang sơ và thưởng thức cà phê giữa thung lũng hoa.'
+    }
+  };
+
+  // Nút mở modal chi tiết
+  const openDetailButtons = document.querySelectorAll('.btn-open-detail');
+  openDetailButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const tourKey = btn.getAttribute('data-tour');
+      const data = tourDataMap[tourKey];
+
+      if (data && detailModal) {
+        if (modalTourTitle) modalTourTitle.textContent = data.title;
+        if (modalTourLocation) modalTourLocation.textContent = data.location;
+        if (modalTourDuration) modalTourDuration.textContent = data.duration;
+        if (modalTourPrice) modalTourPrice.textContent = data.price;
+        if (modalTourDesc) modalTourDesc.textContent = data.desc;
+        if (modalTourImg) modalTourImg.src = data.img;
+
+        detailModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  });
+
+  if (modalCloseBtn && detailModal) {
+    modalCloseBtn.addEventListener('click', () => {
+      detailModal.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+
+    detailModal.addEventListener('click', (e) => {
+      if (e.target === detailModal) {
+        detailModal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+
+  // 7. TOAST NOTIFICATION VÀ XỬ LÝ FORM
+  function showToast(message, type = 'success') {
+    const toast = document.getElementById('toastNotification');
+    const toastMessage = document.getElementById('toastMessage');
+    if (!toast) return;
+
+    if (toastMessage) toastMessage.textContent = message;
+    toast.classList.add('show');
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 4000);
+  }
+
+  // Xử lý form đặt tour / liên hệ
+  const contactForm = document.getElementById('bookingContactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = contactForm.querySelector('[name="fullname"]')?.value.trim();
+      const phone = contactForm.querySelector('[name="phone"]')?.value.trim();
+      const tourSelect = contactForm.querySelector('[name="tour_selected"]')?.value;
+
+      if (!name || !phone) {
+        showToast('Vui lòng điền đầy đủ họ tên và số điện thoại liên hệ!', 'warning');
+        return;
+      }
+
+      // Giả lập gửi thành công
+      showToast(`Cảm ơn bạn ${name}! Vietnam Wonder đã nhận yêu cầu và sẽ gọi hotline trong 10 phút.`, 'success');
+      contactForm.reset();
+
+      // Nếu có modal đang mở thì đóng
+      if (detailModal && detailModal.classList.contains('active')) {
+        detailModal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+
+  // Form tìm kiếm nhanh tại hero
+  const quickSearchForm = document.getElementById('quickSearchForm');
+  if (quickSearchForm) {
+    quickSearchForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const destination = document.getElementById('quickDest')?.value;
+      showToast(`Đang tìm kiếm tour phù hợp tại "${destination}"... Vui lòng xem danh sách bên dưới!`, 'info');
+
+      const toursSection = document.getElementById('tour-section');
+      if (toursSection) {
+        toursSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+});
+
+</script>
+</body>
+</html>
