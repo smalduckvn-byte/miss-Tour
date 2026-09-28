@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miss tour - Du Lịch Gia Lai & Bình Định | Nguyễn Lê Gia Lâm</title>
+
+    <!-- Google Fonts: Be Vietnam Pro & Fredoka for playful mascot -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        forestGreen: '#1b4332',
+                        jadeGreen: '#2d6a4f',
+                        emeraldVibrant: '#10b981',
+                        mintLight: '#d8f3dc',
+                        sunsetGold: '#f59e0b',
+                        coralOrange: '#f97316',
+                        roseAccent: '#f43f5e',
+                        softCream: '#f8fafc',
+                        earthDark: '#0f172a',
+                    },
+                    fontFamily: {
+                        sans: ['Be Vietnam Pro', 'sans-serif'],
+                        playful: ['Fredoka', 'sans-serif'],
+                    },
+                    keyframes: {
+                        bounceSlow: {
+                            '0%, 100%': { transform: 'translateY(-5%)' },
+                            '50%': { transform: 'translateY(5%)' },
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-6deg)' },
+                            '50%': { transform: 'rotate(6deg)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: 1, transform: 'scale(1)' },
+                            '50%': { opacity: 0.85, transform: 'scale(1.05)' },
+                        }
+                    },
+                    animation: {
+                        bounceSlow: 'bounceSlow 3s ease-in-out infinite',
+                        wiggle: 'wiggle 1s ease-in-out infinite',
+                        pulseGlow: 'pulseGlow 2s infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons & Canvas Confetti CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        .glass-header {
+            background: rgba(27, 67, 50, 0.92);
+            backdrop-filter: blur(16px);
+        }
+
+        .tab-page {
+            display: none;
+        }
+
+        .tab-page.active {
+            display: block;
+            animation: zoomFade 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes zoomFade {
+            from { opacity: 0; transform: scale(0.98) translateY(8px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .active-tab-btn {
+            background-color: #10b981 !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #059669; }
+    </style>
+</head>
+<body class="antialiased selection:bg-emeraldVibrant selection:text-white flex flex-col min-h-screen relative overflow-x-hidden">
+
+    <!-- Header Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-40 transition-all duration-300 glass-header text-white border-b border-emeraldVibrant/20 shadow-lg" id="main-header">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Logo Miss tour -->
+            <button onclick="navigateTo('home')" class="flex items-center gap-3 text-left group focus:outline-none">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emeraldVibrant via-teal-400 to-sunsetGold flex items-center justify-center text-white font-bold text-xl shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
+                    <i data-lucide="compass" class="w-7 h-7 text-white animate-spin-slow"></i>
+                </div>
+                <div>
+                    <span class="block text-2xl font-extrabold tracking-tight text-white uppercase leading-none font-playful">Miss tour</span>
+                    <span class="text-[10px] text-mintLight font-medium tracking-widest uppercase flex items-center gap-1 mt-0.5">
+                        <span class="w-2 h-2 rounded-full bg-emeraldVibrant animate-ping"></span> Gia Lai & Bình Định
+                    </span>
+                </div>
+            </button>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden xl:flex items-center gap-2 font-medium text-xs">
+                <button onclick="navigateTo('home')" id="nav-btn-home" class="nav-btn px-4 py-2.5 rounded-full text-mintLight hover:text-white hover:bg-white/10 transition flex items-center gap-1.5 font-bold">
+                    <i data-lucide="home" class="w-4 h-4"></i> Trang Chủ
+                </button>
+                <button onclick="navigateTo('tours')" id="nav-btn-tours" class="nav-btn px-4 py-2.5 rounded-full text-mintLight hover:text-white hover:bg-white/10 transition flex items-center gap-1.5 font-bold">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-sunsetGold"></i> Tour Du Lịch
+                </button>
+                <button onclick="navigateTo('free-roam')" id="nav-btn-free-roam" class="nav-btn px-4 py-2.5 rounded-full text-mintLight hover:text-white hover:bg-white/10 transition flex items-center gap-1.5 font-bold">
+                    <i data-lucide="coffee" class="w-4 h-4 text-coralOrange"></i> Khám Phá Tự Do
+                </button>
+                <button onclick="navigateTo('history')" id="nav-btn-history" class="nav-btn px-4 py-2.5 rounded-full text-mintLight hover:text-white hover:bg-white/10 transition flex items-center gap-1.5 font-bold">
+                    <i data-lucide="scroll" class="w-4 h-4 text-amber-300"></i> Lịch Sử & Văn Hóa
+                </button>
+                <button onclick="navigateTo('reviews')" id="nav-btn-reviews" class="nav-btn px-4 py-2.5 rounded-full text-mintLight hover:text-white hover:bg-white/10 transition flex items-center gap-1.5 font-bold">
+                    <i data-lucide="message-square" class="w-4 h-4"></i> Bình Luận
+                </button>
+                <button onclick="navigateTo('my-booking')" id="nav-btn-my-booking" class="nav-btn px-4 py-2.5 rounded-full text-mintLight hover:text-white hover:bg-white/10 transition flex items-center gap-1.5 font-bold">
+                    <i data-lucide="ticket-check" class="w-4 h-4"></i> Đăng Ký Của Tôi
+                </button>
+                <button onclick="navigateTo('map')" id="nav-btn-map" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-emeraldVibrant to-teal-500 text-white font-bold hover:shadow-lg hover:scale-105 transition shadow-md flex items-center gap-1.5 ml-2">
+                    <i data-lucide="map-pin" class="w-4 h-4"></i> Chỉ Đường GPS
+                </button>
+            </nav>
+
+            <!-- Social Media Handles Header -->
+            <div class="hidden lg:flex items-center gap-2">
+                <a href="https://www.facebook.com/nguyen.lam.267069/" target="_blank" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-blue-600 transition" title="Facebook"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                <a href="https://www.instagram.com/nguyen8145lam/?hl=ko" target="_blank" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-pink-600 transition" title="Instagram"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                <a href="https://www.tiktok.com/@misslanhonholathuong" target="_blank" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-black transition" title="TikTok"><i data-lucide="video" class="w-4 h-4"></i></a>
+            </div>
+
+            <!-- Mobile Menu Toggle Button -->
+            <button id="mobile-menu-btn" class="xl:hidden p-2 rounded-xl text-white hover:bg-jadeGreen focus:outline-none" aria-label="Toggle Menu">
+                <i data-lucide="menu" class="w-7 h-7"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation Menu Dropdown -->
+        <div id="mobile-menu" class="hidden xl:hidden bg-forestGreen border-b border-emeraldVibrant/20 px-4 pt-2 pb-6 space-y-2">
+            <button onclick="navigateTo('home')" class="block w-full text-left py-2.5 px-3 rounded-lg text-mintLight hover:bg-white/10 font-bold">Trang Chủ</button>
+            <button onclick="navigateTo('tours')" class="block w-full text-left py-2.5 px-3 rounded-lg text-mintLight hover:bg-white/10 font-bold">Tour Du Lịch Di Sản</button>
+            <button onclick="navigateTo('free-roam')" class="block w-full text-left py-2.5 px-3 rounded-lg text-mintLight hover:bg-white/10 font-bold">Khám Phá Tự Do (Ăn uống, Quán khuya)</button>
+            <button onclick="navigateTo('history')" class="block w-full text-left py-2.5 px-3 rounded-lg text-mintLight hover:bg-white/10 font-bold">Lịch Sử & Văn Hóa Vùng Đất</button>
+            <button onclick="navigateTo('reviews')" class="block w-full text-left py-2.5 px-3 rounded-lg text-mintLight hover:bg-white/10 font-bold">Bình Luận & Tương Tác</button>
+            <button onclick="navigateTo('my-booking')" class="block w-full text-left py-2.5 px-3 rounded-lg text-mintLight hover:bg-white/10 font-bold">Đăng Ký Tour Của Tôi</button>
+            <button onclick="navigateTo('map')" class="block w-full text-center py-3 rounded-xl bg-gradient-to-r from-emeraldVibrant to-teal-500 text-white font-bold mt-3 shadow-md">
+                Bản Đồ Google Maps GPS
+            </button>
+        </div>
+    </header>
+
+    <!-- Interactive Gemini Mascot Widget -->
+    <div id="mascot-container" class="fixed bottom-6 left-6 z-30 flex items-end gap-3 pointer-events-none sm:pointer-events-auto">
+        <div id="mascot-bubble" class="bg-white px-4 py-3 rounded-2xl shadow-2xl border-2 border-emeraldVibrant text-xs font-bold text-forestGreen max-w-[200px] sm:max-w-[240px] relative animate-bounceSlow hidden sm:block">
+            <p id="mascot-speech">Xin chào! Song Tử sẽ đồng hành cùng bạn khám phá Gia Lai & Bình Định.</p>
+            <div class="w-3 h-3 bg-white border-r-2 border-b-2 border-emeraldVibrant absolute -bottom-1.5 left-6 transform rotate-45"></div>
+        </div>
+
+        <button onclick="mascotInteract()" class="group relative focus:outline-none pointer-events-auto transition-transform hover:scale-110 active:scale-95" title="Tương tác với linh thú Song Tử">
+            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-sky-300 via-emeraldVibrant to-sunsetGold p-1 shadow-2xl animate-wiggle">
+                <div class="w-full h-full rounded-full bg-slate-900 flex flex-col items-center justify-center relative overflow-hidden border-2 border-white text-white">
+                    <span aria-hidden="true" class="text-4xl sm:text-5xl leading-none font-bold text-amber-200">♊</span>
+                    <span class="text-[9px] uppercase tracking-wider font-bold text-white/90">Song Tử</span>
+                </div>
+            </div>
+            <span class="absolute -top-2 -right-1 bg-roseAccent text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow border border-white animate-pulse">Khám phá!</span>
+        </button>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow pt-20">
+
+        <!-- TAB 1: TRANG CHỦ (HOME) -->
+        <div id="page-home" class="tab-page active">
+            <!-- Hero Section -->
+            <section class="relative pt-20 pb-20 md:pt-32 md:pb-28 overflow-hidden bg-gradient-to-br from-forestGreen via-jadeGreen to-slate-900 text-white">
+                <div class="absolute inset-0 bg-gradient-to-r from-forestGreen/95 via-forestGreen/80 to-transparent z-10"></div>
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=80" alt="Gia Lai & Bình Định" class="absolute inset-0 w-full h-full object-cover object-center transform scale-105 animate-pulseGlow" onerror="this.src='https://placehold.co/1920x1080/1b4332/d8f3dc?text=Miss+Tour'">
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+                    <div class="max-w-3xl space-y-6">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emeraldVibrant/20 border border-emeraldVibrant/40 text-mintLight text-xs sm:text-sm font-bold backdrop-blur-md shadow-lg">
+                            <span class="w-2.5 h-2.5 rounded-full bg-sunsetGold animate-ping"></span>
+                            <span>Cùng Nguyễn Lê Gia Lâm Khám Phá Địa Phương</span>
+                        </div>
+
+                        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+                            Hành Trình Rực Rỡ <br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-emeraldVibrant via-sunsetGold to-coralOrange font-playful">
+                                Gia Lai & Bình Định
+                            </span>
+                        </h1>
+
+                        <p class="text-base sm:text-lg text-slate-200 font-light leading-relaxed">
+                            Chào mừng bạn đến với <b>Miss tour</b>. Trải nghiệm bức tranh giao thoa tuyệt đẹp giữa đại ngàn Tây Nguyên kì vĩ và không gian tâm linh di sản Bình Định cổ kính.
+                        </p>
+
+                        <div class="flex flex-wrap gap-4 pt-2">
+                            <button onclick="navigateTo('tours')" class="px-8 py-4 rounded-full bg-gradient-to-r from-emeraldVibrant to-teal-500 text-white font-extrabold text-sm sm:text-base shadow-xl hover:scale-105 hover:shadow-emeraldVibrant/40 transition flex items-center gap-2">
+                                <i data-lucide="sparkles" class="w-5 h-5 text-sunsetGold"></i> Đặt Tour Di Sản Ngay
+                            </button>
+                            <button onclick="navigateTo('free-roam')" class="px-8 py-4 rounded-full bg-white/10 border border-white/30 hover:bg-white/20 text-white font-bold text-sm sm:text-base backdrop-blur-md transition flex items-center gap-2">
+                                <i data-lucide="coffee" class="w-5 h-5 text-coralOrange"></i> Ăn Sáng & Quán Khuya
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Destination Highlights Cards -->
+            <section class="py-16 bg-softCream">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-2xl mx-auto mb-12">
+                        <span class="text-emeraldVibrant font-bold tracking-widest uppercase text-xs block mb-1">Địa Điểm Nổi Bật</span>
+                        <h2 class="text-3xl font-extrabold text-earthDark">Danh Thắng Không Thể Bỏ Qua</h2>
+                        <div class="w-16 h-1.5 bg-gradient-to-r from-emeraldVibrant to-sunsetGold mx-auto my-3 rounded-full"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- Biển Hồ T'Nưng -->
+                        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col justify-between">
+                            <div>
+                                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" alt="Hồ T'Nưng" class="w-full h-44 object-cover">
+                                <div class="p-5 space-y-2">
+                                    <span class="text-[11px] font-bold px-2.5 py-1 bg-emerald-100 text-forestGreen rounded-full">Pleiku, Gia Lai</span>
+                                    <h3 class="text-lg font-bold text-earthDark pt-1">Biển Hồ T'Nưng</h3>
+                                    <p class="text-xs text-slate-600 leading-relaxed">Biển Hồ T'Nưng là hồ nước ngọt hình thành trong miệng núi lửa đã tắt, nằm giữa cao nguyên Pleiku. Mặt hồ đổi sắc theo nắng và mây, là điểm ngắm bình minh, tìm hiểu cảnh quan núi lửa và cảm nhận nhịp sống yên bình của người địa phương.</p>
+                                </div>
+                            </div>
+                            <div class="p-5 pt-0">
+                                <button onclick="quickNavigateToMap('Biển Hồ T\'Nưng Pleiku Gia Lai')" class="w-full py-2.5 rounded-xl bg-slate-100 text-forestGreen font-bold text-xs hover:bg-emeraldVibrant hover:text-white transition flex items-center justify-center gap-1.5">
+                                    <i data-lucide="navigation" class="w-3.5 h-3.5"></i> Chỉ Đường GPS
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Chư Đăng Ya -->
+                        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col justify-between">
+                            <div>
+                                <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80" alt="Núi Lửa Chư Đăng Ya" class="w-full h-44 object-cover">
+                                <div class="p-5 space-y-2">
+                                    <span class="text-[11px] font-bold px-2.5 py-1 bg-amber-100 text-sunsetGold rounded-full">Chư Păh, Gia Lai</span>
+                                    <h3 class="text-lg font-bold text-earthDark pt-1">Núi Lửa Chư Đăng Ya</h3>
+                                    <p class="text-xs text-slate-600 leading-relaxed">Chư Đăng Ya là núi lửa đã tắt với lòng chảo đất đỏ màu mỡ, nổi bật vào mùa hoa dã quỳ khoảng cuối năm. Du khách có thể đi bộ lên sườn núi, ngắm nương rẫy và những dải cao nguyên thoáng rộng; nên mang giày bám tốt và hỏi người dân về đường đi phù hợp.</p>
+                                </div>
+                            </div>
+                            <div class="p-5 pt-0">
+                                <button onclick="quickNavigateToMap('Núi lửa Chư Đăng Ya Gia Lai')" class="w-full py-2.5 rounded-xl bg-slate-100 text-forestGreen font-bold text-xs hover:bg-emeraldVibrant hover:text-white transition flex items-center justify-center gap-1.5">
+                                    <i data-lucide="navigation" class="w-3.5 h-3.5"></i> Chỉ Đường GPS
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tháp Bánh Ít -->
+                        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col justify-between">
+                            <div>
+                                <img src="https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=600&q=80" alt="Tháp Bánh Ít" class="w-full h-44 object-cover">
+                                <div class="p-5 space-y-2">
+                                    <span class="text-[11px] font-bold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full">Tuy Phước, Bình Định</span>
+                                    <h3 class="text-lg font-bold text-earthDark pt-1">Tháp Bánh Ít</h3>
+                                    <p class="text-xs text-slate-600 leading-relaxed">Quần thể tháp Bánh Ít là dấu tích kiến trúc Chăm Pa nổi bật của Bình Định, gồm nhiều tháp gạch dựng trên đồi cao. Từ chân tháp, khách có thể quan sát bố cục công trình, hoa văn và cảnh đồng bằng xung quanh; hãy giữ gìn di tích, không chạm khắc hay trèo lên phần kiến trúc.</p>
+                                </div>
+                            </div>
+                            <div class="p-5 pt-0">
+                                <button onclick="quickNavigateToMap('Tháp Bánh Ít Bình Định')" class="w-full py-2.5 rounded-xl bg-slate-100 text-forestGreen font-bold text-xs hover:bg-emeraldVibrant hover:text-white transition flex items-center justify-center gap-1.5">
+                                    <i data-lucide="navigation" class="w-3.5 h-3.5"></i> Chỉ Đường GPS
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Chùa Giác Hoàng & Nhà Thờ Kim Châu -->
+                        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col justify-between">
+                            <div>
+                                <img src="https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=600&q=80" alt="Nhà thờ Kim Châu" class="w-full h-44 object-cover">
+                                <div class="p-5 space-y-2">
+                                    <span class="text-[11px] font-bold px-2.5 py-1 bg-rose-100 text-rose-700 rounded-full">An Nhơn, Bình Định</span>
+                                    <h3 class="text-lg font-bold text-earthDark pt-1">Chùa Giác Hoàng & Kim Châu</h3>
+                                    <p class="text-xs text-slate-600 leading-relaxed">Cụm điểm ở An Nhơn gợi mở nhiều lớp sinh hoạt tín ngưỡng và kiến trúc địa phương. Khi ghé chùa Giác Hoàng hoặc nhà thờ Kim Châu, du khách nên chọn trang phục lịch sự, giữ yên tĩnh và kiểm tra thời gian mở cửa, lịch sinh hoạt trước chuyến đi.</p>
+                                </div>
+                            </div>
+                            <div class="p-5 pt-0">
+                                <button onclick="quickNavigateToMap('Nhà thờ Kim Châu Bình Định')" class="w-full py-2.5 rounded-xl bg-slate-100 text-forestGreen font-bold text-xs hover:bg-emeraldVibrant hover:text-white transition flex items-center justify-center gap-1.5">
+                                    <i data-lucide="navigation" class="w-3.5 h-3.5"></i> Chỉ Đường GPS
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-12 bg-forestGreen text-white" aria-labelledby="home-offers-title">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-5 mb-6">
+                        <div>
+                            <span class="text-amber-300 font-bold uppercase text-xs tracking-widest">Ưu đãi tour</span>
+                            <h2 id="home-offers-title" class="text-2xl sm:text-3xl font-extrabold mt-2">Đặc quyền dành cho khách địa phương & gia đình</h2>
+                            <p class="text-sm text-emerald-50/85 mt-2 max-w-2xl">Ưu đãi áp dụng trên giá vé của từng khách đủ điều kiện. Chọn chương trình để xem giá dự kiến và cung cấp thông tin xác minh khi đặt tour.</p>
+                        </div>
+                        <button onclick="navigateTo('tours')" class="shrink-0 px-5 py-3 rounded-xl border border-white/40 text-white font-bold text-sm hover:bg-white/10 transition">Xem tất cả tour</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <article class="bg-white text-earthDark p-5 sm:p-6 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <p class="text-xs uppercase font-bold tracking-wider text-emerald-700">Cư dân Nhơn Hòa</p>
+                                <p class="text-3xl font-extrabold text-forestGreen mt-1">Giảm 36%</p>
+                                <p class="text-xs text-slate-600 mt-1">Nhập nơi cư trú Nhơn Hòa và số khách đủ điều kiện khi đặt.</p>
+                            </div>
+                            <button onclick="openTourOffer('nhon-hoa')" class="px-4 py-3 rounded-xl bg-emerald-700 text-white font-bold text-sm hover:bg-emerald-800 transition">Dùng ưu đãi</button>
+                        </article>
+                        <article class="bg-white text-earthDark p-5 sm:p-6 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <p class="text-xs uppercase font-bold tracking-wider text-amber-700">Trẻ em sinh năm 2013</p>
+                                <p class="text-3xl font-extrabold text-amber-700 mt-1">Giảm 67%</p>
+                                <p class="text-xs text-slate-600 mt-1">Nhập năm sinh 2013 và số trẻ đủ điều kiện khi đặt.</p>
+                            </div>
+                            <button onclick="openTourOffer('child-2013')" class="px-4 py-3 rounded-xl bg-amber-600 text-white font-bold text-sm hover:bg-amber-700 transition">Dùng ưu đãi</button>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: TOUR DU LỊCH (TOURS) -->
+        <div id="page-tours" class="tab-page">
+            <section class="py-12 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-12">
+                        <span class="text-emeraldVibrant font-bold tracking-widest uppercase text-xs block mb-1">Gói Hành Trình Độc Quyền</span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-earthDark">Các Tour Di Sản Gia Lai & Bình Định</h2>
+                        <div class="w-20 h-1.5 bg-gradient-to-r from-emeraldVibrant via-sunsetGold to-coralOrange mx-auto my-3 rounded-full"></div>
+                        <p class="text-slate-600 text-sm">Được thiết kế tinh tế bởi Nguyễn Lê Gia Lâm - Miss tour.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        
+                        <!-- TOUR BÌNH ĐỊNH 1 -->
+                        <div class="bg-gradient-to-br from-amber-50/50 to-orange-50/30 border-2 border-amber-200/80 rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition duration-300 flex flex-col justify-between relative overflow-hidden">
+                            <span class="absolute top-4 right-4 text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 bg-sunsetGold text-white rounded-full shadow">HOT BÌNH ĐỊNH</span>
+
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-2 text-sunsetGold font-bold text-xs uppercase tracking-wider">
+                                    <i data-lucide="landmark" class="w-4 h-4"></i> Tour Tâm Linh & Di Sản 1 Ngày
+                                </div>
+
+                                <h3 class="text-2xl font-bold text-earthDark">Chiêm Bái Chùa Giác Hoàng, Nhà Thờ Kim Châu & Tháp Bánh Ít</h3>
+                                
+                                <div class="p-4 bg-white rounded-2xl border border-amber-100 space-y-2 text-xs text-slate-700 shadow-sm">
+                                    <p><b>📍 Hành trình:</b> Chùa Giác Hoàng &rarr; Nhà thờ Kim Châu &rarr; Tháp Bánh Ít &rarr; Làng nghề Chợ Huyện.</p>
+                                    <p><b>✨ Nét đặc sắc:</b> Dành thời gian tìm hiểu không gian tín ngưỡng tại Chùa Giác Hoàng, quan sát kiến trúc Nhà thờ Kim Châu và nghe giới thiệu về dấu tích Chăm Pa ở Tháp Bánh Ít. Lịch trình có thời gian nghỉ chân, chụp ảnh và tham quan làng nghề Chợ Huyện.</p>
+                                    <p><b>🍲 Đã bao gồm:</b> Bữa trưa với bánh xèo tôm nhảy Mỹ Cang và bún rạm An Nhơn; thông tin điểm ăn, thời lượng dừng và các khoản chưa bao gồm sẽ được xác nhận khi chốt đoàn.</p>
+                                    <p><b>🕒 Gợi ý lịch trình:</b> Khởi hành buổi sáng, tham quan các điểm tâm linh và di sản, nghỉ trưa thưởng thức đặc sản, sau đó ghé làng nghề trước khi kết thúc hành trình trong ngày.</p>
+                                </div>
+
+                                <div class="flex items-baseline justify-between pt-2">
+                                    <div>
+                                        <span class="text-xs text-slate-500 block">Giá trọn gói / Khách</span>
+                                        <span class="text-2xl font-extrabold text-forestGreen">1.250.000 VNĐ</span>
+                                    </div>
+                                    <span class="text-xs text-emeraldVibrant font-bold bg-emerald-100 px-3 py-1 rounded-full">Khởi hành hàng ngày</span>
+                                </div>
+                            </div>
+
+                            <div class="pt-6">
+                                <button onclick="openBookingModal('Chiêm Bái Chùa Giác Hoàng, Nhà Thờ Kim Châu & Tháp Bánh Ít', 1250000)" class="w-full py-4 rounded-2xl bg-gradient-to-r from-sunsetGold to-coralOrange text-white font-extrabold text-sm hover:shadow-lg hover:scale-[1.02] active:scale-98 transition duration-200 flex items-center justify-center gap-2">
+                                    <i data-lucide="ticket" class="w-5 h-5"></i> Đặt Gói Tour Này
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- TOUR BÌNH ĐỊNH 2 -->
+                        <div class="bg-gradient-to-br from-amber-50/50 to-orange-50/30 border-2 border-amber-200/80 rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition duration-300 flex flex-col justify-between relative overflow-hidden">
+                            <span class="absolute top-4 right-4 text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 bg-coralOrange text-white rounded-full shadow">VIP 2N1Đ</span>
+
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-2 text-coralOrange font-bold text-xs uppercase tracking-wider">
+                                    <i data-lucide="award" class="w-4 h-4"></i> Tour Trải Nghiệm Di Sản Cổ Bình Định
+                                </div>
+
+                                <h3 class="text-2xl font-bold text-earthDark">Hành Trình Kiến Trúc & Làng Nghề Cổ Truyền</h3>
+                                
+                                <div class="p-4 bg-white rounded-2xl border border-amber-100 space-y-2 text-xs text-slate-700 shadow-sm">
+                                    <p><b>📍 Hành trình:</b> Tháp Bánh Ít &rarr; Chùa Giác Hoàng &rarr; Nhà thờ Kim Châu &rarr; Làng làm Bánh ít lá gai & Rượu Bầu Đá.</p>
+                                    <p><b>✨ Nét đặc sắc:</b> Khám phá tháp Chăm và những câu chuyện về vùng đất Bình Định, ghé cơ sở làm bánh ít lá gai để tìm hiểu các công đoạn chế biến, rồi dành thời gian tham quan Chùa Giác Hoàng và Nhà thờ Kim Châu.</p>
+                                    <p><b>🍲 Đã bao gồm:</b> Dự kiến 3 bữa ăn đặc sản và 1 đêm lưu trú. Hạng phòng, tiêu chuẩn dịch vụ, phương án lưu trú và các khoản phụ thu cần được xác nhận với đơn vị tổ chức trước khi thanh toán.</p>
+                                    <p><b>🕒 Gợi ý lịch trình:</b> Ngày đầu tham quan di sản, trải nghiệm làng nghề và nghỉ đêm; ngày thứ hai dùng bữa sáng, tiếp tục khám phá điểm phù hợp với thời gian rồi trở về.</p>
+                                </div>
+
+                                <div class="flex items-baseline justify-between pt-2">
+                                    <div>
+                                        <span class="text-xs text-slate-500 block">Giá trọn gói / Khách</span>
+                                        <span class="text-2xl font-extrabold text-forestGreen">1.850.000 VNĐ</span>
+                                    </div>
+                                    <span class="text-xs text-amber-700 font-bold bg-amber-100 px-3 py-1 rounded-full">2 Ngày 1 Đêm</span>
+                                </div>
+                            </div>
+
+                            <div class="pt-6">
+                                <button onclick="openBookingModal('Hành Trình Kiến Trúc & Làng Nghề Cổ Truyền', 1850000)" class="w-full py-4 rounded-2xl bg-gradient-to-r from-sunsetGold to-coralOrange text-white font-extrabold text-sm hover:shadow-lg hover:scale-[1.02] active:scale-98 transition duration-200 flex items-center justify-center gap-2">
+                                    <i data-lucide="ticket" class="w-5 h-5"></i> Đặt Gói Tour Này
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- TOUR GIA LAI -->
+                        <div class="bg-gradient-to-br from-emerald-50/50 to-teal-50/30 border-2 border-emerald-200/80 rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition duration-300 flex flex-col justify-between relative overflow-hidden lg:col-span-2">
+                            <span class="absolute top-4 right-4 text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 bg-emeraldVibrant text-white rounded-full shadow">ĐẠI NGÀN GIA LAI</span>
+
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-2 text-forestGreen font-bold text-xs uppercase tracking-wider">
+                                    <i data-lucide="mountain" class="w-4 h-4"></i> Tour Khám Phá Núi Rừng Pleiku
+                                </div>
+
+                                <h3 class="text-2xl font-bold text-earthDark">Sắc Vàng Núi Lửa Chư Đăng Ya & Mắt Ngọc Biển Hồ</h3>
+                                
+                                <div class="p-4 bg-white rounded-2xl border border-emerald-100 space-y-2 text-xs text-slate-700 shadow-sm">
+                                    <p><b>📍 Hành trình:</b> Biển Hồ T'Nưng &rarr; Núi lửa Chư Đăng Ya &rarr; Biển Hồ Trà & Hàng thông trăm tuổi.</p>
+                                    <p><b>✨ Nét đặc sắc:</b> Ngắm cảnh hồ T'Nưng, tìm hiểu địa hình núi lửa Chư Đăng Ya và dạo dưới hàng thông trăm tuổi. Thời tiết cao nguyên thay đổi nhanh, vì vậy lịch tham quan có thể điều chỉnh theo mưa, đường đi và tình hình thực tế.</p>
+                                    <p><b>🍲 Đã bao gồm:</b> Bữa ăn gợi ý với phở hai tô Pleiku, cơm lam và gà nướng; thành phần món, điểm ăn và khẩu phần được trao đổi khi xác nhận tour.</p>
+                                    <p><b>🕒 Gợi ý lịch trình:</b> Bắt đầu từ Pleiku, ghé Biển Hồ vào buổi sáng, dành buổi trưa nghỉ và thưởng thức món địa phương, sau đó tham quan Chư Đăng Ya hoặc hàng thông tùy điều kiện.</p>
+                                </div>
+
+                                <div class="flex items-baseline justify-between pt-2">
+                                    <div>
+                                        <span class="text-xs text-slate-500 block">Giá trọn gói / Khách</span>
+                                        <span class="text-2xl font-extrabold text-forestGreen">1.450.000 VNĐ</span>
+                                    </div>
+                                    <span class="text-xs text-forestGreen font-bold bg-mintLight px-3 py-1 rounded-full">1 Ngày trọn vẹn</span>
+                                </div>
+                            </div>
+
+                            <div class="pt-6">
+                                <button onclick="openBookingModal('Sắc Vàng Núi Lửa Chư Đăng Ya & Mắt Ngọc Biển Hồ', 1450000)" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emeraldVibrant to-teal-600 text-white font-extrabold text-sm hover:shadow-lg hover:scale-[1.01] active:scale-98 transition duration-200 flex items-center justify-center gap-2">
+                                    <i data-lucide="ticket" class="w-5 h-5"></i> Đặt Gói Tour Gia Lai
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <section class="mt-10" aria-labelledby="tour-offers-title">
+                        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-4">
+                            <div>
+                                <span class="text-emerald-700 font-bold uppercase text-xs tracking-widest">Ưu đãi ngay dưới danh sách tour</span>
+                                <h3 id="tour-offers-title" class="text-xl sm:text-2xl font-extrabold text-earthDark mt-1">Giảm giá dành cho Nhơn Hòa & trẻ sinh năm 2013</h3>
+                            </div>
+                            <button onclick="navigateTo('my-booking')" class="text-sm font-bold text-emerald-700 hover:underline">Xem đăng ký của tôi</button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <article class="border border-emerald-200 bg-emerald-50 p-5 rounded-2xl flex items-center justify-between gap-3">
+                                <div><p class="text-3xl font-extrabold text-emerald-800">36%</p><p class="text-sm font-bold text-earthDark">Cư dân Nhơn Hòa</p><p class="text-xs text-slate-600 mt-1">Tính trên vé của khách đủ điều kiện.</p></div>
+                                <button onclick="openTourOffer('nhon-hoa')" class="px-4 py-3 rounded-xl bg-emerald-700 text-white font-bold text-xs sm:text-sm">Chọn ưu đãi</button>
+                            </article>
+                            <article class="border border-amber-200 bg-amber-50 p-5 rounded-2xl flex items-center justify-between gap-3">
+                                <div><p class="text-3xl font-extrabold text-amber-800">67%</p><p class="text-sm font-bold text-earthDark">Trẻ em sinh năm 2013</p><p class="text-xs text-slate-600 mt-1">Tính trên vé của trẻ đủ điều kiện.</p></div>
+                                <button onclick="openTourOffer('child-2013')" class="px-4 py-3 rounded-xl bg-amber-700 text-white font-bold text-xs sm:text-sm">Chọn ưu đãi</button>
+                            </article>
+                        </div>
+                    </section>
+
+                    <section id="booking-status-panel" class="mt-10 bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm" aria-live="polite">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-emeraldVibrant">Theo dõi đăng ký</span>
+                                <h3 class="text-lg font-bold text-earthDark mt-1">Trạng thái gói tour của bạn</h3>
+                            </div>
+                            <span id="booking-status-badge" class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 text-xs font-bold">Chưa có đăng ký</span>
+                        </div>
+                        <p id="booking-status-message" class="text-sm text-slate-600 mt-3">Sau khi gửi yêu cầu đặt tour, thông tin gói và tiến độ xử lý sẽ hiển thị tại đây trên thiết bị này.</p>
+                        <div id="booking-status-details" class="hidden mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600">
+                            <p><b class="block text-slate-800">Gói tour</b><span id="booking-status-tour"></span></p>
+                            <p><b class="block text-slate-800">Ngày khởi hành</b><span id="booking-status-date"></span></p>
+                            <p><b class="block text-slate-800">Số khách</b><span id="booking-status-guests"></span></p>
+                        </div>
+                        <button onclick="navigateTo('my-booking')" class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-emerald-700 hover:underline">
+                            <i data-lucide="external-link" class="w-4 h-4"></i> Mở trang đăng ký của tôi
+                        </button>
+                    </section>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 3: KHÁM PHÁ TỰ DO (FREE ROAM) -->
+        <div id="page-free-roam" class="tab-page">
+            <section class="py-12 bg-softCream">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-12">
+                        <span class="text-coralOrange font-bold tracking-widest uppercase text-xs block mb-1">Gợi Ý Ăn Uống & Đi Chơi</span>
+                        <h2 class="text-3xl font-extrabold text-earthDark">Địa Điểm Ăn Sáng, Quán Khuya & Cà Phê</h2>
+                        <div class="w-16 h-1.5 bg-gradient-to-r from-coralOrange to-sunsetGold mx-auto my-3 rounded-full"></div>
+                        <p class="text-slate-600 text-sm leading-relaxed">Dành cho khoảng thời gian tự do khám phá: chọn món theo khẩu vị, tìm quán cà phê phù hợp và hỏi người dân về giờ mở cửa, tình hình đông khách cũng như cách di chuyển. Địa chỉ, lịch kinh doanh và giá có thể thay đổi; vui lòng xác nhận trước khi đến.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        
+                        <!-- Ăn Sáng -->
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+                                <i data-lucide="sun" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-earthDark">Quán Ăn Sáng Đậm Đà</h3>
+                            <ul class="space-y-3 text-xs text-slate-700">
+                                <li class="p-3 bg-softCream rounded-xl">
+                                    <b class="text-forestGreen block font-bold text-sm">Phở Hai Tô Pleiku (Phở Hồng)</b>
+                                    <span>22 Nguyễn Văn Trỗi, Pleiku, Gia Lai. Món phở khô thường được dọn thành hai tô: một tô bánh phở trộn sốt và thịt, một tô nước dùng nóng ăn riêng. Thêm rau, tương và gia vị theo khẩu vị để cảm nhận vị đậm đặc trưng.</span>
+                                </li>
+                                <li class="p-3 bg-softCream rounded-xl">
+                                    <b class="text-amber-700 block font-bold text-sm">Bánh Hỏi Lòng Heo Cổ Nhơn</b>
+                                    <span>145 Ngô Mây, Quy Nhơn / An Nhơn, Bình Định. Bánh hỏi sợi mảnh ăn cùng lòng heo, rau thơm, bánh tráng và chén nước mắm pha. Mỗi quán có cách nêm và phần ăn khác nhau, nên hỏi trước nếu muốn chọn phần ít lòng hoặc không ăn nội tạng.</span>
+                                </li>
+                                <li class="p-3 bg-softCream rounded-xl">
+                                    <b class="text-coralOrange block font-bold text-sm">Bún Rạm An Nhơn Tươi Rói</b>
+                                    <span>Chợ An Nhơn, Bình Định. Bún ăn cùng nước rạm béo thơm, rau sống và gia vị; nên hỏi quán về độ cay và khẩu phần trước khi gọi.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Ăn Khuya / Ăn Đêm -->
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                            <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                                <i data-lucide="moon" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-earthDark">Quán Đêm & Ăn Khuya</h3>
+                            <ul class="space-y-3 text-xs text-slate-700">
+                                <li class="p-3 bg-softCream rounded-xl">
+                                    <b class="text-indigo-700 block font-bold text-sm">Chợ Đêm Pleiku (Bún Cua Thối & Chè)</b>
+                                    <span>Đường Lê Lai, TP. Pleiku. Bún cua có mùi lên men nồng đặc trưng, thường ăn với bún, rau sống và gia vị; đây là món dành cho người muốn thử hương vị địa phương mạnh. Chợ và giờ bán thay đổi theo ngày, nên hỏi người dân hoặc kiểm tra trước khi đi muộn.</span>
+                                </li>
+                                <li class="p-3 bg-softCream rounded-xl">
+                                    <b class="text-rose-700 block font-bold text-sm">Bánh Xèo Tôm Nhảy Khuya Mỹ Cang</b>
+                                    <span>Đường tránh An Nhơn, Bình Định. Bánh đổ nóng với lớp vỏ mỏng giòn, nhân tôm và giá; cuốn cùng rau xanh, bánh tráng rồi chấm nước mắm chua ngọt. Ăn ngay khi vừa ra lò sẽ cảm nhận rõ độ giòn và vị ngọt của tôm.</span>
+                                </li>
+                                <li class="p-3 bg-softCream rounded-xl">
+                                    <b class="text-forestGreen block font-bold text-sm">Nem Nướng & Lụi Nướng Than Hồng</b>
+                                    <span>Góc đường Phan Đình Phùng, Pleiku. Nem hoặc thịt xiên được nướng trên than, dậy mùi thơm và thường ăn kèm rau, bánh tráng cùng nước chấm. Hỏi quán về thành phần nước chấm và độ cay nếu đi cùng trẻ nhỏ.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Cà Phê & Đi Chơi Check-in -->
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                                <i data-lucide="compass" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-earthDark">Cà Phê & Đi Chơi Tự Do</h3>
+                            <ul class="space-y-3 text-xs text-slate-700">
+                                <li class="p-3 bg-softCream rounded-xl">
+                                    <b class="text-emerald-700 block font-bold text-sm">Cà Phê Thu Hà Pleiku (Lâu đời)</b>
+                                    <span>09 Nguyễn Thái Học, Pleiku, Gia Lai</span>
+                                </li>
+                                <li class="p-3 bg-softCream rounded-xl">
+                                    <b class="text-amber-700 block font-bold text-sm">Đồi Cỏ Cổ Tháp Bánh Ít</b>
+                                    <span>Thích hợp ngắm hoàng hôn chiều tà thanh bình</span>
+                                </li>
+                                <li class="p-3 bg-softCream rounded-xl">
+                                    <b class="text-indigo-700 block font-bold text-sm">Quảng Trường Đại Đoàn Kết Pleiku</b>
+                                    <span>Trái tim sôi động về đêm của TP. Pleiku</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 md:col-span-3">
+                            <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold">
+                                <i data-lucide="cup-soda" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-earthDark">Nước Uống & Hương Vị Cao Nguyên</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700 leading-relaxed">
+                                <p class="p-3 bg-softCream rounded-xl"><b class="block text-forestGreen text-sm mb-1">Cà phê Pleiku</b>Thử cà phê rang xay tại quán địa phương, chọn kiểu pha phin hoặc espresso tùy sở thích. Nhiều quán có không gian nhìn ra phố và đồi; hỏi mức rang, độ đậm và lựa chọn ít đường nếu cần.</p>
+                                <p class="p-3 bg-softCream rounded-xl"><b class="block text-amber-700 text-sm mb-1">Nước lá & trà địa phương</b>Ở một số quán ăn, trà nóng hoặc nước lá được dùng kèm bữa cơm. Hãy hỏi rõ thành phần nếu có dị ứng hoặc cần tránh caffeine, và ưu tiên đồ uống được pha mới, bảo quản sạch.</p>
+                                <p class="p-3 bg-softCream rounded-xl"><b class="block text-sky-700 text-sm mb-1">Nước mát ngày nắng</b>Nước sâm, nước trái cây và các loại nước giải khát thường có ở chợ, quán ăn. Mang theo bình cá nhân, chọn nơi có nguồn nước và đá đảm bảo vệ sinh, đặc biệt khi đi đường xa.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 4: LỊCH SỬ & VĂN HÓA (HISTORY) -->
+        <div id="page-history" class="tab-page">
+            <section class="py-12 bg-white">
+                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <span class="text-amber-700 font-bold tracking-widest uppercase text-xs block mb-1">Cội Nguồn Di Sản</span>
+                        <h2 class="text-3xl font-extrabold text-earthDark">Lịch Sử & Văn Hóa Vùng Đất Thời Xưa</h2>
+                        <div class="w-20 h-1.5 bg-gradient-to-r from-amber-600 via-sunsetGold to-emeraldVibrant mx-auto my-3 rounded-full"></div>
+                    </div>
+
+                    <div class="space-y-8">
+                        <!-- Gia Lai History -->
+                        <div class="bg-softCream p-8 rounded-3xl border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                            <div class="md:col-span-5">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/1/15/Ho_T%27Nung_%282%29.jpg" alt="Toàn cảnh Biển Hồ T'Nưng ở Pleiku, Gia Lai" class="rounded-2xl w-full h-56 object-cover shadow">
+                                <a href="https://commons.wikimedia.org/wiki/File:Ho_T%27Nung_(2).jpg" target="_blank" rel="noopener noreferrer" class="block mt-2 text-[11px] text-slate-500 hover:underline">Ảnh: Phó Nháy / Wikimedia Commons, CC BY-SA 3.0</a>
+                            </div>
+                            <div class="md:col-span-7 space-y-3">
+                                <span class="text-xs font-bold text-forestGreen bg-emerald-100 px-3 py-1 rounded-full uppercase">Đại Ngàn Tây Nguyên</span>
+                                <h3 class="text-2xl font-bold text-earthDark">Không Gian Văn Hóa Cồng Chiêng Gia Lai</h3>
+                                <div class="space-y-3 text-sm text-slate-700 leading-relaxed">
+                                    <p>Gia Lai là nơi sinh sống lâu đời của nhiều cộng đồng, trong đó có người Jrai và Bahnar. Lịch sử vùng đất được ghi dấu qua các buôn làng, nhà rông, nương rẫy, tập quán canh tác và những tuyến giao thương nối cao nguyên với duyên hải miền Trung.</p>
+                                    <p>Cồng chiêng hiện diện trong các dịp cộng đồng như lễ mừng lúa mới, lễ cưới và nghi thức vòng đời. Mỗi cộng đồng có cách diễn tấu, nhịp điệu và ý nghĩa riêng; không gian văn hóa cồng chiêng Tây Nguyên được UNESCO ghi danh là Kiệt tác truyền khẩu và di sản phi vật thể của nhân loại năm 2005, sau đó được đưa vào Danh sách di sản văn hóa phi vật thể đại diện của nhân loại năm 2008.</p>
+                                    <p>Khi tham dự sinh hoạt văn hóa, du khách nên xin phép trước khi chụp ảnh, tuân theo hướng dẫn của chủ nhà và không tự ý chạm vào nhạc cụ hay vật dụng nghi lễ. Sự tôn trọng giúp chuyến thăm trở thành cuộc gặp gỡ văn hóa thực sự thay vì chỉ là một điểm chụp hình.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bình Định History -->
+                        <div class="bg-softCream p-8 rounded-3xl border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                            <div class="md:col-span-7 space-y-3 order-2 md:order-1">
+                                <span class="text-xs font-bold text-amber-800 bg-amber-100 px-3 py-1 rounded-full uppercase">Đất Võ Trời Văn</span>
+                                <h3 class="text-2xl font-bold text-earthDark">Cổ Tự & Kiến Trúc Di Sản Bình Định</h3>
+                                <div class="space-y-3 text-sm text-slate-700 leading-relaxed">
+                                    <p>Bình Định nằm trên dải duyên hải Nam Trung Bộ, là vùng đất có dấu tích cư trú và giao lưu văn hóa kéo dài qua nhiều thời kỳ. Từ các di tích Chăm Pa như tháp Bánh Ít đến những công trình tín ngưỡng, làng nghề và đô thị cổ, cảnh quan nơi đây kể lại câu chuyện về sự tiếp nối và giao thoa của nhiều cộng đồng.</p>
+                                    <p>Trong lịch sử cận đại, vùng đất này gắn với phong trào Tây Sơn vào thế kỷ XVIII và các nhân vật như Nguyễn Huệ. Bên cạnh di tích và câu chuyện lịch sử, Bình Định còn lưu giữ nghệ thuật tuồng, võ cổ truyền, thơ ca và truyền thống hiếu học; mỗi loại hình có bối cảnh riêng, đáng tìm hiểu qua bảo tàng, hướng dẫn viên và người dân địa phương.</p>
+                                    <p>Tháp Bánh Ít cho thấy kỹ thuật xây gạch, tạo hình và trang trí của kiến trúc Chăm. Khi tham quan, hãy đi theo lối quy định, tránh leo trèo lên thân tháp và không lấy vật liệu tại di tích. Với chùa và nhà thờ, cần chọn trang phục kín đáo, giữ trật tự và tôn trọng thời gian sinh hoạt tôn giáo.</p>
+                                </div>
+                            </div>
+                            <div class="md:col-span-5 order-1 md:order-2">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/0040323_Thap_Banh_It_complex%2C_Nhon_Hoa%2C_Binh_Dinh_Vietnam_001.jpg" alt="Quần thể tháp Chăm Bánh Ít ở Nhơn Hòa, Bình Định" class="rounded-2xl w-full h-56 object-cover shadow">
+                                <a href="https://commons.wikimedia.org/wiki/File:0040323_Thap_Banh_It_complex,_Nhon_Hoa,_Binh_Dinh_Vietnam_001.jpg" target="_blank" rel="noopener noreferrer" class="block mt-2 text-[11px] text-slate-500 hover:underline">Ảnh: Ms Sarah Welch / Wikimedia Commons, CC0</a>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <article class="overflow-hidden border border-slate-200 rounded-2xl bg-white">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/S%C3%BAng_th%E1%BA%A7n_c%C3%B4ng_th%E1%BB%9Di_T%C3%A2y_S%C6%A1n.jpg" alt="Súng thần công thời Tây Sơn trưng bày tại Bảo tàng Quang Trung" loading="lazy" class="w-full h-56 object-cover">
+                                <a href="https://commons.wikimedia.org/wiki/File:S%C3%BAng_th%E1%BA%A7n_c%C3%B4ng_th%E1%BB%9Di_T%C3%A2y_S%C6%A1n.jpg" target="_blank" rel="noopener noreferrer" class="block mt-2 text-[11px] text-slate-500 hover:underline">Ảnh: Bùi Thụy Đào Nguyên / Wikimedia Commons, CC BY-SA 3.0</a>
+                                <div class="p-5">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Bảo tàng Quang Trung</span>
+                                    <h3 class="text-lg font-bold text-earthDark mt-1">Dấu tích phong trào Tây Sơn</h3>
+                                    <p class="text-sm text-slate-600 leading-relaxed mt-2">Bảo tàng Quang Trung tại huyện Tây Sơn lưu giữ tư liệu và hiện vật gắn với phong trào Tây Sơn thế kỷ XVIII. Các hiện vật quân sự như súng thần công giúp hình dung thêm về tổ chức và kỹ thuật thời kỳ đó; hãy đọc phần chú giải tại bảo tàng để hiểu bối cảnh và nguồn gốc hiện vật.</p>
+                                </div>
+                            </article>
+                            <article class="overflow-hidden border border-slate-200 rounded-2xl bg-white">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/B%C3%A3i_%C4%90%C3%A1_Tr%E1%BB%A9ng.jpg" alt="Bãi Đá Trứng tại Ghềnh Ráng, Quy Nhơn, Bình Định" loading="lazy" class="w-full h-56 object-cover">
+                                <a href="https://commons.wikimedia.org/wiki/File:B%C3%A3i_%C4%90%C3%A1_Tr%E1%BB%A9ng.jpg" target="_blank" rel="noopener noreferrer" class="block mt-2 text-[11px] text-slate-500 hover:underline">Ảnh: Bùi Thụy Đào Nguyên / Wikimedia Commons, CC BY-SA 3.0</a>
+                                <div class="p-5">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Thắng cảnh Quy Nhơn</span>
+                                    <h3 class="text-lg font-bold text-earthDark mt-1">Ghềnh Ráng và Bãi Đá Trứng</h3>
+                                    <p class="text-sm text-slate-600 leading-relaxed mt-2">Ghềnh Ráng - Tiên Sa là thắng cảnh ven biển phía nam thành phố Quy Nhơn; Bãi Đá Trứng nổi bật với những viên đá tròn được sóng biển mài nhẵn. Cảnh quan biển, ghềnh đá và các điểm tham quan lân cận góp phần tạo nên ký ức du lịch của địa phương. Du khách nên đi theo lối an toàn và tránh trèo lên đá trơn khi biển động.</p>
+                                </div>
+                            </article>
+                        </div>
+
+                        <article class="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 sm:p-8">
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                                <div class="md:col-span-4">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/PhuPhong_town_aerial_photograph.jpg" alt="Toàn cảnh thị trấn Phú Phong, huyện Tây Sơn, Bình Định" loading="lazy" class="w-full h-52 object-cover rounded-xl">
+                                    <a href="https://commons.wikimedia.org/wiki/File:PhuPhong_town_aerial_photograph.jpg" target="_blank" rel="noopener noreferrer" class="block mt-2 text-[11px] text-slate-500 hover:underline">Ảnh: Uranus2808 / Wikimedia Commons, CC BY-SA 4.0</a>
+                                </div>
+                                <div class="md:col-span-8">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-800">Tuyến giao lưu vùng miền</span>
+                                    <h3 class="text-xl font-bold text-earthDark mt-2">Từ cao nguyên đến duyên hải</h3>
+                                    <p class="text-sm text-slate-700 leading-relaxed mt-3">Gia Lai và Bình Định có địa hình, khí hậu và sinh kế khác nhau nhưng được kết nối qua những tuyến đường vượt đèo, trao đổi nông sản và giao lưu văn hóa. Cà phê, hồ tiêu và sản vật cao nguyên theo các tuyến này xuống vùng duyên hải; chiều ngược lại, hàng hóa và ảnh hưởng văn hóa biển cũng góp phần tạo nên đời sống đa dạng ở miền núi. Hành trình giữa hai tỉnh vì vậy không chỉ là chuyến đi ngắm cảnh mà còn là dịp nhận ra sự gắn bó giữa các vùng sinh thái.</p>
+                                    <p class="text-sm text-slate-700 leading-relaxed mt-3">Khi tìm hiểu lịch sử địa phương, nên đối chiếu tư liệu tại bảo tàng, di tích và lời kể của cộng đồng; các truyền thuyết, ký ức gia đình và ghi chép chính sử có thể kể cùng một địa danh theo những góc nhìn khác nhau.</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 5: BÌNH LUẬN & TƯƠNG TÁC (REVIEWS) -->
+        <div id="page-reviews" class="tab-page">
+            <section class="py-12 bg-softCream">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-12">
+                        <span class="text-emeraldVibrant font-bold tracking-widest uppercase text-xs block mb-1">Ý Kiến Du Khách</span>
+                        <h2 class="text-3xl font-extrabold text-earthDark">Bình Luận & Cảm Nhận Trực Tuyến</h2>
+                        <div class="w-16 h-1.5 bg-gradient-to-r from-emeraldVibrant to-sunsetGold mx-auto my-3 rounded-full"></div>
+                    </div>
+
+                    <!-- 6 Detailed Comment Cards Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="comments-grid">
+                        
+                        <!-- Review 1 -->
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4" id="comment-card-1">
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" class="w-11 h-11 rounded-full object-cover border-2 border-emeraldVibrant">
+                                    <div>
+                                        <h4 class="font-bold text-earthDark text-sm">Thân Thương</h4>
+                                        <span class="text-[10px] text-slate-500">Du khách TP.HCM</span>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-slate-700 leading-relaxed italic">"Chuyến đi Chùa Giác Hoàng và Nhà thờ Kim Châu ở Bình Định rất yên bình. Hướng dẫn của Miss tour vô cùng chu đáo!"</p>
+                            </div>
+
+                            <!-- Interactive Reaction Bar -->
+                            <div class="pt-3 border-t border-slate-100 space-y-3">
+                                <div class="flex items-center gap-2">
+                                    <button onclick="reactComment(1, 'like')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald font-bold transition">
+                                        👍 <span id="react-1-like">12</span>
+                                    </button>
+                                    <button onclick="reactComment(1, 'love')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-700 hover:text-rose-600 font-bold transition">
+                                        ❤️ <span id="react-1-love">24</span>
+                                    </button>
+                                    <button onclick="toggleReplyBox(1)" class="ml-auto text-[11px] font-bold text-emeraldVibrant hover:underline">Trả lời</button>
+                                </div>
+
+                                <!-- Reply Box Container -->
+                                <div id="reply-box-1" class="hidden pt-2">
+                                    <div class="p-3 bg-slate-50 rounded-xl space-y-2 border border-slate-200 text-xs">
+                                        <div class="flex items-center gap-2">
+                                            <b class="text-emerald font-bold text-[11px]">Nguyễn Lê Gia Lâm:</b>
+                                            <span class="text-[11px] text-slate-600">Cảm ơn chị Thân Thương đã ủng hộ Miss tour ạ! ❤️</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Review 2 -->
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4" id="comment-card-2">
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" class="w-11 h-11 rounded-full object-cover border-2 border-emeraldVibrant">
+                                    <div>
+                                        <h4 class="font-bold text-earthDark text-sm">Nguyễn Lê Gia Lâm</h4>
+                                        <span class="text-[10px] text-emeraldVibrant font-bold">Tác Giả Miss Tour</span>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-slate-700 leading-relaxed italic">"Rất vui được đồng hành cùng mọi người trong các chuyến hành trình khám phá cảnh đẹp Gia Lai & Bình Định!"</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 space-y-3">
+                                <div class="flex items-center gap-2">
+                                    <button onclick="reactComment(2, 'like')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald font-bold transition">
+                                        👍 <span id="react-2-like">45</span>
+                                    </button>
+                                    <button onclick="reactComment(2, 'love')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-700 hover:text-rose-600 font-bold transition">
+                                        ❤️ <span id="react-2-love">58</span>
+                                    </button>
+                                    <button onclick="toggleReplyBox(2)" class="ml-auto text-[11px] font-bold text-emeraldVibrant hover:underline">Trả lời</button>
+                                </div>
+                                <div id="reply-box-2" class="hidden pt-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Review 3 -->
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4" id="comment-card-3">
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" class="w-11 h-11 rounded-full object-cover border-2 border-emeraldVibrant">
+                                    <div>
+                                        <h4 class="font-bold text-earthDark text-sm">Nguyễn Đức Tài</h4>
+                                        <span class="text-[10px] text-slate-500">Nhiếp ảnh gia</span>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-slate-700 leading-relaxed italic">"Tháp Bánh Ít đứng ngắm chiều tà tuyệt đẹp. Góc quay chụp ảnh siêu ma mị cổ kính!"</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 space-y-3">
+                                <div class="flex items-center gap-2">
+                                    <button onclick="reactComment(3, 'like')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald font-bold transition">
+                                        👍 <span id="react-3-like">18</span>
+                                    </button>
+                                    <button onclick="reactComment(3, 'love')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-700 hover:text-rose-600 font-bold transition">
+                                        ❤️ <span id="react-3-love">19</span>
+                                    </button>
+                                    <button onclick="toggleReplyBox(3)" class="ml-auto text-[11px] font-bold text-emeraldVibrant hover:underline">Trả lời</button>
+                                </div>
+                                <div id="reply-box-3" class="hidden pt-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Review 4 -->
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4" id="comment-card-4">
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80" class="w-11 h-11 rounded-full object-cover border-2 border-emeraldVibrant">
+                                    <div>
+                                        <h4 class="font-bold text-earthDark text-sm">Đào Trường Giang</h4>
+                                        <span class="text-[10px] text-slate-500">Phượt thủ</span>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-slate-700 leading-relaxed italic">"Bánh xèo tôm nhảy Mỹ Cang ăn giòn rụm béo ngậy. Đi theo chỉ đường GPS rất chuẩn!"</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 space-y-3">
+                                <div class="flex items-center gap-2">
+                                    <button onclick="reactComment(4, 'like')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald font-bold transition">
+                                        👍 <span id="react-4-like">21</span>
+                                    </button>
+                                    <button onclick="reactComment(4, 'love')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-700 hover:text-rose-600 font-bold transition">
+                                        ❤️ <span id="react-4-love">15</span>
+                                    </button>
+                                    <button onclick="toggleReplyBox(4)" class="ml-auto text-[11px] font-bold text-emeraldVibrant hover:underline">Trả lời</button>
+                                </div>
+                                <div id="reply-box-4" class="hidden pt-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Review 5 -->
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4" id="comment-card-5">
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80" class="w-11 h-11 rounded-full object-cover border-2 border-emeraldVibrant">
+                                    <div>
+                                        <h4 class="font-bold text-earthDark text-sm">Trần Bùi Phương Oanh</h4>
+                                        <span class="text-[10px] text-slate-500">Blogger Du Lịch</span>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-slate-700 leading-relaxed italic">"Linh thú Song Tử đáng yêu! Giao diện thiết kế vừa đẹp mắt vừa dễ dàng tìm thông tin."</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 space-y-3">
+                                <div class="flex items-center gap-2">
+                                    <button onclick="reactComment(5, 'like')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald font-bold transition">
+                                        👍 <span id="react-5-like">30</span>
+                                    </button>
+                                    <button onclick="reactComment(5, 'love')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-700 hover:text-rose-600 font-bold transition">
+                                        ❤️ <span id="react-5-love">42</span>
+                                    </button>
+                                    <button onclick="toggleReplyBox(5)" class="ml-auto text-[11px] font-bold text-emeraldVibrant hover:underline">Trả lời</button>
+                                </div>
+                                <div id="reply-box-5" class="hidden pt-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- Review 6 -->
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4" id="comment-card-6">
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=150&q=80" class="w-11 h-11 rounded-full object-cover border-2 border-emeraldVibrant">
+                                    <div>
+                                        <h4 class="font-bold text-earthDark text-sm">Bùi Quốc Thái</h4>
+                                        <span class="text-[10px] text-slate-500">Du khách tự do</span>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-slate-700 leading-relaxed italic">"Gia Lai khí hậu trong lành, ăn phở 2 tô cực mê. Đánh giá 5 sao cho Miss tour!"</p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-100 space-y-3">
+                                <div class="flex items-center gap-2">
+                                    <button onclick="reactComment(6, 'like')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald font-bold transition">
+                                        👍 <span id="react-6-like">16</span>
+                                    </button>
+                                    <button onclick="reactComment(6, 'love')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-700 hover:text-rose-600 font-bold transition">
+                                        ❤️ <span id="react-6-love">22</span>
+                                    </button>
+                                    <button onclick="toggleReplyBox(6)" class="ml-auto text-[11px] font-bold text-emeraldVibrant hover:underline">Trả lời</button>
+                                </div>
+                                <div id="reply-box-6" class="hidden pt-2"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Submit Comment Form -->
+                    <div class="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-md">
+                        <h3 class="text-lg font-bold text-earthDark text-center mb-4 flex items-center justify-center gap-2">
+                            <i data-lucide="edit-3" class="w-5 h-5 text-emeraldVibrant"></i> Đăng Nhận Xét Mới
+                        </h3>
+                        <form id="comment-form" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <input type="text" id="comment-name" required placeholder="Họ và tên của bạn..." class="p-3 rounded-xl border border-slate-200 text-xs w-full focus:outline-none focus:ring-2 focus:ring-emeraldVibrant">
+                                <select id="comment-rating" class="p-3 rounded-xl border border-slate-200 text-xs w-full focus:outline-none focus:ring-2 focus:ring-emeraldVibrant">
+                                    <option value="5">⭐⭐⭐⭐⭐ (5/5 Rất tuyệt vời)</option>
+                                    <option value="4">⭐⭐⭐⭐ (4/5 Hài lòng)</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <img id="comment-avatar-preview" src="" alt="Ảnh đại diện xem trước" class="hidden w-14 h-14 rounded-full object-cover border-2 border-emeraldVibrant">
+                                <div id="comment-avatar-placeholder" class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200">
+                                    <i data-lucide="user-round" class="w-6 h-6"></i>
+                                </div>
+                                <label for="comment-avatar" class="cursor-pointer inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50">
+                                    <i data-lucide="image-plus" class="w-4 h-4"></i> Chọn ảnh đại diện
+                                </label>
+                                <input type="file" id="comment-avatar" accept="image/*" class="sr-only">
+                                <span class="text-[11px] text-slate-500">Ảnh JPG, PNG hoặc WEBP, tối đa 2 MB.</span>
+                            </div>
+                            <textarea id="comment-text" required rows="3" placeholder="Chia sẻ trải nghiệm của bạn về chuyến đi..." class="p-3 rounded-xl border border-slate-200 text-xs w-full focus:outline-none focus:ring-2 focus:ring-emeraldVibrant"></textarea>
+                            <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-emeraldVibrant to-teal-600 text-white font-extrabold text-sm rounded-xl hover:shadow-lg transition">
+                                Gửi Bình Luận & Bắn Confetti 🎉
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+        <div id="page-my-booking" class="tab-page">
+            <section class="py-12 bg-softCream min-h-[65vh]">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="mb-8">
+                        <span class="text-emerald-700 font-bold uppercase text-xs tracking-widest">Hồ sơ hành trình</span>
+                        <h2 class="text-3xl font-extrabold text-earthDark mt-2">Đăng ký tour của tôi</h2>
+                        <p class="text-sm text-slate-600 mt-2">Xem gói tour, ngày đi, địa điểm và khung giờ dự kiến của lần đăng ký gần nhất trên thiết bị này.</p>
+                    </div>
+                    <div id="my-booking-empty" class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 text-center">
+                        <i data-lucide="calendar-search" class="w-10 h-10 text-emerald-700 mx-auto"></i>
+                        <h3 class="text-lg font-bold text-earthDark mt-3">Bạn chưa có đăng ký nào</h3>
+                        <p class="text-sm text-slate-600 mt-2">Chọn một hành trình để xem lịch trình và tạo yêu cầu đăng ký.</p>
+                        <button onclick="navigateTo('tours')" class="mt-5 px-5 py-3 rounded-xl bg-emerald-700 text-white font-bold text-sm">Khám phá các tour</button>
+                    </div>
+                    <article id="my-booking-card" class="hidden bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm" aria-live="polite">
+                        <div class="p-5 sm:p-7 border-b border-slate-100 flex flex-wrap justify-between items-start gap-4">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Gói đã chọn</span>
+                                <h3 id="my-booking-tour" class="text-xl sm:text-2xl font-extrabold text-earthDark mt-1"></h3>
+                            </div>
+                            <span id="my-booking-status" class="px-3 py-1.5 rounded-full bg-amber-100 text-amber-800 text-xs font-bold"></span>
+                        </div>
+                        <div class="p-5 sm:p-7 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 text-sm">
+                            <p><b class="block text-xs uppercase tracking-wide text-slate-500">Thời gian khởi hành</b><span id="my-booking-date" class="block font-semibold text-earthDark mt-1"></span></p>
+                            <p><b class="block text-xs uppercase tracking-wide text-slate-500">Thời lượng</b><span id="my-booking-duration" class="block font-semibold text-earthDark mt-1"></span></p>
+                            <p class="sm:col-span-2"><b class="block text-xs uppercase tracking-wide text-slate-500">Địa điểm & hành trình</b><span id="my-booking-route" class="block text-slate-700 leading-relaxed mt-1"></span></p>
+                            <p><b class="block text-xs uppercase tracking-wide text-slate-500">Bắt đầu dự kiến</b><span id="my-booking-start" class="block font-semibold text-earthDark mt-1"></span></p>
+                            <p><b class="block text-xs uppercase tracking-wide text-slate-500">Kết thúc dự kiến</b><span id="my-booking-end" class="block font-semibold text-earthDark mt-1"></span></p>
+                            <p><b class="block text-xs uppercase tracking-wide text-slate-500">Số lượng khách</b><span id="my-booking-guests" class="block font-semibold text-earthDark mt-1"></span></p>
+                            <p><b class="block text-xs uppercase tracking-wide text-slate-500">Trạng thái ưu đãi</b><span id="my-booking-voucher-status" class="block font-semibold text-earthDark mt-1"></span></p>
+                            <p><b class="block text-xs uppercase tracking-wide text-slate-500">Mức giảm</b><span id="my-booking-discount" class="block font-semibold text-earthDark mt-1"></span></p>
+                        </div>
+                        <div class="px-5 sm:px-7 pb-6 sm:pb-7">
+                            <p id="my-booking-note" class="text-xs text-slate-600 leading-relaxed bg-amber-50 border border-amber-200 rounded-xl p-4"></p>
+                            <div class="flex flex-wrap gap-3 mt-4">
+                                <a href="tel:0762799157" class="px-4 py-3 rounded-xl bg-emerald-700 text-white font-bold text-sm">Gọi xác nhận 0762799157</a>
+                                <button onclick="navigateTo('tours')" class="px-4 py-3 rounded-xl border border-slate-300 text-slate-700 font-bold text-sm">Xem các tour khác</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 6: BẢN ĐỒ CHỈ ĐƯỜNG (MAP) -->
+        <div id="page-map" class="tab-page">
+            <section class="py-12 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-10">
+                        <span class="text-emeraldVibrant font-bold tracking-widest uppercase text-xs block mb-1">Dẫn Đường Google Maps</span>
+                        <h2 class="text-3xl font-extrabold text-earthDark">Bản Đồ Định Vị GPS Tương Tác</h2>
+                        <div class="w-16 h-1.5 bg-gradient-to-r from-emeraldVibrant to-sunsetGold mx-auto my-3 rounded-full"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                        <!-- Navigation Controller -->
+                        <div class="lg:col-span-5 bg-softCream p-6 rounded-3xl border border-slate-200 space-y-5">
+                            <h3 class="text-base font-bold text-forestGreen flex items-center gap-2">
+                                <i data-lucide="navigation" class="w-5 h-5 text-emeraldVibrant"></i>
+                                Chọn Điểm Đến Gia Lai & Bình Định
+                            </h3>
+
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-2">1. Chọn điểm ghé thăm</label>
+                                <select id="map-destination" class="w-full p-3.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emeraldVibrant">
+                                    <option value="Biển Hồ T'Nưng Pleiku Gia Lai">Biển Hồ T'Nưng (Pleiku, Gia Lai)</option>
+                                    <option value="Núi lửa Chư Đăng Ya Gia Lai">Núi Lửa Chư Đăng Ya (Gia Lai)</option>
+                                    <option value="Tháp Bánh Ít Bình Định">Tháp Bánh Ít (Bình Định)</option>
+                                    <option value="Nhà thờ Kim Châu Bình Định">Nhà thờ Kim Châu (An Nhơn, Bình Định)</option>
+                                    <option value="Chùa Giác Hoàng Bình Định">Chùa Giác Hoàng (Bình Định)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold uppercase text-slate-700 mb-2">2. Điểm xuất phát</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="map-start-location" placeholder="Vị trí của bạn..." class="flex-1 p-3.5 rounded-xl border border-slate-200 bg-white text-xs focus:outline-none focus:ring-2 focus:ring-emeraldVibrant">
+                                    <button type="button" onclick="getCurrentGPS()" title="Tự động lấy GPS" class="px-3.5 bg-mintLight text-forestGreen rounded-xl hover:bg-emeraldVibrant hover:text-white transition font-bold text-xs flex items-center gap-1">
+                                        <i data-lucide="crosshair" class="w-4 h-4"></i> GPS
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 pt-2">
+                                <button onclick="updateMapRoute()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emeraldVibrant to-teal-600 text-white font-extrabold text-xs hover:shadow-lg transition flex items-center justify-center gap-2">
+                                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Cập Nhật Lộ Trình
+                                </button>
+                                <button onclick="openExternalGoogleMaps()" class="w-full py-3 rounded-xl bg-white border border-forestGreen text-forestGreen font-bold text-xs hover:bg-mintLight transition flex items-center justify-center gap-2">
+                                    <i data-lucide="external-link" class="w-4 h-4"></i> Mở Trong Ứng Dụng Google Maps
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Embedded Maps Display -->
+                        <div class="lg:col-span-7 bg-slate-100 rounded-3xl overflow-hidden shadow-md border border-slate-200 h-[460px]">
+                            <iframe 
+                                id="google-map-iframe"
+                                class="w-full h-full border-0"
+                                loading="lazy"
+                                allowfullscreen
+                                referrerpolicy="no-referrer-when-downgrade"
+                                src="https://www.google.com/maps?q=Bi%E1%BB%83n%20H%E1%BB%93%20Pleiku%20Gia%20Lai&output=embed">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Interactive Tour Booking Modal -->
+    <div id="booking-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-2xl border border-slate-100 relative animate-zoomFade">
+            
+            <button onclick="closeBookingModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 text-slate-600 hover:bg-rose-100 hover:text-rose-600 transition flex items-center justify-center">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="space-y-4">
+                <div class="flex items-center gap-2 text-emeraldVibrant font-bold text-xs uppercase">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i> Đặt Vé Điện Tử Trực Tuyến
+                </div>
+
+                <h3 id="modal-tour-title" class="text-xl font-bold text-earthDark leading-snug">Tên gói tour</h3>
+
+                <form id="booking-form" onsubmit="submitBooking(event)" class="space-y-4 pt-2">
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-slate-700">Họ và tên khách hàng *</label>
+                        <input type="text" id="book-name" required placeholder="Ví dụ: Nguyễn Văn A" class="w-full p-3 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-emeraldVibrant focus:outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-slate-700">Số điện thoại *</label>
+                            <input type="tel" id="book-phone" required placeholder="090xxxxxxx" class="w-full p-3 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-emeraldVibrant focus:outline-none">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-slate-700">Ngày khởi hành *</label>
+                            <input type="date" id="book-date" required class="w-full p-3 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-emeraldVibrant focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <label for="book-residence" class="block text-xs font-bold text-slate-700">Nơi cư trú (nếu đăng ký ưu đãi Nhơn Hòa)</label>
+                            <input type="text" id="book-residence" oninput="calculateTourTotal()" placeholder="Ví dụ: Nhơn Hòa, An Nhơn" class="w-full p-3 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-emeraldVibrant focus:outline-none">
+                        </div>
+                        <div class="space-y-1">
+                            <label for="book-birth-year" class="block text-xs font-bold text-slate-700">Năm sinh (nếu đăng ký ưu đãi trẻ em)</label>
+                            <input type="number" id="book-birth-year" min="2000" max="2026" oninput="calculateTourTotal()" placeholder="2013" class="w-full p-3 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-emeraldVibrant focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-slate-700">Số lượng khách</label>
+                            <input type="number" id="book-guests" min="1" max="20" value="1" onchange="calculateTourTotal()" class="w-full p-3 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-emeraldVibrant focus:outline-none font-bold">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-slate-700">Chương trình ưu đãi</label>
+                            <select id="book-voucher" onchange="calculateTourTotal()" class="w-full p-3 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-emeraldVibrant focus:outline-none">
+                                <option value="none">Không dùng</option>
+                                <option value="nhon-hoa">Cư dân Nhơn Hòa: giảm 36%</option>
+                                <option value="child-2013">Trẻ em sinh năm 2013: giảm 67%</option>
+                                <option value="fixed-100k">GIALAI100K: giảm 100.000 VNĐ</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="eligible-guests-wrap" class="hidden space-y-1">
+                        <label for="book-eligible-guests" class="block text-xs font-bold text-slate-700">Số khách đủ điều kiện nhận ưu đãi</label>
+                        <input type="number" id="book-eligible-guests" min="1" max="20" value="1" oninput="calculateTourTotal()" class="w-full p-3 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-emeraldVibrant focus:outline-none font-bold">
+                    </div>
+                    <p id="voucher-eligibility-message" class="text-[11px] text-slate-500">Ưu đãi phần trăm chỉ tính trên vé của khách đủ điều kiện. Vui lòng nhập thông tin để xác nhận mức giảm.</p>
+                    <div class="flex flex-wrap items-center gap-2 text-xs">
+                        <span class="font-semibold text-slate-700">Trạng thái ưu đãi:</span>
+                        <span id="voucher-status-badge" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-bold">Chưa áp dụng</span>
+                    </div>
+
+                    <!-- Dynamic Price Calculation Box -->
+                    <div class="p-4 bg-emerald-50/80 rounded-2xl border border-emerald-200/60 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-forestGreen block">Tổng chi phí dự kiến:</span>
+                            <span id="modal-discount-amount" class="text-[11px] text-emerald-700">Chưa áp dụng ưu đãi</span>
+                        </div>
+                        <span id="modal-total-price" class="text-xl font-extrabold text-emeraldVibrant">1.250.000 VNĐ</span>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emeraldVibrant via-teal-500 to-sunsetGold text-white font-extrabold text-sm hover:shadow-xl hover:scale-[1.01] transition duration-200">
+                        Xác Nhận Đặt Tour & Nhận Vé 🎉
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Hotline & Zalo Contact Button -->
+    <div class="fixed bottom-6 right-6 z-30 flex flex-col gap-3">
+        <a href="tel:0762799157" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-r from-emeraldVibrant to-teal-500 text-white flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-transform animate-pulse" title="Gọi hotline 0762799157">
+            <i data-lucide="phone-call" class="w-6 h-6"></i>
+        </a>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-forestGreen text-mintLight pt-12 pb-8 border-t border-emeraldVibrant/20 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-jadeGreen/40">
+                
+                <!-- Brand Info -->
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emeraldVibrant to-sunsetGold flex items-center justify-center text-white font-bold">
+                            <i data-lucide="compass" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-xl font-extrabold text-white uppercase font-playful">Miss tour</span>
+                    </div>
+                    <p class="text-xs text-mintLight/80 leading-relaxed">
+                        Chuyên trang hướng dẫn du lịch địa phương Gia Lai & Bình Định. Khám phá vẻ đẹp thiên nhiên và di sản cổ xưa.
+                    </p>
+                </div>
+
+                <!-- Author Info -->
+                <div class="space-y-2.5">
+                    <h4 class="text-white font-bold text-xs uppercase tracking-wider">Thông Tin Tác Giả</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li class="flex items-center gap-2"><i data-lucide="user" class="w-4 h-4 text-emeraldVibrant"></i> <span>Nguyễn Lê Gia Lâm</span></li>
+                        <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-emeraldVibrant"></i> <a href="tel:0762799157" class="hover:text-white">0762799157</a></li>
+                        <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-emeraldVibrant"></i> <a href="mailto:teot99349@gmail.com" class="hover:text-white">teot99349@gmail.com</a></li>
+                    </ul>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="space-y-2.5">
+                    <h4 class="text-white font-bold text-xs uppercase tracking-wider">Danh Mục Khám Phá</h4>
+                    <ul class="space-y-1.5 text-xs">
+                        <li><button onclick="navigateTo('home')" class="hover:text-white">Trang Chủ Gia Lai & Bình Định</button></li>
+                        <li><button onclick="navigateTo('tours')" class="hover:text-white">Tour Chùa Giác Hoàng & Tháp Bánh Ít</button></li>
+                        <li><button onclick="navigateTo('free-roam')" class="hover:text-white">Khám Phá Ăn Đêm & Quán Khuya</button></li>
+                        <li><button onclick="navigateTo('history')" class="hover:text-white">Lịch Sử Văn Hóa Cổ</button></li>
+                        <li><button onclick="navigateTo('my-booking')" class="hover:text-white">Đăng Ký Tour Của Tôi</button></li>
+                    </ul>
+                </div>
+
+                <!-- Social Handles -->
+                <div class="space-y-2.5">
+                    <h4 class="text-white font-bold text-xs uppercase tracking-wider">Kết Nối Mạng Xã Hội</h4>
+                    <div class="flex gap-2 pt-1">
+                        <a href="https://facebook.com" target="_blank" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-emeraldVibrant transition"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                        <a href="https://instagram.com" target="_blank" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-emeraldVibrant transition"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                        <a href="https://tiktok.com" target="_blank" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-emeraldVibrant transition"><i data-lucide="video" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Mandatory Designer Credit -->
+            <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-mintLight/60 gap-3">
+                <p>&copy; 2026 Miss tour. Bản quyền thuộc về tác giả.</p>
+                <p class="font-semibold text-slate-300">Thiết kế & Phát triển bởi Nguyễn Lê Gia Lâm | Miss tour</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Toast Widget -->
+    <div id="toast" class="fixed top-24 right-6 z-50 bg-forestGreen text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-emeraldVibrant/40 flex items-center gap-3 transform translate-x-32 opacity-0 transition-all duration-300">
+        <i data-lucide="check-circle" class="w-5 h-5 text-emeraldVibrant shrink-0"></i>
+        <div>
+            <p class="font-bold text-xs" id="toast-title">Thông báo</p>
+            <p class="text-[11px] text-mintLight/80" id="toast-msg">Nội dung đã cập nhật.</p>
+        </div>
+    </div>
+
+    <script>
+        // Global Application State
+        let currentTourBasePrice = 1250000;
+        let currentTourName = '';
+        let mascotDialogueIndex = -1;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            setupMobileMenu();
+            setupCommentForm();
+            renderBookingStatus();
+            
+            // Set current date on booking form
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('book-date').min = today;
+            document.getElementById('book-date').value = today;
+        });
+
+        // Tab Router Logic
+        function navigateTo(pageId) {
+            const pages = document.querySelectorAll('.tab-page');
+            pages.forEach(p => p.classList.remove('active'));
+
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Highlight Active Nav Button
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-tab-btn'));
+            const activeNavBtn = document.getElementById(`nav-btn-${pageId}`);
+            if (activeNavBtn) activeNavBtn.classList.add('active-tab-btn');
+
+            // Hide mobile dropdown
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        // Mobile Menu Dropdown
+        function setupMobileMenu() {
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+        }
+
+        // Mascot Dialogue Interaction
+        function mascotInteract() {
+            const speech = document.getElementById('mascot-speech');
+            const bubble = document.getElementById('mascot-bubble');
+            
+            bubble.classList.remove('hidden');
+
+            const dialogues = [
+                "Song Tử gợi ý bạn thử phở hai tô Pleiku và cà phê rang xay địa phương.",
+                "Ở Tháp Bánh Ít, hãy dành thời gian quan sát từng cụm tháp và giữ gìn di tích nhé.",
+                "Muốn khám phá đại ngàn? Biển Hồ và Chư Đăng Ya là hai điểm đáng dành trọn buổi.",
+                "Chọn điểm đến trong mục bản đồ để mở chỉ đường Google Maps nhé!"
+            ];
+
+            mascotDialogueIndex = (mascotDialogueIndex + 1) % dialogues.length;
+            speech.innerText = dialogues[mascotDialogueIndex];
+
+            // Trigger Confetti effect
+            confetti({
+                particleCount: 25,
+                spread: 50,
+                origin: { x: 0.1, y: 0.8 }
+            });
+        }
+
+        // Booking Modal Management
+        function openBookingModal(tourTitle, basePrice) {
+            currentTourName = tourTitle;
+            currentTourBasePrice = basePrice;
+
+            document.getElementById('modal-tour-title').innerText = tourTitle;
+            document.getElementById('book-voucher').value = 'none';
+            document.getElementById('book-residence').value = '';
+            document.getElementById('book-birth-year').value = '';
+            document.getElementById('book-eligible-guests').value = '1';
+            calculateTourTotal();
+
+            document.getElementById('booking-modal').classList.remove('hidden');
+        }
+
+        function openTourOffer(voucher) {
+            navigateTo('tours');
+            openBookingModal('Chiêm Bái Chùa Giác Hoàng, Nhà Thờ Kim Châu & Tháp Bánh Ít', 1250000);
+            document.getElementById('book-voucher').value = voucher;
+            calculateTourTotal();
+        }
+
+        function getTourDetails(tourName) {
+            if (tourName.includes('Kiến Trúc')) {
+                return {
+                    duration: '2 ngày 1 đêm',
+                    route: 'An Nhơn → Tháp Bánh Ít → Chùa Giác Hoàng → Nhà thờ Kim Châu → làng nghề bánh ít lá gai, rượu Bầu Đá → trở về An Nhơn.',
+                    startTime: '08:00 ngày khởi hành',
+                    endTime: '17:00 ngày kế tiếp'
+                };
+            }
+            if (tourName.includes('Chư Đăng Ya')) {
+                return {
+                    duration: '1 ngày',
+                    route: 'Pleiku → Biển Hồ T\'Nưng → Chư Đăng Ya → Biển Hồ Trà và hàng thông trăm tuổi → Pleiku.',
+                    startTime: '06:30',
+                    endTime: '17:30'
+                };
+            }
+            return {
+                duration: '1 ngày',
+                route: 'An Nhơn → Chùa Giác Hoàng → Nhà thờ Kim Châu → Tháp Bánh Ít → làng nghề Chợ Huyện → An Nhơn.',
+                startTime: '07:30',
+                endTime: '17:30'
+            };
+        }
+
+        function closeBookingModal() {
+            document.getElementById('booking-modal').classList.add('hidden');
+        }
+
+        function calculateTourTotal() {
+            const guests = parseInt(document.getElementById('book-guests').value) || 1;
+            const voucher = document.getElementById('book-voucher').value;
+            const eligibleWrap = document.getElementById('eligible-guests-wrap');
+            const eligibleInput = document.getElementById('book-eligible-guests');
+            const eligibilityMessage = document.getElementById('voucher-eligibility-message');
+            const statusBadge = document.getElementById('voucher-status-badge');
+            const isPercentVoucher = voucher === 'nhon-hoa' || voucher === 'child-2013';
+            eligibleWrap.classList.toggle('hidden', !isPercentVoucher);
+
+            const eligibleGuests = Math.min(parseInt(eligibleInput.value) || 1, guests);
+            eligibleInput.max = String(guests);
+            let discount = 0;
+            let isEligible = true;
+            let message = 'Chưa áp dụng ưu đãi';
+            let status = 'Chưa áp dụng';
+
+            if (voucher === 'nhon-hoa') {
+                const residence = normalizeEligibilityValue(document.getElementById('book-residence').value);
+                isEligible = residence.includes('nhon hoa') && eligibleGuests >= 1 && eligibleGuests <= guests;
+                if (isEligible) {
+                    discount = Math.round(currentTourBasePrice * eligibleGuests * 0.36);
+                    message = `Đã giảm ${discount.toLocaleString('vi-VN')} VNĐ (36% cho ${eligibleGuests} khách đủ điều kiện)`;
+                    status = 'Đã áp dụng';
+                } else {
+                    message = 'Nhập nơi cư trú có Nhơn Hòa và số khách đủ điều kiện để áp dụng.';
+                    status = 'Không đủ điều kiện';
+                }
+            } else if (voucher === 'child-2013') {
+                isEligible = Number(document.getElementById('book-birth-year').value) === 2013 && eligibleGuests >= 1 && eligibleGuests <= guests;
+                if (isEligible) {
+                    discount = Math.round(currentTourBasePrice * eligibleGuests * 0.67);
+                    message = `Đã giảm ${discount.toLocaleString('vi-VN')} VNĐ (67% cho ${eligibleGuests} khách đủ điều kiện)`;
+                    status = 'Đã áp dụng';
+                } else {
+                    message = 'Ưu đãi này dành cho khách sinh năm 2013; vui lòng nhập năm sinh và số khách đủ điều kiện.';
+                    status = 'Không đủ điều kiện';
+                }
+            } else if (voucher === 'fixed-100k') {
+                discount = 100000;
+                message = 'Đã áp dụng ưu đãi 100.000 VNĐ';
+                status = 'Đã áp dụng';
+            }
+
+            let total = (currentTourBasePrice * guests) - discount;
+            if (total < 0) total = 0;
+
+            document.getElementById('modal-total-price').innerText = total.toLocaleString('vi-VN') + " VNĐ";
+            document.getElementById('modal-discount-amount').innerText = message;
+            statusBadge.innerText = status;
+            statusBadge.className = status === 'Đã áp dụng'
+                ? 'px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold'
+                : status === 'Không đủ điều kiện'
+                    ? 'px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 font-bold'
+                    : 'px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-bold';
+            eligibilityMessage.classList.toggle('text-rose-600', isPercentVoucher && !isEligible);
+            eligibilityMessage.classList.toggle('text-slate-500', !isPercentVoucher || isEligible);
+            return { isEligible, isPercentVoucher, eligibleGuests, status, discount, message, voucher };
+        }
+
+        function normalizeEligibilityValue(value) {
+            return value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();
+        }
+
+        function submitBooking(e) {
+            e.preventDefault();
+            const eligibility = calculateTourTotal();
+
+            const name = document.getElementById('book-name').value;
+            const phone = document.getElementById('book-phone').value;
+            const guests = parseInt(document.getElementById('book-guests').value) || 1;
+            const departureDate = document.getElementById('book-date').value;
+            const tourDetails = getTourDetails(currentTourName);
+            const endDate = new Date(`${departureDate}T12:00:00`);
+            if (tourDetails.duration === '2 ngày 1 đêm') endDate.setDate(endDate.getDate() + 1);
+            const booking = {
+                tourName: currentTourName,
+                departureDate,
+                returnDate: endDate.toISOString().slice(0, 10),
+                guests,
+                voucher: eligibility.voucher,
+                voucherStatus: eligibility.status,
+                discountAmount: eligibility.discount,
+                ...tourDetails,
+                status: 'Chờ xác nhận',
+                updatedAt: new Date().toISOString()
+            };
+
+            try {
+                localStorage.setItem('missTourLatestBooking', JSON.stringify(booking));
+            } catch (error) {
+                showToast("Không thể lưu trạng thái", "Trình duyệt đang chặn lưu trữ; yêu cầu vẫn được ghi nhận trong phiên này.");
+            }
+
+            closeBookingModal();
+            renderBookingStatus(booking);
+            navigateTo('my-booking');
+
+            // Fire fireworks confetti
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            showToast("ĐÃ LƯU YÊU CẦU TRÊN THIẾT BỊ", `Cảm ơn ${name}. Gọi 0762799157 để gửi và xác nhận đăng ký với đơn vị tổ chức.`);
+        }
+
+        function renderBookingStatus(booking = null) {
+            if (!booking) {
+                try {
+                    booking = JSON.parse(localStorage.getItem('missTourLatestBooking') || 'null');
+                } catch (error) {
+                    booking = null;
+                }
+            }
+
+            const badge = document.getElementById('booking-status-badge');
+            const message = document.getElementById('booking-status-message');
+            const details = document.getElementById('booking-status-details');
+            if (!badge || !message || !details) return;
+
+            renderMyBooking(booking);
+
+            if (!booking) {
+                badge.innerText = 'Chưa có đăng ký';
+                message.innerText = 'Sau khi gửi yêu cầu đặt tour, thông tin gói và tiến độ xử lý sẽ hiển thị tại đây trên thiết bị này.';
+                details.classList.add('hidden');
+                return;
+            }
+
+            badge.innerText = booking.status;
+            badge.className = 'px-3 py-1.5 rounded-full bg-amber-100 text-amber-800 text-xs font-bold';
+            message.innerText = 'Bản ghi chỉ được lưu trên trình duyệt này, chưa gửi tới đơn vị tổ chức. Gọi 0762799157 để xác nhận lịch, dịch vụ và thanh toán; đây chưa phải vé xác nhận.';
+            document.getElementById('booking-status-tour').innerText = booking.tourName;
+            document.getElementById('booking-status-date').innerText = booking.departureDate;
+            document.getElementById('booking-status-guests').innerText = `${booking.guests} khách`;
+            details.classList.remove('hidden');
+        }
+
+        function renderMyBooking(booking) {
+            const empty = document.getElementById('my-booking-empty');
+            const card = document.getElementById('my-booking-card');
+            if (!empty || !card) return;
+
+            empty.classList.toggle('hidden', Boolean(booking));
+            card.classList.toggle('hidden', !booking);
+            if (!booking) return;
+
+            const tourDetails = getTourDetails(booking.tourName || '');
+            const duration = booking.duration || tourDetails.duration;
+            const dateOptions = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            const startDate = new Date(`${booking.departureDate}T12:00:00`);
+            const fallbackEndDate = new Date(startDate);
+            if (duration === '2 ngày 1 đêm') fallbackEndDate.setDate(fallbackEndDate.getDate() + 1);
+            const endDate = booking.returnDate ? new Date(`${booking.returnDate}T12:00:00`) : fallbackEndDate;
+            const startDateLabel = startDate.toLocaleDateString('vi-VN', dateOptions);
+            const endDateLabel = endDate.toLocaleDateString('vi-VN', dateOptions);
+
+            document.getElementById('my-booking-tour').innerText = booking.tourName || 'Tour Miss Tour';
+            document.getElementById('my-booking-status').innerText = booking.status || 'Chờ xác nhận';
+            document.getElementById('my-booking-date').innerText = duration === '2 ngày 1 đêm'
+                ? `${startDateLabel} - ${endDateLabel}`
+                : startDateLabel;
+            document.getElementById('my-booking-duration').innerText = duration;
+            document.getElementById('my-booking-route').innerText = booking.route || tourDetails.route;
+            document.getElementById('my-booking-start').innerText = booking.startTime || tourDetails.startTime;
+            document.getElementById('my-booking-end').innerText = booking.endTime || tourDetails.endTime;
+            document.getElementById('my-booking-guests').innerText = `${booking.guests || 1} khách`;
+            document.getElementById('my-booking-voucher-status').innerText = booking.voucherStatus || 'Chưa áp dụng';
+            document.getElementById('my-booking-discount').innerText = booking.discountAmount
+                ? `${booking.discountAmount.toLocaleString('vi-VN')} VNĐ`
+                : '0 VNĐ';
+            document.getElementById('my-booking-note').innerText = `Trạng thái ưu đãi: ${booking.voucherStatus || 'Chưa áp dụng'}. Khung giờ và điểm đón là lịch dự kiến, chưa phải xác nhận dịch vụ. Đăng ký lưu trên thiết bị này; vui lòng gọi hotline để xác nhận lịch, điểm đón và các dịch vụ bao gồm.`;
+        }
+
+        // Comment Reactions Logic
+        function reactComment(commentId, type) {
+            const el = document.getElementById(`react-${commentId}-${type}`);
+            if (el) {
+                let currentVal = parseInt(el.innerText) || 0;
+                el.innerText = currentVal + 1;
+                showToast("Đã thả cảm xúc!", "Cảm ơn bạn đã tương tác cùng Miss tour.");
+            }
+        }
+
+        function toggleReplyBox(commentId) {
+            const box = document.getElementById(`reply-box-${commentId}`);
+            if (box) box.classList.toggle('hidden');
+        }
+
+        // Comment Submission Logic
+        function setupCommentForm() {
+            const form = document.getElementById('comment-form');
+            const avatarInput = document.getElementById('comment-avatar');
+            const avatarPreview = document.getElementById('comment-avatar-preview');
+            const avatarPlaceholder = document.getElementById('comment-avatar-placeholder');
+            let avatarDataUrl = '';
+
+            avatarInput.addEventListener('change', () => {
+                const file = avatarInput.files[0];
+                if (!file) {
+                    avatarDataUrl = '';
+                    avatarPreview.classList.add('hidden');
+                    avatarPlaceholder.classList.remove('hidden');
+                    return;
+                }
+                if (!file.type.startsWith('image/') || file.size > 2 * 1024 * 1024) {
+                    avatarInput.value = '';
+                    showToast("Ảnh không hợp lệ", "Chọn ảnh JPG, PNG hoặc WEBP có dung lượng tối đa 2 MB.");
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = () => {
+                    avatarDataUrl = reader.result;
+                    avatarPreview.src = avatarDataUrl;
+                    avatarPreview.classList.remove('hidden');
+                    avatarPlaceholder.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('comment-name').value.trim();
+                const text = document.getElementById('comment-text').value.trim();
+
+                if (!name || !text) return;
+
+                const grid = document.getElementById('comments-grid');
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-3xl border border-emeraldVibrant/40 shadow-sm flex flex-col justify-between space-y-4";
+
+                const newId = Date.now();
+                const safeName = escapeHTML(name);
+                const safeText = escapeHTML(text);
+                const avatarMarkup = avatarDataUrl
+                    ? `<img src="${avatarDataUrl}" alt="Ảnh đại diện của ${safeName}" class="w-11 h-11 rounded-full object-cover border-2 border-emeraldVibrant">`
+                    : `<div class="w-11 h-11 rounded-full bg-emeraldVibrant text-white font-bold flex items-center justify-center text-sm border-2 border-emeraldVibrant">${safeName.substring(0, 2).toUpperCase()}</div>`;
+
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            ${avatarMarkup}
+                            <div>
+                                <h4 class="font-bold text-earthDark text-sm">${safeName}</h4>
+                                <span class="text-[10px] text-slate-500">Du khách mới</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-700 leading-relaxed italic">"${safeText}"</p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 space-y-3">
+                        <div class="flex items-center gap-2">
+                            <button onclick="reactComment(${newId}, 'like')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-100 font-bold">
+                                👍 <span id="react-${newId}-like">1</span>
+                            </button>
+                            <button onclick="reactComment(${newId}, 'love')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-rose-100 font-bold">
+                                ❤️ <span id="react-${newId}-love">1</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                grid.prepend(card);
+
+                confetti({
+                    particleCount: 40,
+                    spread: 60,
+                    origin: { y: 0.7 }
+                });
+
+                showToast("Đã đăng bình luận!", "Cảm ơn đóng góp ý kiến của bạn.");
+                form.reset();
+                avatarDataUrl = '';
+                avatarPreview.removeAttribute('src');
+                avatarPreview.classList.add('hidden');
+                avatarPlaceholder.classList.remove('hidden');
+            });
+        }
+
+        function escapeHTML(value) {
+            return value.replace(/[&<>"']/g, (character) => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            })[character]);
+        }
+
+        // Map Methods
+        function quickNavigateToMap(destName) {
+            navigateTo('map');
+            const mapSelect = document.getElementById('map-destination');
+            for (let i = 0; i < mapSelect.options.length; i++) {
+                if (mapSelect.options[i].value.includes(destName) || destName.includes(mapSelect.options[i].value)) {
+                    mapSelect.selectedIndex = i;
+                    break;
+                }
+            }
+            updateMapRoute();
+        }
+
+        function getCurrentGPS() {
+            const startInput = document.getElementById('map-start-location');
+            if (navigator.geolocation) {
+                startInput.value = "Đang tìm GPS...";
+                navigator.geolocation.getCurrentPosition(
+                    (p) => {
+                        startInput.value = `${p.coords.latitude.toFixed(4)}, ${p.coords.longitude.toFixed(4)}`;
+                        showToast("Lấy GPS thành công", `Tọa độ: ${startInput.value}`);
+                    },
+                    () => {
+                        startInput.value = "An Nhơn, Bình Định";
+                        showToast("Thông báo GPS", "Đã lấy vị trí An Nhơn, Bình Định.");
+                    }
+                );
+            }
+        }
+
+        function updateMapRoute() {
+            const destination = document.getElementById('map-destination').value;
+            const iframe = document.getElementById('google-map-iframe');
+            iframe.src = `https://www.google.com/maps?q=${encodeURIComponent(destination)}&output=embed`;
+            showToast("Bản đồ cập nhật", `Điểm đến: ${destination}`);
+        }
+
+        function openExternalGoogleMaps() {
+            const destination = document.getElementById('map-destination').value;
+            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(destination)}`, '_blank');
+        }
+
+        // Toast Helper
+        function showToast(title, msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-msg').innerText = msg;
+
+            toast.classList.remove('translate-x-32', 'opacity-0');
+            toast.classList.add('translate-x-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-x-0', 'opacity-100');
+                toast.classList.add('translate-x-32', 'opacity-0');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
