@@ -59,6 +59,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./supabase-config.js"></script>
 
     <style>
         body {
@@ -1240,8 +1241,9 @@
         let isSiteOwner = false;
         let currentUserId = null;
         let currentUserName = '';
-        const SUPABASE_URL = 'https://YOUR_PROJECT_REF.supabase.co';
-        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const SUPABASE_CONFIG = window.MISS_TOUR_SUPABASE_CONFIG || {};
+        const SUPABASE_URL = String(SUPABASE_CONFIG.projectUrl || '').trim();
+        const SUPABASE_ANON_KEY = String(SUPABASE_CONFIG.anonKey || '').trim();
         const LOCAL_ADMIN_USERNAME = 'missyou';
         const LOCAL_ADMIN_EMAIL = 'teot99349@gmail.com';
 
@@ -1558,9 +1560,8 @@
         async function initializeCommentBackend() {
             const loginButton = document.getElementById('owner-login-toggle');
             const authStatus = document.getElementById('owner-auth-status');
-            const isConfigured = SUPABASE_URL.startsWith('https://')
-                && !SUPABASE_URL.includes('YOUR_PROJECT_REF')
-                && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY';
+            const isConfigured = /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(SUPABASE_URL)
+                && SUPABASE_ANON_KEY.length > 20;
             if (!isConfigured) {
                 loginButton.disabled = false;
                 loginButton.title = '';
