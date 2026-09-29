@@ -1149,7 +1149,10 @@
             setupMobileMenu();
             setupCommentForm();
             
-            renderMyBookings();
+            // Set current date on booking form
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('book-date').min = today;
+            document.getElementById('book-date').value = today;
         });
 
         // Tab Router Logic
@@ -1358,10 +1361,61 @@
         function reactComment(commentId, type) {
             const el = document.getElementById(`react-${commentId}-${type}`);
             if (el) {
-                let currentVal = parseInt(el.innerText) || 0;
-                el.innerText = currentVal + 1;
+                const currentVal = parseInt(el.innerText) || 0;
+                const nextVal = currentVal + 1;
+                el.innerText = nextVal;
+                try {
+                    const reactions = JSON.parse(localStorage.getItem('missTourCommentReactions') || '{}');
+                    reactions[`${commentId}-${type}`] = nextVal;
+                    localStorage.setItem('missTourCommentReactions', JSON.stringify(reactions));
+                } catch (error) {
+                    showToast('Chưa lưu được cảm xúc', 'Trình duyệt không cho phép lưu dữ liệu trên thiết bị này.');
+                    return;
+                }
                 showToast("Đã thả cảm xúc!", "Cảm ơn bạn đã tương tác cùng Miss tour.");
             }
+        }
+
+        function toggleReplyBox(commentId) {
+            const box = document.getElementById(`reply-box-${commentId}`);
+            if (box) box.classList.toggle('hidden');
+        }
+
+        // Comment Submission Logic
+        function setupCommentForm() {
+            const form = document.getElementById('comment-form');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('comment-name').value.trim();
+                const text = document.getElementById('comment-text').value.trim();
+
+                if (!name || !text) return;
+
+                const grid = document.getElementById('comments-grid');
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-3xl border border-emeraldVibrant/40 shadow-sm flex flex-col justify-between space-y-4";
+
+                const newId = Date.now();
+
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            ${avatar}
+                            <div>
+                                <h4 class="font-bold text-earthDark text-sm">${name}</h4>
+                                <span class="text-[10px] text-slate-500">Du khách mới</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-700 leading-relaxed italic">"${text}"</p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 space-y-3">
+                        <div class="flex items-center gap-2">
+                            <button onclick="reactComment('${escapeHTML(comment.id)}', 'like')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-100 font-bold">👍 <span id="react-${escapeHTML(comment.id)}-like">${Number(comment.likes) || 0}</span></button>
+                            <button onclick="reactComment('${escapeHTML(comment.id)}', 'love')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-rose-100 font-bold">❤️ <span id="react-${escapeHTML(comment.id)}-love">${Number(comment.loves) || 0}</span></button>
+                        </div>
+                    </div>`;
+                grid.prepend(card);
+            });
         }
 
         function toggleReplyBox(commentId) {
@@ -1405,40 +1459,27 @@
 
                 if (!name || !text) return;
 
-                const grid = document.getElementById('comments-grid');
-                const card = document.createElement('div');
-                card.className = "bg-white p-6 rounded-3xl border border-emeraldVibrant/40 shadow-sm flex flex-col justify-between space-y-4";
-
-                const newId = Date.now();
-                const avatar = selectedCommentAvatar
-                    ? `<img src="${selectedCommentAvatar}" alt="Ảnh đại diện của ${escapeHTML(name)}" class="w-11 h-11 rounded-full object-cover border-2 border-emeraldVibrant">`
-                    : `<div class="w-11 h-11 rounded-full bg-emeraldVibrant text-white font-bold flex items-center justify-center text-sm border-2 border-emeraldVibrant">${escapeHTML(name.substring(0, 2).toUpperCase())}</div>`;
                 const rating = document.getElementById('comment-rating').value;
-
-                card.innerHTML = `
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-3">
-                            ${avatar}
-                            <div>
-                                <h4 class="font-bold text-earthDark text-sm">${escapeHTML(name)}</h4>
-                                <span class="text-[10px] text-slate-500">Du khách mới · ${'★'.repeat(Number(rating))}</span>
-                            </div>
-                        </div>
-                        <p class="text-xs text-slate-700 leading-relaxed italic">"${escapeHTML(text)}"</p>
-                    </div>
-                    <div class="pt-3 border-t border-slate-100 space-y-3">
-                        <div class="flex items-center gap-2">
-                            <button onclick="reactComment(${newId}, 'like')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-100 font-bold">
-                                👍 <span id="react-${newId}-like">1</span>
-                            </button>
-                            <button onclick="reactComment(${newId}, 'love')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-rose-100 font-bold">
-                                ❤️ <span id="react-${newId}-love">1</span>
-                            </button>
-                        </div>
-                    </div>
-                `;
-
-                grid.prepend(card);
+                const comment = {
+                    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+                    name,
+                    text,
+                    rating,
+                    avatar: selectedCommentAvatar,
+                    createdAt: new Date().toISOString(),
+                    likes: 0,
+                    loves: 0
+                };
+                try {
+                    const comments = JSON.parse(localStorage.getItem('missTourComments') || '[]');
+                    const savedComments = Array.isArray(comments) ? comments : [];
+                    savedComments.unshift(comment);
+                    localStorage.setItem('missTourComments', JSON.stringify(savedComments));
+                } catch (error) {
+                    showToast('Chưa lưu được bình luận', 'Bộ nhớ trình duyệt có thể đã đầy hoặc bị chặn.');
+                    return;
+                }
+                renderStoredComments();
 
                 confetti({
                     particleCount: 40,
