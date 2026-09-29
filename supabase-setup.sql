@@ -15,8 +15,37 @@ create table if not exists public.site_admins (
     created_at timestamptz not null default now()
 );
 
+create table if not exists public.miss_tour_profiles (
+    user_id uuid primary key references auth.users(id) on delete cascade,
+    username text not null unique
+        check (username = lower(username) and username ~ '^[a-z0-9_]{3,24}$'),
+    created_at timestamptz not null default now()
+);
+
+create unique index if not exists site_admins_single_account
+    on public.site_admins ((true));
+
+create or replace function public.create_miss_tour_profile()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+    insert into public.miss_tour_profiles (user_id, username)
+    values (new.id, lower(trim(new.raw_user_meta_data ->> 'username')));
+    return new;
+end;
+$$;
+
+drop trigger if exists create_miss_tour_profile on auth.users;
+create trigger create_miss_tour_profile
+    after insert on auth.users
+    for each row execute function public.create_miss_tour_profile();
+
 alter table public.miss_tour_comments enable row level security;
 alter table public.site_admins enable row level security;
+alter table public.miss_tour_profiles enable row level security;
 
 revoke all on public.miss_tour_comments from anon, authenticated;
 grant select, insert on public.miss_tour_comments to anon, authenticated;
@@ -24,6 +53,8 @@ grant delete on public.miss_tour_comments to authenticated;
 
 revoke all on public.site_admins from anon, authenticated;
 grant select on public.site_admins to authenticated;
+revoke all on public.miss_tour_profiles from anon, authenticated;
+grant select on public.miss_tour_profiles to authenticated;
 
 drop policy if exists "Anyone can read comments" on public.miss_tour_comments;
 create policy "Anyone can read comments"
@@ -33,13 +64,15 @@ create policy "Anyone can read comments"
 drop policy if exists "Anyone can submit comments" on public.miss_tour_comments;
 create policy "Anyone can submit comments"
     on public.miss_tour_comments for insert
-    with check (true);
+    with check (created_by is null or created_by = (select auth.uid()));
 
 drop policy if exists "Registered site owners can delete comments" on public.miss_tour_comments;
-create policy "Registered site owners can delete comments"
+drop policy if exists "Authors and site owners can delete comments" on public.miss_tour_comments;
+create policy "Authors and site owners can delete comments"
     on public.miss_tour_comments for delete
     using (
-        exists (
+        created_by = (select auth.uid())
+        or exists (
             select 1
             from public.site_admins
             where site_admins.user_id = (select auth.uid())
@@ -49,6 +82,11 @@ create policy "Registered site owners can delete comments"
 drop policy if exists "Site owners can read their own role" on public.site_admins;
 create policy "Site owners can read their own role"
     on public.site_admins for select
+    using (user_id = (select auth.uid()));
+
+drop policy if exists "Users can read their own profile" on public.miss_tour_profiles;
+create policy "Users can read their own profile"
+    on public.miss_tour_profiles for select
     using (user_id = (select auth.uid()));
 
 create or replace function public.react_to_miss_tour_comment(
@@ -97,5 +135,5 @@ begin
 end;
 $$;
 
--- Create the owner account in Supabase Auth, then register its user ID here:
+-- Register the first account created through the site's sign-up form as the single site owner:
 -- insert into public.site_admins (user_id) values ('OWNER_AUTH_USER_UUID');
