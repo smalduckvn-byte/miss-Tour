@@ -1148,11 +1148,20 @@
             lucide.createIcons();
             setupMobileMenu();
             setupCommentForm();
+            renderStoredComments();
+            restoreCommentReactions();
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'missTourComments') renderStoredComments();
+                if (event.key === 'missTourCommentReactions') restoreCommentReactions();
+            });
             
             // Set current date on booking form
             const today = new Date().toISOString().split('T')[0];
-            document.getElementById('book-date').min = today;
-            document.getElementById('book-date').value = today;
+            const bookingDate = document.getElementById('book-date');
+            if (bookingDate) {
+                bookingDate.min = today;
+                bookingDate.value = today;
+            }
         });
 
         // Tab Router Logic
@@ -1357,65 +1366,101 @@
             }).join('');
         }
 
-        // Comment Reactions Logic
-        function reactComment(commentId, type) {
-            const el = document.getElementById(`react-${commentId}-${type}`);
-            if (el) {
-                const currentVal = parseInt(el.innerText) || 0;
-                const nextVal = currentVal + 1;
-                el.innerText = nextVal;
-                try {
-                    const reactions = JSON.parse(localStorage.getItem('missTourCommentReactions') || '{}');
-                    reactions[`${commentId}-${type}`] = nextVal;
-                    localStorage.setItem('missTourCommentReactions', JSON.stringify(reactions));
-                } catch (error) {
-                    showToast('Chưa lưu được cảm xúc', 'Trình duyệt không cho phép lưu dữ liệu trên thiết bị này.');
-                    return;
-                }
-                showToast("Đã thả cảm xúc!", "Cảm ơn bạn đã tương tác cùng Miss tour.");
+        function getStoredComments() {
+            try {
+                const comments = JSON.parse(localStorage.getItem('missTourComments') || '[]');
+                return Array.isArray(comments) ? comments : [];
+            } catch (error) {
+                return [];
             }
         }
 
-        function toggleReplyBox(commentId) {
-            const box = document.getElementById(`reply-box-${commentId}`);
-            if (box) box.classList.toggle('hidden');
+        function renderStoredComments() {
+            const grid = document.getElementById('comments-grid');
+            if (!grid) return;
+            grid.querySelectorAll('[data-stored-comment="true"]').forEach((card) => card.remove());
+            getStoredComments().slice().reverse().forEach((comment) => appendCommentCard(comment, true));
         }
 
-        // Comment Submission Logic
-        function setupCommentForm() {
-            const form = document.getElementById('comment-form');
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const name = document.getElementById('comment-name').value.trim();
-                const text = document.getElementById('comment-text').value.trim();
+        function appendCommentCard(comment, prepend = false) {
+            const grid = document.getElementById('comments-grid');
+            if (!grid || !comment || comment.id == null) return;
 
-                if (!name || !text) return;
+            const commentId = String(comment.id);
+            if (!/^[\w-]+$/.test(commentId)) return;
+            if (document.getElementById(`comment-card-${commentId}`)) return;
 
-                const grid = document.getElementById('comments-grid');
-                const card = document.createElement('div');
-                card.className = "bg-white p-6 rounded-3xl border border-emeraldVibrant/40 shadow-sm flex flex-col justify-between space-y-4";
+            const name = String(comment.name || 'Du khách');
+            const text = String(comment.text || '');
+            const avatar = String(comment.avatar || '');
+            const safeAvatar = /^(https:\/\/|data:image\/)/i.test(avatar) ? avatar : '';
+            const stars = '⭐'.repeat(Math.min(5, Math.max(1, parseInt(comment.rating, 10) || 5)));
+            const card = document.createElement('article');
+            card.id = `comment-card-${commentId}`;
+            card.dataset.storedComment = 'true';
+            card.className = 'bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4';
 
-                const newId = Date.now();
+            const avatarMarkup = safeAvatar
+                ? `<img src="${escapeHTML(safeAvatar)}" alt="Ảnh đại diện của ${escapeHTML(name)}" class="w-11 h-11 rounded-full object-cover border-2 border-emeraldVibrant">`
+                : `<div class="w-11 h-11 rounded-full border-2 border-emeraldVibrant bg-emerald-50 flex items-center justify-center font-bold text-forestGreen">${escapeHTML(name.charAt(0))}</div>`;
 
-                card.innerHTML = `
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-3">
-                            ${avatar}
-                            <div>
-                                <h4 class="font-bold text-earthDark text-sm">${name}</h4>
-                                <span class="text-[10px] text-slate-500">Du khách mới</span>
-                            </div>
+            card.innerHTML = `
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3">
+                        ${avatarMarkup}
+                        <div>
+                            <h4 class="font-bold text-earthDark text-sm">${escapeHTML(name)}</h4>
+                            <span class="text-[10px] text-emeraldVibrant font-bold">${stars} · Du khách</span>
                         </div>
-                        <p class="text-xs text-slate-700 leading-relaxed italic">"${text}"</p>
                     </div>
-                    <div class="pt-3 border-t border-slate-100 space-y-3">
-                        <div class="flex items-center gap-2">
-                            <button onclick="reactComment('${escapeHTML(comment.id)}', 'like')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-100 font-bold">👍 <span id="react-${escapeHTML(comment.id)}-like">${Number(comment.likes) || 0}</span></button>
-                            <button onclick="reactComment('${escapeHTML(comment.id)}', 'love')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-rose-100 font-bold">❤️ <span id="react-${escapeHTML(comment.id)}-love">${Number(comment.loves) || 0}</span></button>
-                        </div>
-                    </div>`;
-                grid.prepend(card);
-            });
+                    <p class="text-xs text-slate-700 leading-relaxed italic">"${escapeHTML(text)}"</p>
+                </div>
+                <div class="pt-3 border-t border-slate-100 space-y-3">
+                    <div class="flex items-center gap-2">
+                        <button onclick="reactComment('${commentId}', 'like')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-100 text-slate-700 font-bold transition">👍 <span id="react-${commentId}-like">${Number(comment.likes) || 0}</span></button>
+                        <button onclick="reactComment('${commentId}', 'love')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-700 font-bold transition">❤️ <span id="react-${commentId}-love">${Number(comment.loves) || 0}</span></button>
+                    </div>
+                </div>`;
+
+            if (prepend) grid.prepend(card);
+            else grid.appendChild(card);
+        }
+
+        function restoreCommentReactions() {
+            try {
+                const reactions = JSON.parse(localStorage.getItem('missTourCommentReactions') || '{}');
+                Object.entries(reactions).forEach(([key, count]) => {
+                    const element = document.getElementById(`react-${key}`);
+                    if (element && Number.isFinite(Number(count))) element.innerText = count;
+                });
+            } catch (error) {
+                showToast('Không đọc được cảm xúc', 'Dữ liệu phản ứng đã lưu không hợp lệ.');
+            }
+        }
+
+        function reactComment(commentId, type) {
+            if (!['like', 'love'].includes(type)) return;
+            const element = document.getElementById(`react-${commentId}-${type}`);
+            if (!element) return;
+
+            const nextValue = (parseInt(element.innerText, 10) || 0) + 1;
+            const comments = getStoredComments();
+            const storedComment = comments.find((comment) => String(comment.id) === String(commentId));
+            try {
+                if (storedComment) {
+                    storedComment[type === 'like' ? 'likes' : 'loves'] = nextValue;
+                    localStorage.setItem('missTourComments', JSON.stringify(comments));
+                } else {
+                    const reactions = JSON.parse(localStorage.getItem('missTourCommentReactions') || '{}');
+                    reactions[`${commentId}-${type}`] = nextValue;
+                    localStorage.setItem('missTourCommentReactions', JSON.stringify(reactions));
+                }
+            } catch (error) {
+                showToast('Chưa lưu được cảm xúc', 'Trình duyệt không cho phép lưu dữ liệu trên thiết bị này.');
+                return;
+            }
+            element.innerText = nextValue;
+            showToast('Đã thả cảm xúc!', 'Cảm ơn bạn đã tương tác cùng Miss tour.');
         }
 
         function toggleReplyBox(commentId) {
@@ -1423,20 +1468,16 @@
             if (box) box.classList.toggle('hidden');
         }
 
-        // Comment Submission Logic
         function setupCommentForm() {
             const form = document.getElementById('comment-form');
             const avatarInput = document.getElementById('comment-avatar-input');
+            if (!form || !avatarInput) return;
+
             avatarInput.addEventListener('change', (event) => {
                 const file = event.target.files[0];
                 if (!file) return;
-                if (!file.type.startsWith('image/')) {
-                    showToast('Ảnh không hợp lệ', 'Vui lòng chọn một tệp hình ảnh.');
-                    avatarInput.value = '';
-                    return;
-                }
-                if (file.size > 1500000) {
-                    showToast('Ảnh quá lớn', 'Vui lòng chọn ảnh có dung lượng tối đa 1,5 MB.');
+                if (!file.type.startsWith('image/') || file.size > 1500000) {
+                    showToast('Ảnh không hợp lệ', 'Chọn tệp hình ảnh có dung lượng tối đa 1,5 MB.');
                     avatarInput.value = '';
                     return;
                 }
@@ -1452,42 +1493,34 @@
                 reader.readAsDataURL(file);
             });
 
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
                 const name = document.getElementById('comment-name').value.trim();
                 const text = document.getElementById('comment-text').value.trim();
-
                 if (!name || !text) return;
 
-                const rating = document.getElementById('comment-rating').value;
+                const comments = getStoredComments();
                 const comment = {
                     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
                     name,
                     text,
-                    rating,
+                    rating: document.getElementById('comment-rating').value,
                     avatar: selectedCommentAvatar,
                     createdAt: new Date().toISOString(),
                     likes: 0,
                     loves: 0
                 };
+                comments.unshift(comment);
                 try {
-                    const comments = JSON.parse(localStorage.getItem('missTourComments') || '[]');
-                    const savedComments = Array.isArray(comments) ? comments : [];
-                    savedComments.unshift(comment);
-                    localStorage.setItem('missTourComments', JSON.stringify(savedComments));
+                    localStorage.setItem('missTourComments', JSON.stringify(comments));
                 } catch (error) {
                     showToast('Chưa lưu được bình luận', 'Bộ nhớ trình duyệt có thể đã đầy hoặc bị chặn.');
                     return;
                 }
-                renderStoredComments();
 
-                confetti({
-                    particleCount: 40,
-                    spread: 60,
-                    origin: { y: 0.7 }
-                });
-
-                showToast("Đã đăng bình luận!", "Cảm ơn đóng góp ý kiến của bạn.");
+                appendCommentCard(comment, true);
+                if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 60, origin: { y: 0.7 } });
+                showToast('Đã đăng bình luận!', 'Cảm ơn đóng góp ý kiến của bạn.');
                 form.reset();
                 selectedCommentAvatar = '';
                 document.getElementById('comment-avatar-preview').src = '';
@@ -1497,7 +1530,149 @@
             });
         }
 
-        // Map Methods
+        /*
+let selectedCommentAvatar = '';
+
+// 1. Tự động hiển thị các bình luận đã lưu khi mở trang
+function renderStoredComments() {
+    const comments = safeStorage.getItem('missTourComments') || [];
+    comments.forEach(c => appendCommentCard(c, false));
+}
+
+// 2. Tạo và chèn thẻ Bình luận vào giao diện HTML
+function appendCommentCard(comment, prepend = false) {
+    const grid = document.getElementById('comments-grid');
+    if (!grid) return;
+    if (document.getElementById(`comment-card-${comment.id}`)) return;
+
+    const card = document.createElement('div');
+    card.className = "bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4";
+    card.id = `comment-card-${comment.id}`;
+
+    // Tạo avatar (nếu có ảnh đính kèm thì hiển thị, không thì lấy chữ cái đầu)
+    const avatarImg = comment.avatar 
+        ? `<img src="${comment.avatar}" class="w-11 h-11 rounded-full object-cover border-2 border-emeraldVibrant">` 
+        : `<div class="w-11 h-11 rounded-full border-2 border-emeraldVibrant bg-emerald-50 flex items-center justify-center font-bold text-forestGreen">${comment.name.charAt(0)}</div>`;
+    
+    const stars = '⭐'.repeat(parseInt(comment.rating) || 5);
+
+    card.innerHTML = `
+        <div class="space-y-3">
+            <div class="flex items-center gap-3">
+                ${avatarImg}
+                <div>
+                    <h4 class="font-bold text-earthDark text-sm">${comment.name}</h4>
+                    <span class="text-[10px] text-emeraldVibrant font-bold">${stars} · Du khách</span>
+                </div>
+            </div>
+            <p class="text-xs text-slate-700 leading-relaxed italic">"${comment.text}"</p>
+        </div>
+        <div class="pt-3 border-t border-slate-100 space-y-3">
+            <div class="flex items-center gap-2">
+                <button onclick="reactComment('${comment.id}', 'like')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-100 text-slate-700 font-bold transition">
+                    👍 <span id="react-${comment.id}-like">${comment.likes || 0}</span>
+                </button>
+                <button onclick="reactComment('${comment.id}', 'love')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-700 font-bold transition">
+                    ❤️ <span id="react-${comment.id}-love">${comment.loves || 0}</span>
+                </button>
+            </div>
+        </div>`;
+
+    if (prepend) grid.prepend(card);
+    else grid.appendChild(card);
+}
+
+// 3. Khởi tạo sự kiện Chọn ảnh & Gửi Form bình luận
+function setupCommentForm() {
+    const form = document.getElementById('comment-form');
+    const avatarInput = document.getElementById('comment-avatar-input');
+    if (!form || !avatarInput) return;
+
+    // Xem trước ảnh đại diện khi người dùng chọn file
+    avatarInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = () => {
+            selectedCommentAvatar = String(reader.result);
+            const preview = document.getElementById('comment-avatar-preview');
+            const placeholder = document.getElementById('comment-avatar-placeholder');
+            
+            if (preview && placeholder) {
+                preview.src = selectedCommentAvatar;
+                preview.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            }
+            document.getElementById('comment-avatar-filename').innerText = file.name;
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Sự kiện khi bấm Submit Form
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('comment-name').value.trim();
+        const text = document.getElementById('comment-text').value.trim();
+        const rating = document.getElementById('comment-rating').value;
+
+        if (!name || !text) return;
+
+        const comment = {
+            id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+            name,
+            text,
+            rating,
+            avatar: selectedCommentAvatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
+            likes: 0,
+            loves: 0
+        };
+
+        // Lưu bình luận an toàn vào safeStorage
+        try {
+            const list = safeStorage.getItem('missTourComments') || [];
+            list.unshift(comment);
+            safeStorage.setItem('missTourComments', list);
+        } catch (err) {}
+
+        // Hiển thị bình luận mới lên đầu danh sách
+        appendCommentCard(comment, true);
+
+        // Bắn hiệu ứng Confetti chúc mừng
+        if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 60 });
+        showToast("Đã đăng bình luận!", "Cảm ơn đóng góp ý kiến của bạn.");
+
+        // Reset form
+        form.reset();
+        selectedCommentAvatar = '';
+        document.getElementById('comment-avatar-preview').classList.add('hidden');
+        document.getElementById('comment-avatar-placeholder').classList.remove('hidden');
+        document.getElementById('comment-avatar-filename').innerText = 'Chưa chọn ảnh';
+    });
+}
+
+// 4. Xử lý thả cảm xúc 👍 / ❤️
+function reactComment(commentId, type) {
+    const el = document.getElementById(`react-${commentId}-${type}`);
+    if (el) {
+        const nextVal = (parseInt(el.innerText) || 0) + 1;
+        el.innerText = nextVal;
+        
+        try {
+            let comments = safeStorage.getItem('missTourComments') || [];
+            const found = comments.find(c => String(c.id) === String(commentId));
+            if (found) {
+                if (type === 'like') found.likes = nextVal;
+                if (type === 'love') found.loves = nextVal;
+                safeStorage.setItem('missTourComments', comments);
+            }
+        } catch (error) {}
+        showToast("Đã thả cảm xúc!", "Cảm ơn bạn đã tương tác cùng Miss tour.");
+    }
+    }
+    */
+
+    // Map Methods
         function quickNavigateToMap(destName) {
             navigateTo('map');
             const mapSelect = document.getElementById('map-destination');
@@ -1553,6 +1728,6 @@
                 toast.classList.add('translate-x-32', 'opacity-0');
             }, 3500);
         }
-    </script>
+	</script>
 </body>
 </html>
