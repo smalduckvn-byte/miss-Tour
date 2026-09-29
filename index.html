@@ -93,6 +93,31 @@
             box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
         }
 
+        .comment-card-delete {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.18s ease;
+        }
+
+        .comment-card:hover .comment-card-delete,
+        .comment-card:focus-within .comment-card-delete,
+        .comment-card-delete:focus-visible {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+        }
+
+        .comment-card-delete:focus-visible {
+            outline: 3px solid #10b981;
+            outline-offset: 2px;
+        }
+
+        @media (hover: none) {
+            .comment-card-delete {
+                opacity: 1 !important;
+                pointer-events: auto !important;
+            }
+        }
+
         @keyframes zoomFade {
             from { opacity: 0; transform: scale(0.98) translateY(8px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
@@ -1217,6 +1242,8 @@
         let currentUserName = '';
         const SUPABASE_URL = 'https://YOUR_PROJECT_REF.supabase.co';
         const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const LOCAL_ADMIN_USERNAME = 'missyou';
+        const LOCAL_ADMIN_EMAIL = 'teot99349@gmail.com';
 
         const tourDetails = {
             'Chiêm Bái Chùa Giác Hoàng, Nhà Thờ Kim Châu & Tháp Bánh Ít': {
@@ -1480,6 +1507,11 @@
             }
         }
 
+        function isLocalAdminAccount(account) {
+            return account?.username?.toLowerCase() === LOCAL_ADMIN_USERNAME
+                && account?.email?.toLowerCase() === LOCAL_ADMIN_EMAIL;
+        }
+
         function bytesToHex(bytes) {
             return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
         }
@@ -1509,6 +1541,7 @@
                 localStorage.removeItem('missTourLocalSession');
                 currentUserId = null;
                 currentUserName = '';
+                isSiteOwner = false;
                 logoutButton.classList.add('hidden');
                 status.innerText = 'Tài khoản được lưu trên trình duyệt này';
                 renderStoredComments();
@@ -1516,8 +1549,9 @@
             }
             currentUserId = account.id;
             currentUserName = account.username;
+            isSiteOwner = isLocalAdminAccount(account);
             logoutButton.classList.remove('hidden');
-            status.innerText = `Đã đăng nhập: @${account.username} · lưu trên thiết bị này`;
+            status.innerText = `Đã đăng nhập: @${account.username}${isSiteOwner ? ' · Admin cục bộ' : ''} · lưu trên thiết bị này`;
             renderStoredComments();
         }
 
@@ -1803,7 +1837,7 @@
             } else {
                 const comments = getStoredComments();
                 const ownedComment = comments.find((item) => String(item.id) === String(commentId));
-                if (!ownedComment || ownedComment.createdBy !== currentUserId) {
+                if (!ownedComment || (!isSiteOwner && ownedComment.createdBy !== currentUserId)) {
                     showToast('Không có quyền xóa', 'Tài khoản này không tạo bình luận đó.');
                     return;
                 }
@@ -1840,18 +1874,18 @@
             const stars = '⭐'.repeat(Math.min(5, Math.max(1, parseInt(comment.rating, 10) || 5)));
             const createdBy = String(comment.createdBy || '');
             const canDelete = currentUserId && createdBy === currentUserId
-                || useSupabaseComments && isSiteOwner;
+                || isSiteOwner;
             const card = document.createElement('article');
             card.id = `comment-card-${commentId}`;
             card.dataset.storedComment = 'true';
             if (createdBy) card.dataset.createdBy = createdBy;
-            card.className = 'group relative bg-white p-6 rounded-3xl border-2 border-slate-300 hover:border-emerald-500 shadow-sm flex flex-col justify-between space-y-4 transition-colors';
+            card.className = 'comment-card group relative bg-white p-6 rounded-3xl border-2 border-slate-300 hover:border-emerald-500 shadow-sm flex flex-col justify-between space-y-4 transition-colors';
 
             const avatarMarkup = safeAvatar
                 ? `<img src="${escapeHTML(safeAvatar)}" alt="Ảnh đại diện của ${escapeHTML(name)}" class="w-11 h-11 rounded-full object-cover border-2 border-emeraldVibrant">`
                 : `<div class="w-11 h-11 rounded-full border-2 border-emeraldVibrant bg-emerald-50 flex items-center justify-center font-bold text-forestGreen">${escapeHTML(name.charAt(0))}</div>`;
             const deleteButton = canDelete
-                ? `<button type="button" onclick="deleteRemoteComment('${commentId}')" class="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-white text-rose-700 shadow-md opacity-0 transition-opacity hover:bg-rose-50 hover:text-rose-900 group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100" title="Xóa bình luận" aria-label="Xóa bình luận"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`
+                ? `<button type="button" onclick="deleteRemoteComment('${commentId}')" class="comment-card-delete absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-white text-rose-700 shadow-md hover:bg-rose-50 hover:text-rose-900" title="Xóa bình luận" aria-label="Xóa bình luận"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`
                 : '';
 
             card.innerHTML = `
@@ -1882,7 +1916,26 @@
 
             if (prepend) grid.prepend(card);
             else grid.appendChild(card);
-            if (deleteButton) card.insertAdjacentHTML('afterbegin', deleteButton);
+            if (deleteButton) {
+                card.insertAdjacentHTML('afterbegin', deleteButton);
+                const deleteControl = card.querySelector('.comment-card-delete');
+                const setDeleteVisibility = (visible) => {
+                    deleteControl.style.opacity = visible ? '1' : '0';
+                    deleteControl.style.pointerEvents = visible ? 'auto' : 'none';
+                };
+                setDeleteVisibility(window.matchMedia('(hover: none)').matches);
+                card.addEventListener('pointerenter', () => setDeleteVisibility(true));
+                card.addEventListener('pointerleave', () => {
+                    if (!card.matches(':focus-within')) setDeleteVisibility(false);
+                });
+                card.addEventListener('focusin', () => setDeleteVisibility(true));
+                card.addEventListener('focusout', (event) => {
+                    if (event.relatedTarget && card.contains(event.relatedTarget)) return;
+                    requestAnimationFrame(() => {
+                        if (!card.matches(':hover') && !card.matches(':focus-within')) setDeleteVisibility(false);
+                    });
+                });
+            }
             lucide.createIcons();
         }
 
