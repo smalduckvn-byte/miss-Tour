@@ -135,5 +135,24 @@ begin
 end;
 $$;
 
--- Register the first account created through the site's sign-up form as the single site owner:
--- insert into public.site_admins (user_id) values ('OWNER_AUTH_USER_UUID');
+-- After the account has been registered in Supabase Auth, run this block to grant it admin rights.
+-- It matches both email and username, and the unique index above prevents a second admin.
+-- do $$
+-- declare
+--     target_user_id uuid;
+-- begin
+--     select auth_user.id into target_user_id
+--     from auth.users as auth_user
+--     join public.miss_tour_profiles as profile on profile.user_id = auth_user.id
+--     where lower(auth_user.email) = lower('teot99349@gmail.com')
+--       and profile.username = 'missyou';
+--
+--     if target_user_id is null then
+--         raise exception 'No registered account found for the specified email and username';
+--     end if;
+--
+--     insert into public.site_admins (user_id)
+--     values (target_user_id)
+--     on conflict (user_id) do nothing;
+-- end;
+-- $$;
