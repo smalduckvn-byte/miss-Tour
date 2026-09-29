@@ -58,6 +58,7 @@
     <!-- Lucide Icons & Canvas Confetti CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         body {
@@ -694,6 +695,24 @@
                         <div class="w-16 h-1.5 bg-gradient-to-r from-emeraldVibrant to-sunsetGold mx-auto my-3 rounded-full"></div>
                     </div>
 
+                    <section class="mb-6 border-b border-slate-200 pb-5" aria-label="Quản trị bình luận">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                            <div>
+                                <h3 class="font-bold text-earthDark">Quản trị bình luận</h3>
+                                <p id="owner-auth-status" class="mt-1 text-xs text-slate-500" role="status">Chế độ lưu trên thiết bị</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button id="owner-login-toggle" type="button" onclick="toggleOwnerLogin()" class="px-4 py-2 rounded-lg bg-forestGreen text-white text-xs font-bold hover:bg-jadeGreen transition">Đăng nhập chủ trang</button>
+                                <button id="owner-logout-button" type="button" onclick="signOutOwner()" class="hidden px-4 py-2 rounded-lg border border-slate-300 text-slate-700 text-xs font-bold hover:bg-slate-100 transition">Đăng xuất</button>
+                            </div>
+                        </div>
+                        <form id="owner-login-form" class="hidden mt-4 grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3" onsubmit="signInOwner(event)">
+                            <input id="owner-email" type="email" autocomplete="username" required placeholder="Email quản trị" class="p-3 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emeraldVibrant">
+                            <input id="owner-password" type="password" autocomplete="current-password" required placeholder="Mật khẩu" class="p-3 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emeraldVibrant">
+                            <button type="submit" class="px-5 py-3 rounded-lg bg-emerald-700 text-white text-sm font-bold hover:bg-emerald-800 transition">Đăng nhập</button>
+                        </form>
+                    </section>
+
                     <!-- 6 Detailed Comment Cards Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="comments-grid">
                         
@@ -1131,6 +1150,11 @@
         let currentTourName = '';
         let currentTourDetails = {};
         let selectedCommentAvatar = '';
+        let supabaseClient = null;
+        let useSupabaseComments = false;
+        let isSiteOwner = false;
+        const SUPABASE_URL = 'https://YOUR_PROJECT_REF.supabase.co';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
         const tourDetails = {
             'Chiêm Bái Chùa Giác Hoàng, Nhà Thờ Kim Châu & Tháp Bánh Ít': {
@@ -1148,12 +1172,11 @@
             lucide.createIcons();
             setupMobileMenu();
             setupCommentForm();
-            renderStoredComments();
-            restoreCommentReactions();
             window.addEventListener('storage', (event) => {
-                if (event.key === 'missTourComments') renderStoredComments();
-                if (event.key === 'missTourCommentReactions') restoreCommentReactions();
+                if (!useSupabaseComments && event.key === 'missTourComments') renderStoredComments();
+                if (!useSupabaseComments && event.key === 'missTourCommentReactions') restoreCommentReactions();
             });
+            initializeCommentBackend();
             
             // Set current date on booking form
             const today = new Date().toISOString().split('T')[0];
@@ -1380,6 +1403,152 @@
             if (!grid) return;
             grid.querySelectorAll('[data-stored-comment="true"]').forEach((card) => card.remove());
             getStoredComments().slice().reverse().forEach((comment) => appendCommentCard(comment, true));
+            restoreCommentReactions();
+        }
+
+        async function initializeCommentBackend() {
+            const loginButton = document.getElementById('owner-login-toggle');
+            const authStatus = document.getElementById('owner-auth-status');
+            const isConfigured = SUPABASE_URL.startsWith('https://')
+                && !SUPABASE_URL.includes('YOUR_PROJECT_REF')
+                && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY';
+            if (!isConfigured) {
+                loginButton.disabled = true;
+                loginButton.title = 'Cấu hình Supabase để bật tài khoản quản trị';
+                authStatus.innerText = 'Chế độ lưu trên thiết bị';
+                renderStoredComments();
+                return;
+            }
+            if (!window.supabase?.createClient) {
+                loginButton.disabled = true;
+                loginButton.title = 'Không tải được thư viện Supabase';
+                authStatus.innerText = 'Không kết nối được dịch vụ xác thực';
+                renderStoredComments();
+                return;
+            }
+
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            useSupabaseComments = true;
+            authStatus.innerText = 'Đang kết nối Supabase...';
+            try {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                await updateOwnerAccess(session?.user || null);
+                await loadRemoteComments();
+                supabaseClient.channel('miss-tour-comments')
+                    .on('postgres_changes', { event: '*', schema: 'public', table: 'miss_tour_comments' }, loadRemoteComments)
+                    .subscribe();
+                supabaseClient.auth.onAuthStateChange((_event, session) => {
+                    setTimeout(() => updateOwnerAccess(session?.user || null), 0);
+                });
+            } catch (error) {
+                document.getElementById('owner-auth-status').innerText = 'Không thể kết nối Supabase';
+                showToast('Lỗi kết nối', 'Kiểm tra cấu hình Supabase và file SQL đã chạy chưa.');
+            }
+        }
+
+        async function loadRemoteComments() {
+            if (!supabaseClient) return;
+            const { data, error } = await supabaseClient
+                .from('miss_tour_comments')
+                .select('*')
+                .order('created_at', { ascending: false });
+            if (error) {
+                showToast('Không tải được bình luận', error.message);
+                return;
+            }
+
+            const grid = document.getElementById('comments-grid');
+            grid.querySelectorAll('[data-stored-comment="true"]').forEach((card) => card.remove());
+            (data || []).forEach((row) => appendCommentCard({
+                id: row.id,
+                name: row.name,
+                text: row.content,
+                rating: row.rating,
+                avatar: row.avatar,
+                likes: row.likes,
+                loves: row.loves,
+                createdAt: row.created_at
+            }));
+        }
+
+        async function updateOwnerAccess(user) {
+            const status = document.getElementById('owner-auth-status');
+            const loginButton = document.getElementById('owner-login-toggle');
+            const logoutButton = document.getElementById('owner-logout-button');
+            const loginForm = document.getElementById('owner-login-form');
+            isSiteOwner = false;
+
+            if (!supabaseClient) {
+                status.innerText = 'Chế độ lưu trên thiết bị';
+                loginButton.disabled = true;
+                loginButton.title = 'Cấu hình Supabase để bật tài khoản quản trị';
+                return;
+            }
+
+            loginButton.disabled = false;
+            loginButton.title = '';
+            logoutButton.classList.toggle('hidden', !user);
+            if (!user) {
+                status.innerText = 'Chưa đăng nhập';
+                loginForm.classList.add('hidden');
+                return;
+            }
+
+            const { data, error } = await supabaseClient
+                .from('site_admins')
+                .select('user_id')
+                .eq('user_id', user.id)
+                .maybeSingle();
+            isSiteOwner = !error && Boolean(data);
+            status.innerText = isSiteOwner ? `Đã đăng nhập: ${user.email}` : 'Tài khoản chưa được cấp quyền chủ trang';
+            loginForm.classList.add('hidden');
+            await loadRemoteComments();
+        }
+
+        function toggleOwnerLogin() {
+            if (!supabaseClient) {
+                showToast('Chưa cấu hình tài khoản', 'Cần điền Supabase URL và anon key để bật đăng nhập.');
+                return;
+            }
+            document.getElementById('owner-login-form').classList.toggle('hidden');
+        }
+
+        async function signInOwner(event) {
+            event.preventDefault();
+            if (!supabaseClient) return;
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: document.getElementById('owner-email').value.trim(),
+                password: document.getElementById('owner-password').value
+            });
+            if (error) {
+                document.getElementById('owner-auth-status').innerText = 'Đăng nhập thất bại';
+                showToast('Không đăng nhập được', error.message);
+                return;
+            }
+            await updateOwnerAccess(data.user);
+            if (!isSiteOwner) await supabaseClient.auth.signOut();
+        }
+
+        async function signOutOwner() {
+            if (!supabaseClient) return;
+            const { error } = await supabaseClient.auth.signOut();
+            if (error) showToast('Đăng xuất thất bại', error.message);
+            else await updateOwnerAccess(null);
+        }
+
+        async function deleteRemoteComment(commentId) {
+            if (!isSiteOwner || !supabaseClient) return;
+            if (!confirm('Xóa bình luận này? Không thể hoàn tác.')) return;
+            const { error } = await supabaseClient
+                .from('miss_tour_comments')
+                .delete()
+                .eq('id', commentId);
+            if (error) {
+                showToast('Không xóa được bình luận', error.message);
+                return;
+            }
+            document.getElementById(`comment-card-${commentId}`)?.remove();
+            showToast('Đã xóa bình luận', 'Bình luận đã được gỡ khỏi trang.');
         }
 
         function appendCommentCard(comment, prepend = false) {
@@ -1403,6 +1572,9 @@
             const avatarMarkup = safeAvatar
                 ? `<img src="${escapeHTML(safeAvatar)}" alt="Ảnh đại diện của ${escapeHTML(name)}" class="w-11 h-11 rounded-full object-cover border-2 border-emeraldVibrant">`
                 : `<div class="w-11 h-11 rounded-full border-2 border-emeraldVibrant bg-emerald-50 flex items-center justify-center font-bold text-forestGreen">${escapeHTML(name.charAt(0))}</div>`;
+            const deleteButton = useSupabaseComments && isSiteOwner
+                ? `<button type="button" onclick="deleteRemoteComment('${commentId}')" class="ml-auto inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 hover:text-rose-900" aria-label="Xóa bình luận"><i data-lucide="trash-2" class="w-4 h-4"></i> Xóa</button>`
+                : '';
 
             card.innerHTML = `
                 <div class="space-y-3">
@@ -1419,11 +1591,13 @@
                     <div class="flex items-center gap-2">
                         <button onclick="reactComment('${commentId}', 'like')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-100 text-slate-700 font-bold transition">👍 <span id="react-${commentId}-like">${Number(comment.likes) || 0}</span></button>
                         <button onclick="reactComment('${commentId}', 'love')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-700 font-bold transition">❤️ <span id="react-${commentId}-love">${Number(comment.loves) || 0}</span></button>
+                        ${deleteButton}
                     </div>
                 </div>`;
 
             if (prepend) grid.prepend(card);
             else grid.appendChild(card);
+            if (deleteButton) lucide.createIcons();
         }
 
         function restoreCommentReactions() {
@@ -1438,10 +1612,28 @@
             }
         }
 
-        function reactComment(commentId, type) {
+        async function reactComment(commentId, type) {
             if (!['like', 'love'].includes(type)) return;
             const element = document.getElementById(`react-${commentId}-${type}`);
             if (!element) return;
+
+            if (useSupabaseComments) {
+                const { data, error } = await supabaseClient.rpc('react_to_miss_tour_comment', {
+                    p_comment_id: commentId,
+                    p_reaction: type
+                });
+                if (error) {
+                    showToast('Chưa lưu được cảm xúc', error.message);
+                    return;
+                }
+                const counts = Array.isArray(data) ? data[0] : data;
+                if (counts) {
+                    document.getElementById(`react-${commentId}-like`).innerText = counts.likes;
+                    document.getElementById(`react-${commentId}-love`).innerText = counts.loves;
+                    showToast('Đã thả cảm xúc!', 'Cảm ơn bạn đã tương tác cùng Miss tour.');
+                    return;
+                }
+            }
 
             const nextValue = (parseInt(element.innerText, 10) || 0) + 1;
             const comments = getStoredComments();
@@ -1493,29 +1685,57 @@
                 reader.readAsDataURL(file);
             });
 
-            form.addEventListener('submit', (event) => {
+            form.addEventListener('submit', async (event) => {
                 event.preventDefault();
                 const name = document.getElementById('comment-name').value.trim();
                 const text = document.getElementById('comment-text').value.trim();
                 if (!name || !text) return;
 
-                const comments = getStoredComments();
-                const comment = {
-                    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-                    name,
-                    text,
-                    rating: document.getElementById('comment-rating').value,
-                    avatar: selectedCommentAvatar,
-                    createdAt: new Date().toISOString(),
-                    likes: 0,
-                    loves: 0
-                };
-                comments.unshift(comment);
-                try {
-                    localStorage.setItem('missTourComments', JSON.stringify(comments));
-                } catch (error) {
-                    showToast('Chưa lưu được bình luận', 'Bộ nhớ trình duyệt có thể đã đầy hoặc bị chặn.');
-                    return;
+                let comment;
+                if (useSupabaseComments) {
+                    const { data, error } = await supabaseClient
+                        .from('miss_tour_comments')
+                        .insert({
+                            name,
+                            content: text,
+                            rating: Number(document.getElementById('comment-rating').value),
+                            avatar: selectedCommentAvatar
+                        })
+                        .select()
+                        .single();
+                    if (error) {
+                        showToast('Chưa gửi được bình luận', error.message);
+                        return;
+                    }
+                    comment = {
+                        id: data.id,
+                        name: data.name,
+                        text: data.content,
+                        rating: data.rating,
+                        avatar: data.avatar,
+                        likes: data.likes,
+                        loves: data.loves,
+                        createdAt: data.created_at
+                    };
+                } else {
+                    comment = {
+                        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+                        name,
+                        text,
+                        rating: document.getElementById('comment-rating').value,
+                        avatar: selectedCommentAvatar,
+                        createdAt: new Date().toISOString(),
+                        likes: 0,
+                        loves: 0
+                    };
+                    const comments = getStoredComments();
+                    comments.unshift(comment);
+                    try {
+                        localStorage.setItem('missTourComments', JSON.stringify(comments));
+                    } catch (error) {
+                        showToast('Chưa lưu được bình luận', 'Bộ nhớ trình duyệt có thể đã đầy hoặc bị chặn.');
+                        return;
+                    }
                 }
 
                 appendCommentCard(comment, true);
