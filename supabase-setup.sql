@@ -22,6 +22,15 @@ create table if not exists public.miss_tour_profiles (
     created_at timestamptz not null default now()
 );
 
+create table if not exists public.miss_tour_comment_replies (
+    id uuid primary key default gen_random_uuid(),
+    comment_id uuid not null references public.miss_tour_comments(id) on delete cascade,
+    author_id uuid references auth.users(id) on delete set null,
+    author_name text not null check (char_length(author_name) between 1 and 100),
+    content text not null check (char_length(content) between 1 and 1000),
+    created_at timestamptz not null default now()
+);
+
 create unique index if not exists site_admins_single_account
     on public.site_admins ((true));
 
@@ -46,6 +55,7 @@ create trigger create_miss_tour_profile
 alter table public.miss_tour_comments enable row level security;
 alter table public.site_admins enable row level security;
 alter table public.miss_tour_profiles enable row level security;
+alter table public.miss_tour_comment_replies enable row level security;
 
 revoke all on public.miss_tour_comments from anon, authenticated;
 grant select, insert on public.miss_tour_comments to anon, authenticated;
@@ -55,6 +65,8 @@ revoke all on public.site_admins from anon, authenticated;
 grant select on public.site_admins to authenticated;
 revoke all on public.miss_tour_profiles from anon, authenticated;
 grant select on public.miss_tour_profiles to authenticated;
+revoke all on public.miss_tour_comment_replies from anon, authenticated;
+grant select, insert on public.miss_tour_comment_replies to anon, authenticated;
 
 drop policy if exists "Anyone can read comments" on public.miss_tour_comments;
 create policy "Anyone can read comments"
@@ -88,6 +100,16 @@ drop policy if exists "Users can read their own profile" on public.miss_tour_pro
 create policy "Users can read their own profile"
     on public.miss_tour_profiles for select
     using (user_id = (select auth.uid()));
+
+drop policy if exists "Anyone can read comment replies" on public.miss_tour_comment_replies;
+create policy "Anyone can read comment replies"
+    on public.miss_tour_comment_replies for select
+    using (true);
+
+drop policy if exists "Anyone can submit comment replies" on public.miss_tour_comment_replies;
+create policy "Anyone can submit comment replies"
+    on public.miss_tour_comment_replies for insert
+    with check (author_id is null or author_id = (select auth.uid()));
 
 create or replace function public.react_to_miss_tour_comment(
     p_comment_id uuid,
@@ -131,6 +153,15 @@ begin
           and tablename = 'miss_tour_comments'
     ) then
         alter publication supabase_realtime add table public.miss_tour_comments;
+    end if;
+    if not exists (
+        select 1
+        from pg_publication_tables
+        where pubname = 'supabase_realtime'
+          and schemaname = 'public'
+          and tablename = 'miss_tour_comment_replies'
+    ) then
+        alter publication supabase_realtime add table public.miss_tour_comment_replies;
     end if;
 end;
 $$;

@@ -81,6 +81,18 @@
             animation: zoomFade 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        #comments-grid > article,
+        #comments-grid > div {
+            border: 1px solid #cbd5e1;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        #comments-grid > article:hover,
+        #comments-grid > div:hover {
+            border-color: #10b981;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        }
+
         @keyframes zoomFade {
             from { opacity: 0; transform: scale(0.98) translateY(8px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
@@ -1202,6 +1214,7 @@
         let useSupabaseComments = false;
         let isSiteOwner = false;
         let currentUserId = null;
+        let currentUserName = '';
         const SUPABASE_URL = 'https://YOUR_PROJECT_REF.supabase.co';
         const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
@@ -1224,6 +1237,7 @@
             window.addEventListener('storage', (event) => {
                 if (!useSupabaseComments && event.key === 'missTourComments') renderStoredComments();
                 if (!useSupabaseComments && event.key === 'missTourCommentReactions') restoreCommentReactions();
+                if (!useSupabaseComments && event.key === 'missTourCommentReplies') renderAllOpenReplies();
             });
             initializeCommentBackend();
             
@@ -1494,12 +1508,14 @@
             if (!account) {
                 localStorage.removeItem('missTourLocalSession');
                 currentUserId = null;
+                currentUserName = '';
                 logoutButton.classList.add('hidden');
                 status.innerText = 'Tài khoản được lưu trên trình duyệt này';
                 renderStoredComments();
                 return;
             }
             currentUserId = account.id;
+            currentUserName = account.username;
             logoutButton.classList.remove('hidden');
             status.innerText = `Đã đăng nhập: @${account.username} · lưu trên thiết bị này`;
             renderStoredComments();
@@ -1539,6 +1555,12 @@
                 await loadRemoteComments();
                 supabaseClient.channel('miss-tour-comments')
                     .on('postgres_changes', { event: '*', schema: 'public', table: 'miss_tour_comments' }, loadRemoteComments)
+                    .subscribe();
+                supabaseClient.channel('miss-tour-replies')
+                    .on('postgres_changes', { event: '*', schema: 'public', table: 'miss_tour_comment_replies' }, (payload) => {
+                        const commentId = payload.new?.comment_id || payload.old?.comment_id;
+                        if (commentId) renderCommentReplies(commentId);
+                    })
                     .subscribe();
                 supabaseClient.auth.onAuthStateChange((event, session) => {
                     if (event === 'PASSWORD_RECOVERY') {
@@ -1592,6 +1614,7 @@
             const loginPanel = document.getElementById('owner-login-panel');
             isSiteOwner = false;
             currentUserId = user?.id || null;
+            currentUserName = user?.email || '';
 
             if (!supabaseClient) {
                 status.innerText = 'Chế độ lưu trên thiết bị';
@@ -1615,6 +1638,7 @@
             ]);
             isSiteOwner = Boolean(admin);
             const accountName = profile?.username || user.email;
+            currentUserName = profile?.username || user.email;
             status.innerText = isSiteOwner ? `Đã đăng nhập: ${accountName} · Admin` : `Đã đăng nhập: ${accountName}`;
             loginPanel.classList.add('hidden');
             await loadRemoteComments();
@@ -1821,13 +1845,13 @@
             card.id = `comment-card-${commentId}`;
             card.dataset.storedComment = 'true';
             if (createdBy) card.dataset.createdBy = createdBy;
-            card.className = 'bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4';
+            card.className = 'group relative bg-white p-6 rounded-3xl border-2 border-slate-300 hover:border-emerald-500 shadow-sm flex flex-col justify-between space-y-4 transition-colors';
 
             const avatarMarkup = safeAvatar
                 ? `<img src="${escapeHTML(safeAvatar)}" alt="Ảnh đại diện của ${escapeHTML(name)}" class="w-11 h-11 rounded-full object-cover border-2 border-emeraldVibrant">`
                 : `<div class="w-11 h-11 rounded-full border-2 border-emeraldVibrant bg-emerald-50 flex items-center justify-center font-bold text-forestGreen">${escapeHTML(name.charAt(0))}</div>`;
             const deleteButton = canDelete
-                ? `<button type="button" onclick="deleteRemoteComment('${commentId}')" class="ml-auto inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 hover:text-rose-900" aria-label="Xóa bình luận"><i data-lucide="trash-2" class="w-4 h-4"></i> Xóa</button>`
+                ? `<button type="button" onclick="deleteRemoteComment('${commentId}')" class="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-white text-rose-700 shadow-md opacity-0 transition-opacity hover:bg-rose-50 hover:text-rose-900 group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100" title="Xóa bình luận" aria-label="Xóa bình luận"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`
                 : '';
 
             card.innerHTML = `
@@ -1845,13 +1869,21 @@
                     <div class="flex items-center gap-2">
                         <button onclick="reactComment('${commentId}', 'like')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-100 text-slate-700 font-bold transition">👍 <span id="react-${commentId}-like">${Number(comment.likes) || 0}</span></button>
                         <button onclick="reactComment('${commentId}', 'love')" class="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-700 font-bold transition">❤️ <span id="react-${commentId}-love">${Number(comment.loves) || 0}</span></button>
-                        ${deleteButton}
+                        <button onclick="toggleReplyBox('${commentId}')" class="ml-auto text-[11px] font-bold text-emerald-700 hover:underline">Trả lời</button>
+                    </div>
+                    <div id="reply-box-${commentId}" class="hidden pt-2 space-y-2">
+                        <div data-reply-list="${commentId}" class="space-y-2"></div>
+                        <form onsubmit="submitCommentReply(event, '${commentId}')" class="flex items-end gap-2">
+                            <textarea required maxlength="1000" rows="2" aria-label="Nội dung trả lời" placeholder="Viết trả lời..." class="min-h-11 flex-1 resize-y rounded-lg border border-slate-300 p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-emeraldVibrant"></textarea>
+                            <button type="submit" title="Gửi trả lời" aria-label="Gửi trả lời" class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-forestGreen text-white hover:bg-jadeGreen transition"><i data-lucide="send" class="w-4 h-4"></i></button>
+                        </form>
                     </div>
                 </div>`;
 
             if (prepend) grid.prepend(card);
             else grid.appendChild(card);
-            if (deleteButton) lucide.createIcons();
+            if (deleteButton) card.insertAdjacentHTML('afterbegin', deleteButton);
+            lucide.createIcons();
         }
 
         function restoreCommentReactions() {
@@ -1909,9 +1941,117 @@
             showToast('Đã thả cảm xúc!', 'Cảm ơn bạn đã tương tác cùng Miss tour.');
         }
 
+        function getStoredReplies() {
+            try {
+                const replies = JSON.parse(localStorage.getItem('missTourCommentReplies') || '{}');
+                return replies && typeof replies === 'object' && !Array.isArray(replies) ? replies : {};
+            } catch (error) {
+                return {};
+            }
+        }
+
+        function isRemoteCommentId(commentId) {
+            return /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i.test(String(commentId));
+        }
+
         function toggleReplyBox(commentId) {
             const box = document.getElementById(`reply-box-${commentId}`);
-            if (box) box.classList.toggle('hidden');
+            if (!box) return;
+            box.classList.toggle('hidden');
+            if (box.classList.contains('hidden')) return;
+
+            if (!box.querySelector('[data-reply-list]')) {
+                const replyList = document.createElement('div');
+                replyList.dataset.replyList = String(commentId);
+                replyList.className = 'space-y-2';
+                box.prepend(replyList);
+            }
+            if (!box.querySelector('form')) {
+                const form = document.createElement('form');
+                form.className = 'flex items-end gap-2';
+                form.innerHTML = '<textarea required maxlength="1000" rows="2" aria-label="Nội dung trả lời" placeholder="Viết trả lời..." class="min-h-11 flex-1 resize-y rounded-lg border border-slate-300 p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-emeraldVibrant"></textarea><button type="submit" title="Gửi trả lời" aria-label="Gửi trả lời" class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-forestGreen text-white hover:bg-jadeGreen transition"><i data-lucide="send" class="w-4 h-4"></i></button>';
+                form.addEventListener('submit', (event) => submitCommentReply(event, commentId));
+                box.append(form);
+                lucide.createIcons();
+            }
+            renderCommentReplies(commentId);
+        }
+
+        async function renderCommentReplies(commentId) {
+            const box = document.getElementById(`reply-box-${commentId}`);
+            const list = box?.querySelector('[data-reply-list]');
+            if (!list) return;
+
+            let replies;
+            if (useSupabaseComments && isRemoteCommentId(commentId)) {
+                const { data, error } = await supabaseClient
+                    .from('miss_tour_comment_replies')
+                    .select('id, author_name, content, created_at')
+                    .eq('comment_id', commentId)
+                    .order('created_at', { ascending: true });
+                if (error) {
+                    showToast('Không tải được câu trả lời', error.message);
+                    return;
+                }
+                replies = data || [];
+            } else {
+                replies = getStoredReplies()[String(commentId)] || [];
+            }
+
+            list.innerHTML = replies.map((reply) => `
+                <div class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs">
+                    <p class="font-bold text-forestGreen">${escapeHTML(reply.author_name || reply.authorName || 'Khách')}</p>
+                    <p class="mt-1 whitespace-pre-wrap break-words text-slate-700">${escapeHTML(reply.content || reply.text || '')}</p>
+                    <time class="mt-1 block text-[10px] text-slate-400">${escapeHTML(new Date(reply.created_at || reply.createdAt).toLocaleString('vi-VN'))}</time>
+                </div>`).join('');
+        }
+
+        function renderAllOpenReplies() {
+            document.querySelectorAll('[id^="reply-box-"]:not(.hidden)').forEach((box) => {
+                renderCommentReplies(box.id.slice('reply-box-'.length));
+            });
+        }
+
+        async function submitCommentReply(event, commentId) {
+            event.preventDefault();
+            const form = event.currentTarget;
+            const textarea = form.querySelector('textarea');
+            const text = textarea.value.trim();
+            if (!text) return;
+
+            const authorName = currentUserName ? `@${currentUserName}` : 'Khách';
+            if (useSupabaseComments && isRemoteCommentId(commentId)) {
+                const { error } = await supabaseClient.from('miss_tour_comment_replies').insert({
+                    comment_id: commentId,
+                    author_id: currentUserId,
+                    author_name: authorName,
+                    content: text
+                });
+                if (error) {
+                    showToast('Chưa gửi được câu trả lời', error.message);
+                    return;
+                }
+            } else {
+                const replies = getStoredReplies();
+                const key = String(commentId);
+                replies[key] = Array.isArray(replies[key]) ? replies[key] : [];
+                replies[key].push({
+                    authorId: currentUserId,
+                    authorName,
+                    text,
+                    createdAt: new Date().toISOString()
+                });
+                try {
+                    localStorage.setItem('missTourCommentReplies', JSON.stringify(replies));
+                } catch (error) {
+                    showToast('Chưa lưu được câu trả lời', 'Bộ nhớ trình duyệt có thể đã đầy hoặc bị chặn.');
+                    return;
+                }
+            }
+
+            form.reset();
+            await renderCommentReplies(commentId);
+            showToast('Đã gửi câu trả lời', 'Phản hồi đã được thêm vào bình luận.');
         }
 
         function setupCommentForm() {
