@@ -699,7 +699,7 @@
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                             <div>
                                 <h3 class="font-bold text-earthDark">Tài khoản & quản lý bình luận</h3>
-                                <p id="owner-auth-status" class="mt-1 text-xs text-slate-500" role="status">Chưa cấu hình Supabase nên chưa thể đăng ký tài khoản online</p>
+                                <p id="owner-auth-status" class="mt-1 text-xs text-slate-500" role="status">Tài khoản được lưu trên trình duyệt này</p>
                             </div>
                             <div class="flex gap-2">
                                 <button id="owner-login-toggle" type="button" onclick="toggleOwnerLogin()" class="px-4 py-2 rounded-lg bg-forestGreen text-white text-xs font-bold hover:bg-jadeGreen transition">Đăng nhập / Đăng ký</button>
@@ -708,7 +708,7 @@
                         </div>
                         <div id="owner-login-panel" class="hidden mt-4 space-y-4">
                             <form id="owner-login-form" class="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3" onsubmit="signInOwner(event)">
-                                <input id="owner-email" type="email" autocomplete="username" required placeholder="Email đã đăng ký" class="p-3 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emeraldVibrant">
+                                <input id="owner-email" type="text" autocomplete="username" required placeholder="Tên tài khoản hoặc email" class="p-3 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emeraldVibrant">
                                 <input id="owner-password" type="password" autocomplete="current-password" required placeholder="Mật khẩu" class="p-3 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emeraldVibrant">
                                 <button type="submit" class="px-5 py-3 rounded-lg bg-emerald-700 text-white text-sm font-bold hover:bg-emerald-800 transition">Đăng nhập</button>
                                 <button type="button" onclick="requestPasswordReset()" class="sm:col-span-3 justify-self-start text-sm font-bold text-emerald-800 hover:underline">Quên mật khẩu?</button>
@@ -723,6 +723,7 @@
                                 <input id="recovery-new-password" type="password" required minlength="8" autocomplete="new-password" placeholder="Mật khẩu mới (ít nhất 8 ký tự)" class="p-3 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emeraldVibrant">
                                 <button type="submit" class="px-5 py-3 rounded-lg bg-emerald-700 text-white text-sm font-bold hover:bg-emerald-800 transition">Lưu mật khẩu mới</button>
                             </form>
+                        </div>
                     </section>
 
                     <!-- 6 Detailed Comment Cards Grid -->
@@ -1419,6 +1420,52 @@
             restoreCommentReactions();
         }
 
+        function getLocalAccounts() {
+            try {
+                const accounts = JSON.parse(localStorage.getItem('missTourAccounts') || '[]');
+                return Array.isArray(accounts) ? accounts : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function bytesToHex(bytes) {
+            return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+        }
+
+        function hexToBytes(hex) {
+            return new Uint8Array(hex.match(/.{2}/g).map((byte) => parseInt(byte, 16)));
+        }
+
+        async function hashAccountPassword(password, salt) {
+            if (!window.crypto?.subtle) throw new Error('Trình duyệt không hỗ trợ mã hóa tài khoản.');
+            const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
+            const bits = await crypto.subtle.deriveBits({
+                name: 'PBKDF2',
+                salt: hexToBytes(salt),
+                iterations: 120000,
+                hash: 'SHA-256'
+            }, key, 256);
+            return bytesToHex(new Uint8Array(bits));
+        }
+
+        function restoreLocalAccountSession() {
+            const sessionId = localStorage.getItem('missTourLocalSession');
+            const account = getLocalAccounts().find((item) => item.id === sessionId);
+            const status = document.getElementById('owner-auth-status');
+            const logoutButton = document.getElementById('owner-logout-button');
+            if (!account) {
+                localStorage.removeItem('missTourLocalSession');
+                currentUserId = null;
+                logoutButton.classList.add('hidden');
+                status.innerText = 'Tài khoản được lưu trên trình duyệt này';
+                return;
+            }
+            currentUserId = account.id;
+            logoutButton.classList.remove('hidden');
+            status.innerText = `Đã đăng nhập: @${account.username} · lưu trên thiết bị này`;
+        }
+
         async function initializeCommentBackend() {
             const loginButton = document.getElementById('owner-login-toggle');
             const authStatus = document.getElementById('owner-auth-status');
@@ -1426,16 +1473,17 @@
                 && !SUPABASE_URL.includes('YOUR_PROJECT_REF')
                 && SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY';
             if (!isConfigured) {
-                loginButton.disabled = true;
-                loginButton.title = 'Cấu hình Supabase để bật tài khoản quản trị';
-                authStatus.innerText = 'Chưa cấu hình Supabase nên chưa thể đăng ký tài khoản online';
+                loginButton.disabled = false;
+                loginButton.title = '';
+                restoreLocalAccountSession();
                 renderStoredComments();
                 return;
             }
             if (!window.supabase?.createClient) {
-                loginButton.disabled = true;
-                loginButton.title = 'Không tải được thư viện Supabase';
-                authStatus.innerText = 'Không kết nối được dịch vụ xác thực';
+                loginButton.disabled = false;
+                loginButton.title = '';
+                authStatus.innerText = 'Supabase chưa tải được; tài khoản lưu trên trình duyệt này';
+                restoreLocalAccountSession();
                 renderStoredComments();
                 return;
             }
@@ -1529,7 +1577,7 @@
 
         function toggleOwnerLogin() {
             if (!supabaseClient) {
-                showToast('Chưa cấu hình tài khoản', 'Cần điền Supabase URL và anon key để bật đăng nhập.');
+                document.getElementById('owner-login-panel').classList.toggle('hidden');
                 return;
             }
             document.getElementById('owner-login-panel').classList.toggle('hidden');
@@ -1537,7 +1585,21 @@
 
         async function signInOwner(event) {
             event.preventDefault();
-            if (!supabaseClient) return;
+            if (!supabaseClient) {
+                const identity = document.getElementById('owner-email').value.trim().toLowerCase();
+                const password = document.getElementById('owner-password').value;
+                const account = getLocalAccounts().find((item) => item.email === identity || item.username === identity);
+                if (!account || await hashAccountPassword(password, account.salt) !== account.passwordHash) {
+                    showToast('Đăng nhập thất bại', 'Tên tài khoản/email hoặc mật khẩu chưa đúng.');
+                    return;
+                }
+                localStorage.setItem('missTourLocalSession', account.id);
+                document.getElementById('owner-login-form').reset();
+                document.getElementById('owner-login-panel').classList.add('hidden');
+                restoreLocalAccountSession();
+                showToast('Đăng nhập thành công', `Xin chào @${account.username}.`);
+                return;
+            }
             const { data, error } = await supabaseClient.auth.signInWithPassword({
                 email: document.getElementById('owner-email').value.trim(),
                 password: document.getElementById('owner-password').value
@@ -1553,10 +1615,38 @@
 
         async function signUpAccount(event) {
             event.preventDefault();
-            if (!supabaseClient) return;
             const username = document.getElementById('signup-username').value.trim().toLowerCase();
             const email = document.getElementById('signup-email').value.trim();
             const password = document.getElementById('signup-password').value;
+            if (!supabaseClient) {
+                const accounts = getLocalAccounts();
+                if (accounts.some((account) => account.username === username || account.email === email.toLowerCase())) {
+                    showToast('Tài khoản đã tồn tại', 'Tên tài khoản hoặc email đã được đăng ký.');
+                    return;
+                }
+                try {
+                    const saltBytes = crypto.getRandomValues(new Uint8Array(16));
+                    const salt = bytesToHex(saltBytes);
+                    const account = {
+                        id: crypto.randomUUID(),
+                        username,
+                        email: email.toLowerCase(),
+                        salt,
+                        passwordHash: await hashAccountPassword(password, salt),
+                        createdAt: new Date().toISOString()
+                    };
+                    accounts.push(account);
+                    localStorage.setItem('missTourAccounts', JSON.stringify(accounts));
+                    localStorage.setItem('missTourLocalSession', account.id);
+                    document.getElementById('owner-signup-form').reset();
+                    document.getElementById('owner-login-panel').classList.add('hidden');
+                    restoreLocalAccountSession();
+                    showToast('Đã tạo tài khoản', `Tài khoản @${username} đã được lưu trên thiết bị này.`);
+                } catch (error) {
+                    showToast('Không tạo được tài khoản', error.message || 'Bộ nhớ trình duyệt có thể đã đầy hoặc bị chặn.');
+                }
+                return;
+            }
             const { data, error } = await supabaseClient.auth.signUp({
                 email,
                 password,
@@ -1579,7 +1669,10 @@
         }
 
         async function requestPasswordReset() {
-            if (!supabaseClient) return;
+            if (!supabaseClient) {
+                showToast('Không thể khôi phục offline', 'Tài khoản cục bộ không có dịch vụ gửi email. Hãy dùng Supabase để bật khôi phục mật khẩu.');
+                return;
+            }
             const email = document.getElementById('owner-email').value.trim()
                 || document.getElementById('signup-email').value.trim();
             if (!email) {
@@ -1610,7 +1703,13 @@
         }
 
         async function signOutOwner() {
-            if (!supabaseClient) return;
+            if (!supabaseClient) {
+                localStorage.removeItem('missTourLocalSession');
+                document.getElementById('owner-login-panel').classList.add('hidden');
+                restoreLocalAccountSession();
+                showToast('Đã đăng xuất', 'Tài khoản vẫn được lưu trên thiết bị này.');
+                return;
+            }
             const { error } = await supabaseClient.auth.signOut();
             if (error) showToast('Đăng xuất thất bại', error.message);
             else await updateOwnerAccess(null);
