@@ -500,6 +500,35 @@
                             </div>
                         </div>
                     </section>
+
+                    <section class="mt-10 border-t border-slate-200 pt-8" aria-labelledby="tour-faq-title">
+                        <div class="max-w-3xl mb-5">
+                            <span class="text-emerald-700 font-bold tracking-widest uppercase text-xs">Trước khi khởi hành</span>
+                            <h3 id="tour-faq-title" class="mt-1 text-2xl font-extrabold text-earthDark">Thông tin hữu ích & câu hỏi thường gặp</h3>
+                        </div>
+                        <div class="divide-y divide-slate-200 border-y border-slate-200">
+                            <details class="group py-4">
+                                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-earthDark">Gửi yêu cầu đặt tour xong thì đã xác nhận chưa?<span class="text-emerald-700 group-open:rotate-45 transition-transform text-xl" aria-hidden="true">+</span></summary>
+                                <p class="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">Chưa. Yêu cầu được lưu ở trạng thái “Đang chờ xác nhận”. Hãy chờ Miss tour liên hệ để chốt chỗ, giờ đón, điểm tập trung và cách thanh toán trước khi khởi hành.</p>
+                            </details>
+                            <details class="group py-4">
+                                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-earthDark">Giá tour gồm những khoản nào?<span class="text-emerald-700 group-open:rotate-45 transition-transform text-xl" aria-hidden="true">+</span></summary>
+                                <p class="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">Mỗi gói nêu các trải nghiệm và bữa ăn dự kiến đã bao gồm. Các khoản chưa ghi rõ như vé tham quan, di chuyển đến điểm đón, phụ thu phòng riêng hoặc chi tiêu cá nhân cần được xác nhận trực tiếp trước khi thanh toán.</p>
+                            </details>
+                            <details class="group py-4">
+                                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-earthDark">Ưu đãi được tính như thế nào?<span class="text-emerald-700 group-open:rotate-45 transition-transform text-xl" aria-hidden="true">+</span></summary>
+                                <p class="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">Chọn đúng nhóm ưu đãi và số khách đủ điều kiện trong form. Mức giảm được tính trên giá mỗi khách đủ điều kiện; vui lòng chuẩn bị thông tin xác minh cư trú hoặc năm sinh khi được yêu cầu.</p>
+                            </details>
+                            <details class="group py-4">
+                                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-earthDark">Nên chuẩn bị gì cho chuyến đi?<span class="text-emerald-700 group-open:rotate-45 transition-transform text-xl" aria-hidden="true">+</span></summary>
+                                <p class="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">Mang giày dễ đi bộ, nước uống, đồ che nắng và áo khoác mỏng khi đến Pleiku. Với điểm tâm linh, nên chọn trang phục lịch sự; xem dự báo thời tiết và xác nhận giờ hoạt động gần ngày đi.</p>
+                            </details>
+                            <details class="group py-4">
+                                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-earthDark">Tôi có dị ứng hoặc cần suất ăn riêng thì sao?<span class="text-emerald-700 group-open:rotate-45 transition-transform text-xl" aria-hidden="true">+</span></summary>
+                                <p class="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">Hãy báo trước qua hotline <a class="font-bold text-emerald-800 underline" href="tel:0762799157">0762 799 157</a> để hỏi khả năng điều chỉnh món ăn. Đừng mặc định mọi yêu cầu ăn kiêng đều có thể đáp ứng nếu chưa được xác nhận.</p>
+                            </details>
+                        </div>
+                    </section>
                 </div>
             </section>
         </div>
@@ -1071,7 +1100,12 @@
 
                     <div class="p-4 bg-emerald-50/80 rounded-2xl border border-emerald-200/60 space-y-2">
                         <div class="flex items-center justify-between gap-3"><span class="text-xs font-bold text-forestGreen">Trạng thái ưu đãi</span><span id="booking-discount-status" class="text-xs font-extrabold text-slate-600">Chưa áp</span></div>
+                        <div class="border-t border-emerald-200 pt-2 space-y-1.5 text-xs">
+                            <div class="flex items-center justify-between gap-3 text-slate-600"><span>Đơn giá × số khách</span><span id="booking-original-total" class="text-right">1.250.000 VNĐ × 1 = 1.250.000 VNĐ</span></div>
+                            <div class="flex items-center justify-between gap-3 text-slate-600"><span>Ưu đãi dự kiến</span><span id="booking-discount-amount">−0 VNĐ</span></div>
+                        </div>
                         <div class="flex items-center justify-between gap-3"><span class="text-xs font-bold text-forestGreen">Tổng chi phí dự kiến</span><span id="modal-total-price" class="text-xl font-extrabold text-emeraldVibrant">1.250.000 VNĐ</span></div>
+                        <p class="text-[11px] leading-relaxed text-slate-500">Tạm tính để tham khảo; yêu cầu chỉ được xác nhận sau khi Miss tour liên hệ chốt dịch vụ và các khoản phát sinh (nếu có).</p>
                     </div>
 
                     <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emeraldVibrant via-teal-500 to-sunsetGold text-white font-extrabold text-sm hover:shadow-xl hover:scale-[1.01] transition duration-200">
@@ -1296,6 +1330,8 @@
             const status = eligibility === 'ineligible' ? 'Không đủ điều kiện' : discountPercent ? 'Đã áp' : 'Chưa áp';
             const statusColor = status === 'Đã áp' ? 'text-emerald-700' : status === 'Không đủ điều kiện' ? 'text-rose-700' : 'text-slate-600';
 
+            document.getElementById('booking-original-total').innerText = `${currentTourBasePrice.toLocaleString('vi-VN')} VNĐ × ${guests} = ${originalTotal.toLocaleString('vi-VN')} VNĐ`;
+            document.getElementById('booking-discount-amount').innerText = `−${discountAmount.toLocaleString('vi-VN')} VNĐ${discountedGuests ? ` (${discountedGuests} khách)` : ''}`;
             document.getElementById('modal-total-price').innerText = total.toLocaleString('vi-VN') + " VNĐ";
             const statusElement = document.getElementById('booking-discount-status');
             statusElement.innerText = status + (discountPercent ? ` (-${discountPercent}%)` : '');
