@@ -755,6 +755,7 @@
                         </div>
                     </section>
 
+                    <p id="comments-sync-status" class="mb-4 text-xs text-slate-500" role="status">Bình luận được lưu trên trình duyệt này.</p>
                     <!-- 6 Detailed Comment Cards Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="comments-grid">
                         
@@ -1495,11 +1496,13 @@
                 currentUserId = null;
                 logoutButton.classList.add('hidden');
                 status.innerText = 'Tài khoản được lưu trên trình duyệt này';
+                renderStoredComments();
                 return;
             }
             currentUserId = account.id;
             logoutButton.classList.remove('hidden');
             status.innerText = `Đã đăng nhập: @${account.username} · lưu trên thiết bị này`;
+            renderStoredComments();
         }
 
         async function initializeCommentBackend() {
@@ -1512,6 +1515,7 @@
                 loginButton.disabled = false;
                 loginButton.title = '';
                 restoreLocalAccountSession();
+                document.getElementById('comments-sync-status').innerText = 'Chế độ cục bộ: bình luận chỉ hiển thị trên trình duyệt này. Kết nối Supabase để đồng bộ giữa các thiết bị.';
                 renderStoredComments();
                 return;
             }
@@ -1519,6 +1523,7 @@
                 loginButton.disabled = false;
                 loginButton.title = '';
                 authStatus.innerText = 'Supabase chưa tải được; tài khoản lưu trên trình duyệt này';
+                document.getElementById('comments-sync-status').innerText = 'Chưa tải được Supabase; bình luận chỉ hiển thị trên trình duyệt này.';
                 restoreLocalAccountSession();
                 renderStoredComments();
                 return;
@@ -1527,6 +1532,7 @@
             supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             useSupabaseComments = true;
             authStatus.innerText = 'Đang kết nối Supabase...';
+            document.getElementById('comments-sync-status').innerText = 'Đang kết nối kho bình luận dùng chung...';
             try {
                 const { data: { session } } = await supabaseClient.auth.getSession();
                 await updateOwnerAccess(session?.user || null);
@@ -1546,6 +1552,7 @@
                 });
             } catch (error) {
                 document.getElementById('owner-auth-status').innerText = 'Không thể kết nối Supabase';
+                document.getElementById('comments-sync-status').innerText = 'Không kết nối được Supabase; chưa thể đồng bộ bình luận.';
                 showToast('Lỗi kết nối', 'Kiểm tra cấu hình Supabase và file SQL đã chạy chưa.');
             }
         }
@@ -1557,12 +1564,14 @@
                 .select('*')
                 .order('created_at', { ascending: false });
             if (error) {
+                document.getElementById('comments-sync-status').innerText = 'Không tải được bình luận dùng chung.';
                 showToast('Không tải được bình luận', error.message);
                 return;
             }
 
             const grid = document.getElementById('comments-grid');
             grid.querySelectorAll('[data-stored-comment="true"]').forEach((card) => card.remove());
+            document.getElementById('comments-sync-status').innerText = 'Đang đồng bộ trực tiếp; bình luận mới sẽ hiển thị trên các thiết bị đang mở trang.';
             (data || []).forEach((row) => appendCommentCard({
                 id: row.id,
                 name: row.name,
@@ -1752,17 +1761,36 @@
         }
 
         async function deleteRemoteComment(commentId) {
-            if (!supabaseClient) return;
             const comment = getRenderedCommentOwner(commentId);
-            if (!isSiteOwner && (!currentUserId || comment?.createdBy !== currentUserId)) return;
-            if (!confirm('Xóa bình luận này? Không thể hoàn tác.')) return;
-            const { error } = await supabaseClient
-                .from('miss_tour_comments')
-                .delete()
-                .eq('id', commentId);
-            if (error) {
-                showToast('Không xóa được bình luận', error.message);
+            if (!currentUserId || (!isSiteOwner && comment?.createdBy !== currentUserId)) {
+                showToast('Không có quyền xóa', 'Chỉ người viết bình luận hoặc admin mới có thể xóa.');
                 return;
+            }
+            if (!confirm('Xóa bình luận này? Không thể hoàn tác.')) return;
+            if (useSupabaseComments && supabaseClient) {
+                const { error } = await supabaseClient
+                    .from('miss_tour_comments')
+                    .delete()
+                    .eq('id', commentId);
+                if (error) {
+                    showToast('Không xóa được bình luận', error.message);
+                    return;
+                }
+            } else {
+                const comments = getStoredComments();
+                const ownedComment = comments.find((item) => String(item.id) === String(commentId));
+                if (!ownedComment || ownedComment.createdBy !== currentUserId) {
+                    showToast('Không có quyền xóa', 'Tài khoản này không tạo bình luận đó.');
+                    return;
+                }
+                try {
+                    localStorage.setItem('missTourComments', JSON.stringify(
+                        comments.filter((item) => String(item.id) !== String(commentId))
+                    ));
+                } catch (error) {
+                    showToast('Không xóa được bình luận', 'Trình duyệt không cho phép cập nhật dữ liệu.');
+                    return;
+                }
             }
             document.getElementById(`comment-card-${commentId}`)?.remove();
             showToast('Đã xóa bình luận', 'Bình luận đã được gỡ khỏi trang.');
@@ -1787,7 +1815,8 @@
             const safeAvatar = /^(https:\/\/|data:image\/)/i.test(avatar) ? avatar : '';
             const stars = '⭐'.repeat(Math.min(5, Math.max(1, parseInt(comment.rating, 10) || 5)));
             const createdBy = String(comment.createdBy || '');
-            const canDelete = useSupabaseComments && (isSiteOwner || (currentUserId && createdBy === currentUserId));
+            const canDelete = currentUserId && createdBy === currentUserId
+                || useSupabaseComments && isSiteOwner;
             const card = document.createElement('article');
             card.id = `comment-card-${commentId}`;
             card.dataset.storedComment = 'true';
@@ -1949,6 +1978,7 @@
                         text,
                         rating: document.getElementById('comment-rating').value,
                         avatar: selectedCommentAvatar,
+                        createdBy: currentUserId || null,
                         createdAt: new Date().toISOString(),
                         likes: 0,
                         loves: 0
